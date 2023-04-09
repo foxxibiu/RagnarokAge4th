@@ -1,0 +1,65 @@
+c_tower1,243,202,3	script	Uzhas	UZHAS,{
+	set .np$,"^00B2EE[ Uzhas ]^000000";
+
+	mes .np$;
+	mes (gettime(3)>= 6&&gettime(3)<= 12?"Bom-dia":(gettime(3)>=13&&gettime(3)<=18?"Boa-tarde":"Boa-noite"))+", ^FFA500"+strcharinfo(0)+"^000000!";
+	mes "Este local não é tão seguro assim para você andar por ai...";
+		switch(select("^3CB371[»]^000000 Entrar no mapa 240+:^3CB371[»]^000000 Loja especial:^ff0000[»]^000000 Sair")) {
+			case 1:
+				next;
+				mes .np$;
+				mes "Beleza, só deixa eu checar uma coisa...";
+					if ((BaseLevel < 239)) {
+						next;
+						mes .np$;
+						mes "Você não é forte o suficiente, saia e só volte com um nível adequado.";
+						end;
+					}
+				next;
+				mes .np$;
+				mes "Você é forte o suficiente... Eu acho... Boa sorte!";
+				next;
+				warp "clock_01",86,42;
+				end;
+			case 2:
+				Switch(rand(4)){
+					case 1:
+						next;
+						mes .np$;
+						mes "Aqui está a Loja.";
+						callshop "eqp#clock01",1;
+						end;
+					case 2:
+						next;
+						mes .np$;
+						mes "Aqui está a Loja.";
+						callshop "eqp1#clock01",1;
+						end;
+					case 3:
+						next;
+						mes .np$;
+						mes "Aqui está a Loja.";
+						callshop "eqp2#clock01",1;
+						end;
+					case 4:
+						next;
+						mes .np$;
+						mes "Aqui está a Loja.";
+						callshop "eqp3#clock01",1;
+						end;
+				}
+			case 3:
+				next;
+				mes .np$;
+				mes "Bom, estarei aqui quando precisar...";
+				end;
+		}
+	end;
+
+OnInit:
+setunitdata (getnpcid(0), UNPC_GROUP_ID, 7);
+setunittitle(getnpcid(0), "[ Clock Tower ]");
+end;
+}
+
+clock_01,79,38,0	warp	clock01un1	1,1,c_tower1,244,198,0

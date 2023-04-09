@@ -1,0 +1,61 @@
+//==================================================
+//==============METAS DO SERVIDOR===================
+//==================================================
+prontera,124,211,5	script	Iris	666,{
+	cutin"h_iris02",2;
+	mes "^DC143C------------------------------------------^000000";
+	mes "^DC143C[Irís]^000000";
+	mes "Obrigado por estar aqui, atualmente o servidor esta em fase ALFA!";
+	mes "Esse quadro Irís resumir a proposta do servidor,";
+	mes "Assim como, nossas metas a serem batidas";
+	mes "Aqui no Age Ragnarok Online";
+	mes "^DC143C------------------------------------------^000000";
+	next;
+	mes "^DC143C------------------------------------------^000000";
+	mes "^DC143C[Irís!]^000000";
+	mes "Gostariamos de iniciar dizendo que,";
+	mes "Agradecemos os feedbacks que vocês dão";
+	mes "para fazer o melhor possível para o Age Ragnarok Online";
+	mes "Empenho e dedicação e tempo são as chaves para um bom servidor.";
+	next;
+	mes "^DC143C[Irís]^000000";
+	mes "^DC143C-------------------------------------------^000000";
+	mes "Estamos trabalhando duro para trazer diversão para você.";
+	mes "Empenho e dedicação e tempo são as chaves para um bom servidor.";
+	mes "^DC143CAgradecemos sua Presença^000000";
+	mes "^DC143C-------------------------------------------^000000";
+	next;
+	mes "^DC143C[Irís]^000000";
+	mes "[Nossas metas!]";
+	mes "GEPARD SHIELD 3.0^000000 : ^DC143CNão Alcançado^000000";
+	mes "^DC143C-------------------------------------------^000000";
+	mes "^7CFC00Dominío Próprio [SITE]^000000 : Alcançado^000000 -";
+	mes "^DC143C-------------------------------------------^000000";
+	next;
+	mes "A proposta do projeto inicialmente, é de um servidor 255/70 PRE-RE";
+	mes "Adicionamos novas funções, e sistemas para criar uma jogabilidade intuitiva assim,";
+	mes "com as novas ^7CFC00funcionalidades^000000 dos sistemas mais recentes.";
+	mes "Instâncias e Quests recentes, trazendo mais itens monstros.";
+	mes "Novos itens, assim trazendo maiores possibilidades na sua ^7CFC00GAMEPLAY^000000.";
+	mes "^DC143C-------------------------------------------^000000";
+	mes "^7CFC00Host -São Paulo- BR^000000 - Anti-DDOS : Alcançado000000";
+	mes "^DC143C-------------------------------------------^000000";
+	next;
+	mes "^DC143C[Irís]^000000";
+	mes "^DC143C-------------------------------------------^000000";
+	mes "Se você quiser ajudar o servidor a evoluir ainda mais,";
+	mes "Deixe sua sugestão no DISCORD, ou também.";
+	mes "Procure o ^DC143CVON^000000 diretamente no DISCORD.";
+	mes "^0000CDObrigado por fazer parte do projeto!^000000";
+	mes "^DC143C-------------------------------------------^000000";
+	cutin"h_iris02",255;
+	close3;
+	
+OnInit:
+.@UID = getnpcid(0);
+setunittitle(.@UID, "Metas Age Ragnarok");
+setunitdata .@UID, UNPC_GROUP_ID, 19;
+
+end;
+	}
+

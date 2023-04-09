@@ -1,0 +1,38 @@
+//======================Buff Gold===========================================
+
+-	script	Buffer_Gold	-1,{
+    OnInit:
+        bindatcmd("buffgold",strnpcinfo(0)+"::OnBuff",0,5);
+        end;
+
+	OnBuff:
+	if ( getmapflag( strcharinfo(3), mf_pvp ) || getmapflag( strcharinfo(3), mf_gvg ) || getmapflag( strcharinfo(3), mf_battleground ) ) {
+	dispbottom "[ @buff está desabilitado em mapas pvp & gvg ].";
+	end;
+	}
+    if (getgroupid()>=5 ){
+    set .@now, gettimetick(2);
+   //if( .@now < bvipP_delay ) { dispbottom "Aguarde "+(bvipP_delay - .@now)+" segundos para se buffar novamente."; end; }
+		atcommand "@repairall";
+		sc_start 32,300000,10; skilleffect 34,0;
+		sc_start 30,300000,10; skilleffect 29,0;
+		sc_start 35,300000,5;
+		sc_start 41,300000,5;
+		skilleffect 75,0; sc_start SC_MAGNIFICAT,360000,5;
+		skilleffect 29,0; sc_start 32, 600000, 10; // Increase Agi
+		skilleffect 34,0; sc_start 30, 600000, 10; // Blessing
+		skilleffect 75,0;
+		sc_start 29, 300000, 10; skilleffect 29,0; // Angelus
+		sc_start 35, 300000, 5; skilleffect 66,0; // Impositio Manus
+		sc_start 39, 300000, 10; skilleffect 73,0; // Kyrie Eleison
+		sc_start 41, 300000, 5; skilleffect 75,0; // Gloria
+		sc_start SC_STRFOOD,300000,10;// FOR + 10
+		sc_start SC_AGIFOOD,300000,10;// AGI + 10
+		sc_start SC_VITFOOD,300000,10;// VIT + 10
+		sc_start SC_INTFOOD,300000,10;// INT + 10
+		sc_start SC_DEXFOOD,300000,10;// DEX + 10
+		sc_start SC_LUKFOOD,300000,10;// SOR + 10
+        dispbottom "Prontinho, divirta-se";
+        set bvipP_delay, gettimetick(2) + 60;
+}
+}		

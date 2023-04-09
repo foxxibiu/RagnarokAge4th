@@ -1,0 +1,71 @@
+//===== Por: ==================================================
+//= Near
+//===== Versão: =====================================
+//= 1.0
+//============================================================
+soularena,36,56,3	script	Loja Batalha Campal	4_F_SARAH,{
+	cutin "sarah_hero3_2.bmp",2;
+	set .np$,"^6713CF[=== Loja da Batalha Campal ===]^000000";
+
+	mes .np$;
+	mes (gettime(3)>= 6&&gettime(3)<= 12?"^FFA500"+strcharinfo(0)+"^000000, Bom-dia bem vindo!.":(gettime(3)>=13&&gettime(3)<=18?"^FFA500"+strcharinfo(0)+"^000000, Boa-tarde bem vindo!":"^FFA500"+strcharinfo(0)+"^000000, Boa-noite bem vindo!"));
+	mes "Eu sou atualmente o representante das ^6713CFBatalhas Campais^000000 e estou aqui para te ajudar "+(gettime(3)>= 6&&gettime(3)<= 12?"nesta linda manhã":(gettime(3)>=13&&gettime(3)<=18?"nesta tarde maravilhosa":"nesta noite maravilhosa"));
+	mes "O que eu posso fazer por você?";
+	switch(select("^3CB371[»]^000000Armas^6713CF Gloriosas^000000:^3CB371[»]^000000Equipamentos^6713CF Gloriosos^000000:^3CB371[»]^000000Armas e Equipamentos de^6713CF Bravura^000000:^3CB371[»]^000000Armas e Equipamentos de^6713CF Valor^000000:^ff0000[»]^000000 Sair")) {
+		case 1:
+			next;
+			mes .np$;
+			mes "Aqui você pode comprar armas.";
+			mes "Feche está janela para abrir a loja";
+			close2;
+			cutin "sarah_hero3_2.bmp",255;
+			callshop "campal#barter",1;
+			end;
+		case 2:
+			next;
+			mes .np$;
+			mes "Aqui você pode comprar armaduras e equipamentos gloriosos.";
+			mes "Feche está janela para abrir a loja";
+			close2;
+			cutin "sarah_hero3_2.bmp",255;
+			callshop "campaleqp#barter",1;
+			end;
+		case 3:
+			next;
+			mes .np$;
+			mes "Aqui você pode comprar armaduras e equipamentos de Bravura";
+			mes "Feche está janela para abrir a loja";
+			close2;
+			cutin "sarah_hero3_2.bmp",255;
+			callshop "campalbrav#barter",1;
+			end;
+        case 4:
+			next;
+			mes .np$;
+			mes "Aqui você pode comprar armaduras e equipamentos de Valor";
+			mes "Feche está janela para abrir a loja";
+			close2;
+			cutin "sarah_hero3_2.bmp",255;
+			callshop "campalval#barter",1;
+			end;
+        case 5:
+			next;
+			mes .np$;
+			mes "Aqui você pode comprar consumíveis para suas batalhas.";
+			mes "Feche está janela para abrir a loja";
+			close2;
+			cutin "sarah_hero3_2.bmp",255;
+			callshop "campalstuff#barter",1;
+			end;                   
+		case 6:
+			next;
+			mes .np$;
+			mes "Tudo bem, me procure quando precisar.";
+			cutin "sarah_hero3_2.bmp",255;
+			close3;
+	}
+OnInit:
+	.@UID = getnpcid(0);
+	setunittitle(.@UID, "[ Itens KVM ]");
+    setunitdata .@UID, UNPC_GROUP_ID, 7;
+}

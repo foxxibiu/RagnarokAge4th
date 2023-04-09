@@ -1,0 +1,44 @@
+/*.---------------------------------------------------------------------.
+  .		 ____                          __                          		.
+  .		/\  _`\                       /\ \__  __                   		.
+  .		\ \ \/\_\  _ __    __     __  \ \ ,_\/\_\  __  __     __   		.
+  .		 \ \ \/_/_/\`'__\/'__`\ /'__`\ \ \ \/\/\ \/\ \/\ \  /'__`\ 		.
+  .		  \ \ \s\ \ \ \//\  __//\ \d\.\_\ \ \_\ \ \ \ \_/ |/\  __/ 		.
+  .		   \ \____/\ \_\\ \____\ \__/.\_\\ \__\\ \_\ \___/ \ \____\		.
+  .		    \/___/  \/_/ \/____/\/__/\/_/ \/__/ \/_/\/__/   \/____/		.
+  .																		.
+  .				2014~2020 © Creative Services and Development			.
+  .						  www.creativesd.com.br							.
+  .---------------------------------------------------------------------.
+  . Script Function:													.
+  .	   Time3Str <tick>;                                                 .
+  .---------------------------------------------------------------------.
+  . Autor: Romulo SM (sbk_)                                 Versão: 1.0	.
+  .                                                                     .
+  . Compátivel:	rAthena / Hercules e derivações.                    	.
+  .---------------------------------------------------------------------.
+  . Descrição:															.
+  .	   Formata a Hora em Dias, minutos e segundos.                      .
+  *---------------------------------------------------------------------*/
+function	script	Time3Str	{
+	set .@timer, getarg(0);
+	
+	if( .@timer < 60 )
+		return .@timer + " segundo(s)";
+	
+	set .@min, .@timer/60;
+	set .@sec, .@timer - (.@min*60);
+	
+	if( .@min < 60 )
+		return .@min + " minuto(s) e " + .@sec + " segundo(s)";
+	
+	set .@hour, .@min/60;
+	set .@min, .@min - (.@hour*60);
+	
+	if( .@hour < 24 )
+		return .@hour + " hora(s), " + .@min + " minuto(s) e " + .@sec + " segundo(s)";
+	
+	set .@day, .@hour/24;
+	set .@hour, .@hour - (.@day*24);
+	return .@day + " dia(s), " + .@hour + " hora(s), " + .@min + " minuto(s) e " + .@sec + " segundo(s)";
+}

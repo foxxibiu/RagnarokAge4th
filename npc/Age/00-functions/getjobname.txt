@@ -1,0 +1,146 @@
+ /*.---------------------------------------------------------------------.
+  .		 ____                          __                          		.
+  .		/\  _`\                       /\ \__  __                   		.
+  .		\ \ \/\_\  _ __    __     __  \ \ ,_\/\_\  __  __     __   		.
+  .		 \ \ \/_/_/\`'__\/'__`\ /'__`\ \ \ \/\/\ \/\ \/\ \  /'__`\ 		.
+  .		  \ \ \s\ \ \ \//\  __//\ \d\.\_\ \ \_\ \ \ \ \_/ |/\  __/ 		.
+  .		   \ \____/\ \_\\ \____\ \__/.\_\\ \__\\ \_\ \___/ \ \____\		.
+  .		    \/___/  \/_/ \/____/\/__/\/_/ \/__/ \/_/\/__/   \/____/		.
+  .																		.
+  .				2014~2020 © Creative Services and Development			.
+  .						  www.creativesd.com.br							.
+  .---------------------------------------------------------------------.
+  . Script Function:													.
+  .	   getjobname(<job_id>,<sex>);                                          .
+  .---------------------------------------------------------------------.
+  . Autor: Romulo SM (sbk_)                                 Versão: 1.0	.
+  .                                                                     .
+  . Compátivel:	rAthena / Hercules e derivações.                    	.
+  .---------------------------------------------------------------------.
+  . Descrição:															.
+  .	   Retorna com o nome da Classe dependendo do Sexo.                 .
+  *---------------------------------------------------------------------*/
+function	script	getjobname	{
+	switch( getarg(0) )
+	{
+		case -1: return "Renascer";
+		case 0: return "Aprendiz";
+		case 1: return "Espadachim";
+		case 2: return "Mag"+(getarg(1)?"o":"a");
+		case 3: return "Arqueir"+(getarg(1)?"o":"a");
+		case 4: return "Noviç"+(getarg(1)?"o":"a");
+		case 5: return "Mercador"+(getarg(1)?"":"a");
+		case 6: return "Gatun"+(getarg(1)?"o":"a");
+		case 7: case 13: return "Cavaleir"+(getarg(1)?"o":"a");
+		case 8: return "Sacerdot"+(getarg(1)?"e":"isa");
+		case 9: return "Brux"+(getarg(1)?"o":"a");
+		case 10: return "Ferreir"+(getarg(1)?"o":"a");
+		case 11: return "Caçador"+(getarg(1)?"":"a");
+		case 12: return "Mercenári"+(getarg(1)?"o":"a");
+		case 14: case 21: return "Templár"+(getarg(1)?"o":"a");
+		case 15: return "Mon"+(getarg(1)?"ge":"ja");
+		case 16: return "Sábi"+(getarg(1)?"o":"a");
+		case 17: return "Arruaceir"+(getarg(1)?"o":"a");
+		case 18: return "Alquimista";
+		case 19: case 20: return (getarg(1)?"Bardo":"Odalisca");
+		case 23: return "Super Aprendiz";
+		case 24: return "Justiceir"+(getarg(1)?"o":"a");
+		case 25: return "Ninja";
+		case 4001: return "Aprendiz T.";
+		case 4002: return "Espadachim T.";
+		case 4003: return "Mag"+(getarg(1)?"o":"a")+" T.";
+		case 4004: return "Arqueir"+(getarg(1)?"o":"a")+" T.";
+		case 4005: return "Noviç"+(getarg(1)?"o":"a")+" T.";
+		case 4006: return "Mercador"+(getarg(1)?"":"a")+" T.";
+		case 4007: return "Gatun"+(getarg(1)?"o":"a")+" T.";
+		case 4008: case 4014: return "Lord"+(getarg(1)?"e":"y");
+		case 4009: return "Sumo-Sacerdot"+(getarg(1)?"e":"isa");
+		case 4010: return "Arquimag"+(getarg(1)?"o":"a");
+		case 4011: return (getarg(1)?"Mestre-Ferreiro":"Mestra-Ferreira");
+		case 4012: return "Atirador"+(getarg(1)?"":"a")+" de Elite";
+		case 4013: return "Algoz";
+		case 4015: case 4022: return "Paladin"+(getarg(1)?"o":"a");
+		case 4016: return "Mestr"+(getarg(1)?"e":"a");
+		case 4017: return "Professor"+(getarg(1)?"":"a");
+		case 4018: return "Desordeir"+(getarg(1)?"o":"a");
+		case 4019: return "Criador"+(getarg(1)?"":"Criadora");
+		case 4020: case 4021: return (getarg(1)?"Menestrel":"Cigana");
+		case 4023: return "Mini Aprendiz";
+		case 4024: return "Mini Espadachim";
+		case 4025: return "Mini Mag"+(getarg(1)?"o":"a");
+		case 4026: return "Mini Arqueir"+(getarg(1)?"o":"a");
+		case 4027: return "Mini Noviç"+(getarg(1)?"o":"a");
+		case 4028: return "Mini Mercador"+(getarg(1)?"":"a");
+		case 4029: return "Mini Gatun"+(getarg(1)?"o":"a");
+		case 4030: case 4036: return "Mini "+(getarg(1)?"Cavaleiro":"Cavaleira");
+		case 4031: return "Mini Sacerdot"+(getarg(1)?"e":"isa");
+		case 4032: return "Mini Brux"+(getarg(1)?"o":"a");
+		case 4033: return "Mini Ferreir"+(getarg(1)?"o":"a");
+		case 4034: return "Mini Caçador"+(getarg(1)?"":"a");
+		case 4035: return "Mini Mercenári"+(getarg(1)?"o":"a");
+		case 4037: case 4044: return "Mini Templári"+(getarg(1)?"o":"a");
+		case 4038: return "Mini Mon"+(getarg(1)?"ge":"ja");
+		case 4039: return "Mini Sábi"+(getarg(1)?"o":"a");
+		case 4040: return "Mini Arruaceir"+(getarg(1)?"o":"a");
+		case 4041: return "Mini Alquimista";
+		case 4042: case 4043: return "Mini "+(getarg(1)?"Bardo":"Odalisca");
+		case 4045: return "Mini Super Aprendiz";
+		case 4046: return "Taekwon";
+		case 4047: case 4048: return "Mestr"+(getarg(1)?"e":"a")+ " Taekwon";
+		case 4049: return "Espiritualista";
+		case 4054: case 4080: return (getarg(1)?"Cavaleiro Rúnico":"Cavaleira Rúnica");
+		case 4055: return "Arcan"+(getarg(1)?"o":"a");
+		case 4056: case 4084: return "Sentinela";
+		case 4057: return "Arcebisp"+(getarg(1)?"o":"a");
+		case 4058: case 4086: return "Mecânic"+(getarg(1)?"o":"a");
+		case 4059: return "Sicário";
+		case 4060: case 4081: return (getarg(1)?"Cavaleiro Rúnico":"Cavaleira Rúnica")+" .T";
+		case 4061: return "Arcan"+(getarg(1)?"o":"a")+" .T";
+		case 4062: case 4085: return "Sentinela"+" .T";
+		case 4063: return "Arcebisp"+(getarg(1)?"o":"a")+" .T";
+		case 4064: case 4087: return "Mecânic"+(getarg(1)?"o":"a")+" .T";
+		case 4065: return "Sicário"+" .T";
+		case 4066: case 4082: return (getarg(1)?"Guardião Rúnico":"Guardiã Rúnica");
+		case 4067: return "Feiticeir"+(getarg(1)?"o":"a");
+		case 4068: case 4069: return (getarg(1)?"Travador":"Musa");
+		case 4070: return "Shura";
+		case 4071: return "Bioquímic"+(getarg(1)?"o":"ca");
+		case 4072: return "Renegad"+(getarg(1)?"o":"a");
+		case 4073: case 4083: return (getarg(1)?"Guardião Rúnico":"Guardiã Rúnica")+" .T";
+		case 4074: return "Feiticeir"+(getarg(1)?"o":"a")+" .T";
+		case 4075: case 4076: return (getarg(1)?"Travador":"Musa")+" .T";
+		case 4077: return "Shura T.";
+		case 4078: return "Bioquímic"+(getarg(1)?"o":"a")+" .T";
+		case 4079: return "Renegad"+(getarg(1)?"o":"a")+" .T";
+		case 4096: case 4109: return "Mini "+(getarg(1)?"Cavaleiro Rúnico":"Cavaleira Rúnica");
+		case 4097: return "Mini Arcan"+(getarg(1)?"o":"a");
+		case 4098: case 4111: return "Mini Sentinela";
+		case 4099: return "Mini Arcebisp"+(getarg(1)?"o":"a");
+		case 4100: case 4112: return "Mini Mecânic"+(getarg(1)?"o":"a");
+		case 4101: return "Mini Sicário";
+		case 4102: case 4110: return "Mini "+(getarg(1)?"Guardião Rúnico":"Guardiã Rúnica");
+		case 4103: return "Mini Feiticeir"+(getarg(1)?"o":"a");
+		case 4104: case 4105: return "Mini "+(getarg(1)?"Trovador":"Musa");
+		case 4106: return "Mini Shura";
+		case 4107: return "Mini Bioquímic"+(getarg(1)?"o":"a");
+		case 4108: return "Mini Renegad"+(getarg(1)?"o":"a");
+		case 4190: return "Super Aprendiz E";
+		case 4191: return "Mini Super Aprendiz E";
+		case 4211: case 4212: return (getarg(1)?"Kagerou":"Oboro");
+		case 4215: return "Insurgente";
+		case 4218: return "Invocador"+(getarg(1)?"":"a");
+		case 4220: return "Mini Invocador"+(getarg(1)?"":"a");
+		case 4222: return "Mini Ninja";
+		case 4223: case 4224: return "Mini "+(getarg(1)?"Kagerou":"Oboro");
+		case 4225: return "Mini Taekwon";
+		case 4226: case 4238: return "Mini Mestr" + (getarg(1)?"e":"a")+ " Taekwon";
+		case 4227: return "Mini Espiritualista";
+		case 4228: return "Mini Justiceir" + (getarg(1)?"o":"a");
+		case 4229: return "Mini Insurgente";
+		case 4239: case 4243: return "Star Emperor";
+		case 4240: return "Soul Reaper";
+		case 4241: case 4244: return "Mini Star Emperor";
+		case 4242: return "Mini Soul Reaper";
+		default: return "Desconhecida";
+	}
+}

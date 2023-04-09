@@ -1,0 +1,29 @@
+vip_lounge,143,121,6	script	Utilidades VIP 	4_EP16_SKIA,{
+    cutin "ep16_skia_nerius03",2;
+    mes "[^0000EEAmora^000000]";
+    mes "Olá ^0055FF"+strcharinfo(0)+"^000000.";
+    mes "O que irá levar o que hoje?";
+    next;
+    switch(select("- [ ^339966Utilidades^000000 ].:- ^FF0000Nada^000000.")) {
+    
+        case 1:
+            close2;
+            callshop "Amora",1;
+            end;
+    
+        case 2:
+            mes "Até mais!";	
+            close2;
+            cutin"",255;
+            end;
+        }
+        OnInit:
+        .@UID = getnpcid(0);
+        setunittitle(.@UID, "Skrika");
+        setunitdata .@UID, UNPC_GROUP_ID, 7;
+    end;
+    }
+    
+    
+    //--- Lojas ---------------------------------------------
+    -	shop	Amora	-1,523:10000,601:-1,657:-1,656:-1,645:-1,610:-1,525:-1,506:-1,645:-1,656:-1,657:-1,717:-1,716:750,715:750,1025:15000,1771:250,14287:10000000,14288:10000000

@@ -1,0 +1,27 @@
+/*.---------------------------------------------------------------------.
+  .		 ____                          __                          		.
+  .		/\  _`\                       /\ \__  __                   		.
+  .		\ \ \/\_\  _ __    __     __  \ \ ,_\/\_\  __  __     __   		.
+  .		 \ \ \/_/_/\`'__\/'__`\ /'__`\ \ \ \/\/\ \/\ \/\ \  /'__`\ 		.
+  .		  \ \ \s\ \ \ \//\  __//\ \d\.\_\ \ \_\ \ \ \ \_/ |/\  __/ 		.
+  .		   \ \____/\ \_\\ \____\ \__/.\_\\ \__\\ \_\ \___/ \ \____\		.
+  .		    \/___/  \/_/ \/____/\/__/\/_/ \/__/ \/_/\/__/   \/____/		.
+  .																		.
+  .				2014~2020 © Creative Services and Development			.
+  .						  www.creativesd.com.br							.
+  .---------------------------------------------------------------------.
+  . Script Function:													.
+  .	   getcharnameonlinebyaid(<account_id>);                            .
+  .---------------------------------------------------------------------.
+  . Autor: Romulo SM (sbk_)                                 Versão: 1.0	.
+  .                                                                     .
+  . Compátivel:	rAthena / Hercules e derivações.                    	.
+  .---------------------------------------------------------------------.
+  . Descrição:															.
+  .	   Retorna se o jogador está online pela account_id via SQL.        .
+  *---------------------------------------------------------------------*/
+function	script	getcharnameonlinebyaid	{
+	deletearray .@tmpname$;
+	query_sql "SELECT `name` FROM `char` WHERE `account_id`='" + getarg(0) + "' AND `online`='1'", .@tmpname$;
+	return (getarraysize(.@tmpname$)?.@tmpname$:0);
+}

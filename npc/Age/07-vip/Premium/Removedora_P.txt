@@ -1,0 +1,170 @@
+//===== rAthena Script =======================================
+//= Card Removal NPC
+//===== By: ==================================================
+//= TyrNemesis^
+//===== Current Version: =====================================
+//= 1.2a
+//===== Compatible With: =====================================
+//= rAthena Project
+//===== Description: =========================================
+//= Removes cards from equipped items.
+//===== Additional Comments: =================================
+//= 1.0 First version. [TyrNemesis^]
+//= 1.2 Optimized and fixed getequipname menu. [Kisuka]
+//= 1.2a Added 'disable_items' command. [Euphy]
+//============================================================
+
+s_room,34,64,5	script	Removedora	4_F_DIENE,{
+	cutin "ep162_dn03",2;
+	set .zenycost,0;    // base cost of the card remover services (in Zeny)
+	set .percardcost,0;  // cost per card of the card remover services (in Zeny)
+	set .faildestroy,0;      // should the card remover have a chance of failure that destroys items? (1=yes, 0=no)
+
+	disable_items;
+	mes "[Vovó Diane]";
+	mes "Bom dia, jovem. Eu tenho o poder de remover cartas que você colocou em seus equipamentos. Essa ideia lhe agrada?";
+	next;
+	switch(select("Sim, eu gostaria.:O que você cobra?:não, obrigado.")) {
+	case 1:
+		mes "[Vovó Diane]";
+		mes "Muito bem. Qual item devo examinar para você?";
+		next;
+
+		setarray .@indices[1], EQI_HEAD_TOP, EQI_ARMOR, EQI_HAND_L, EQI_HAND_R, EQI_GARMENT, EQI_SHOES, EQI_ACC_L, EQI_ACC_R, EQI_HEAD_MID, EQI_HEAD_LOW;
+		for( set .@i,1; .@i <= 10; set .@i,.@i+1 ) {
+			if( getequipisequiped(.@indices[.@i]) )
+				set .@menu$, .@menu$ + F_getpositionname(.@indices[.@i]) + "-[" + getequipname(.@indices[.@i]) + "]";
+			set .@menu$, .@menu$ + ":";
+		}
+		set .@part, .@indices[ select(.@menu$) ];
+		if(!getequipisequiped(.@part)) {
+			mes "[Vovó Diane]";
+			mes "Jovem... você não está usando nada que eu possa remover.";
+			cutin "ep162_dn03",255;
+			close;
+		}
+		if(getequipcardcnt(.@part) == 0) {
+			mes "[Vovó Diane]";
+			mes "Jovem... não há cartas colocadas neste item. não posso fazer nada com isso, sinto muito.";
+			cutin "ep162_dn03",255;
+			close;
+		}
+		set .@cardcount,getequipcardcnt(.@part);
+		
+		if (!checkweight(1202,(.@cardcount+1))) { 
+			mes "^3355FFAguarde um minutinho!";
+			mes "Eu não posso oferecer nenhum dos meus";
+			mes "serviços para você porque";
+			mes "você está carregando muitas";
+			mes "coisas. Coloque seus itens extras";
+			mes "no armazenamento da Kafra e volte mais tarde.";
+			cutin "ep162_dn03",255;
+			close;
+		}
+		mes "[Vovó Diane]";
+		mes "Este item tem " + .@cardcount + " cartas equipadas nele. Para realizar minha magia, você não precisarï¿½ me dar nada, pois você possuï¿½ um emblema VIP. ";
+		next;
+		if(select("Muito bem, pode fazer:Nem pensar.") == 2) {
+			mes "[Vovó Diane]";
+			mes "Muito bem. Retorne imediatamente se você precisar dos meus serviços.";
+			cutin "ep162_dn03",255;
+			close;
+		}
+		if((zeny < (.zenycost+(.@cardcount * .percardcost))) || (countitem(1000) < 1) || (countitem(715) < 1)) {
+			mes "[Vovó Diane]";
+			mes "você não tem todos os itens de que preciso para fazer minha mágica, crianï¿½a. Venha novamente quando você conseguir os itens.";
+			cutin "ep162_dn03",255;
+			close;
+		}
+		mes "[Vovó Diane]";
+		mes "Antes de começar, devo avisa-lo - posso falhar. Se o fizer, posso destruir as cartas, o item ou ambos. Eu não dou reembolsos. Dito isto, o que ï¿½ mais importante para você: as cartas ou o item?";
+		next;
+		switch(select("Mudei de Idï¿½ia.:O Item.:As Cartas.")) {
+		case 1:
+			mes "[Vovó Diane]";
+			mes "Muito bem. Retorne imediatamente se você precisar dos meus serviços.";
+			cutin "ep162_dn03",255;
+			close;
+		case 2:
+			set .@failtype,1;
+			break;
+		case 3:
+			set .@failtype,2;
+		}
+		mes "[Vovó Diane]";
+		mes "Muito bem, vamos começar.";
+		set Zeny, Zeny - (.zenycost+(.@cardcount * .percardcost));
+		//delitem 1000,1; //Star_Crumb
+		//delitem 715,1; //Yellow_Gemstone
+		
+		// Replace the constants in the next 3 lines with failure chance values defined in refine_db.txt
+		// First value = Total failure chance (item and cards destroyed)
+		// Second value = Partial failure chance (one or the other is destroyed, player decides which one is safe)
+		// Third value = Harmless failure chance (all that's lost is your investment)
+
+		set .@failchance,rand(100);
+		if (.faildestroy==1) {
+			if(.@failchance < 2) {
+				next;
+				failedremovecards .@part,0;
+				mes "[Vovó Diane]";
+				mes "O processo foi um fracasso total. Receio que o item e as cartas tenham sido destruï¿½dos.";
+				cutin "ep162_dn03",255;
+				close;
+			}
+
+			if(.@failchance < 8) {
+				if (.@failtype == 1) {
+					next;
+					failedremovecards .@part,1;
+					mes "[Vovó Diane]";
+					mes "Embora eu tenha conseguido remover os cartas do item, eles foram destruï¿½dos no processo. O item, no entanto, está ok.";
+					cutin "ep162_dn03",255;
+					close;
+				}
+
+				if (.@failtype == 2) {
+					next;
+					failedremovecards .@part,2;
+					mes "[Vovó Diane]";
+					mes "Que pena, consegui remover as cartas, mas o item em si foi destruï¿½dos no processo.";
+					cutin "ep162_dn03",255;
+					close;
+				}
+			}
+		}
+
+		if(.@failchance < 10) {
+			next;
+			failedremovecards .@part,3;
+			mes "[Vovó Diane]";
+			mes "não consegui remover as cartas. Felizmente, no entanto, tanto o item quanto as cartas ainda estáo bem.";
+			cutin "ep162_dn03",255;
+			close;
+		}
+		next;
+		successremovecards .@part;
+		mes "[Vovó Diane]";
+		mes "O processo foi um sucesso. Aqui estáo seus cartas e seu item. Atï¿½ a prï¿½xima.";
+		cutin "ep162_dn03",255;
+		close;
+	case 2:
+		mes "[Vovó Diane]";
+		mes "Eu cobro uma taxa fixa de "+callfunc("F_InsertComma",.zenycost)+" zeny, mais "+callfunc("F_InsertComma",.percardcost)+" zeny para cada carta que eu removo do item. AlÃ©m disso, preciso de uma migalha de estrela e uma pedra preciosa amarela para fazer minha mágica.";
+		cutin "ep162_dn03",255;
+		close;
+	case 3:
+		mes "[Vovó Diane]";
+		mes "Muito bem. Retorne imediatamente se você precisar dos meus serviços.";
+		cutin "ep162_dn03",255;
+		close;
+	}
+OnInit:
+	.@UID = getnpcid(0);
+	setunittitle(.@UID, "Vovó Diane");
+	setunitdata .@UID, UNPC_GROUP_ID, 7;
+	.@npc$ = strnpcinfo(0);
+end;
+}
+
+prt_in,28,72,4	duplicate(Removedora)	Diane	4_F_DIENE

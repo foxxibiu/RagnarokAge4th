@@ -1,0 +1,16 @@
+vip_lounge,116,96,4	script	Comandos Premium	882,{
+	
+	mes "_________________________________";
+	mes "^0084ffCOMANDOS PREMIUM^000000";
+	mes "@buffvip - Buffa o personagem";
+	mes "@govip - Tela pra sala vip";
+	mes "@refineui - Abre o ferreiro";
+	mes "@mobsearch - com where do mvp";
+	close;
+//=====================================
+//=== chat em cima do npc =============
+	OnInit:
+	waitingroom "Comandos Extras",0;
+	end;
+	
+}

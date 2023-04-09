@@ -1,0 +1,37 @@
+odin_past,0,0,0	script	#Odin4_Drop	-1,{
+
+OnOdin4MobDead:
+if(getcharid(1)) {
+    getpartymember getcharid(1),1;
+    getpartymember getcharid(1),2;
+    
+    for ( .@p = 0; .@p < $@partymembercount; .@p++)
+        if(attachrid($@partymemberaid[.@p],$@partymembercid[.@p]) == 1) {
+            if(strcharinfo(3) != strnpcinfo(4)) continue;
+            if(rand(1,10000) >= (10000 - .chance)) 
+                getitem .drop_id[rand(getarraysize(.drop_id))],1;
+        }
+
+} else {
+	if(rand(1,10000) >= (10000 - .chance)) 
+		getitem .drop_id[rand(getarraysize(.drop_id))],1;
+}
+end;
+
+OnInit:
+setarray .drop_id[0],23986, // Odin Relic
+					 32859; // Odin's Signet
+
+// ==== Drop Settings ====
+// Multiply the Drop Chance below with the Server Drop Chance
+// 1 = Yes
+// 0 = No
+.battleconf_drop = 0;
+
+// General Drop Chance
+.drop = 50; // 50 = 0.5%
+
+// Calculation
+.chance = .drop * ( (.battleconf_drop)?( (getbattleflag("item_rate_common")%100 > 0)? (getbattleflag("item_rate_common")/100):1):1);
+end;
+}

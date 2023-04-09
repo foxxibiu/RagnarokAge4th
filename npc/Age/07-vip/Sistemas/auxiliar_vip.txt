@@ -1,0 +1,53 @@
+prontera,152,194,5	script	Sala VIP	4_M_SOULREAPER,{
+
+	cutin "soul_van01",2;
+	mes "[ ^008000Ichimaro, o Porteiro VIP^000000 ]";
+	mes "Seja bem vindo ao sistema VIP!";
+	mes "Em que posso te ajudar?";
+	mes "Escolha abaixo a opnião de acordo com seu passe VIP!";
+
+	next;
+	switch(select("^DAA520[>]^000000Acesso VIP[^DAA520Obtido Por Cash^000000]","^DAA520[>]^000000Acesso PREMIUM [^DAA520Obtido Por Cash^000000]","^DC143C[>]^000000 Cancelar")){
+		
+	case 1:
+    if (getgroupid() < 5) {
+		mes "[ ^008000Ichimaro, o Porteiro VIP^000000 ]";
+        mes "Torne-se VIP PREMIUM comprando o passe VIP na loja de cash para poder utilizar meus serviços..";
+		cutin "soul_van01",255;
+        close;
+    }
+		mes "[^008000 AUTENTICANDO ^000000]";		
+		mes "Seja Bem vindo! você irá para a sala VIP.";
+		mes "....";
+		mes "Teleportando para sala VIP.";
+		next;
+		mes " Teleportando... ";
+		warp "vip_lounge",151,129;
+		cutin "",255;
+		close; 
+		
+	case 2:
+	if  (getgroupid() >= 10 ) {
+
+		mes "[^008000 AUTENTICANDO ^000000]";		
+		mes "Seja Bem vindo! você irá para a sala PREMIUM.";
+		mes "....";
+		mes "Teleportando para sala PREMIUM.";
+		next;
+		mes " Teleportando... ";
+		warp "s_room",50,32;
+		cutin "",255;
+		close; 
+	}	
+		case 3:
+		mes "[ ^008000Ichimaro, o Porteiro VIP^000000 ]";
+		mes "Caso precisse dos meus serviços estarei aqui!.";
+		cutin "",255;
+		close;
+	}
+end;
+}
+
+// Duplicates
+//=========================================================
+

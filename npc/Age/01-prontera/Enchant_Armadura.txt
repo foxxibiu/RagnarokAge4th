@@ -1,0 +1,383 @@
+//============================================================
+prontera,195,172,5	script	Mestre de Encantamento	10366,{
+cutin "4job_robin_02.png",2;
+emotion ET_SCRATCH;
+mes .n$;
+mes "Olá, "+strcharinfo(0)+"!";
+mes "Posso encantar suas armaduras com atributos adicionais, que variam entre:";
+mes "Também há chance de eu não conseguir encantar seus itens, já que é um processo dificil.";
+mes "Lembre-se que o item de encantamento sempre será consumido.";
+mes "------------------";
+mes "----Encantamentos Disponíveis----";
+mes "STR (1~3) - AGI (1~3) - VIT (1~3) - INT (1~3) - DEX (1~3) - LUK (1~3)";
+mes "------------------";
+mes "Como posso te ajudar hoje?";
+next;
+switch(select("- Encantar Equipamento:- Resetar Encantamento:- Informação:- Cancelar")) {
+	
+	case 1:
+
+	mes "Por favor, selecione o equipamento que você quer que eu encante:";
+	for ( set .@s,0; .@s < getarraysize(.enchant_equip); set .@s,.@s + 1) {
+		switch(.enchant_equip[.@s]) {
+			case 1: set .@c_slot$,"Acessório Esquerdo"; break;
+			case 2: set .@c_slot$,"Acessório direito"; break;
+			case 3: set .@c_slot$,"Sapatos"; break;
+			case 4: set .@c_slot$,"Capa"; break;
+			case 5: set .@c_slot$,"Baixo"; break;
+			case 6: set .@c_slot$,"Meio"; break;
+			case 7: set .@c_slot$,"Cabeça"; break;
+			case 8: set .@c_slot$,"Armadura"; break;
+			case 9: set .@c_slot$,"Escudo"; break;
+		}
+		set .@c_m$,.@c_m$ + ((getequipid(.enchant_equip[.@s]-1) != -1)?.@c_slot$ + "-["+getitemname(getequipid(.enchant_equip[.@s]-1))+"]":"") + ( (.enchant_equip[.@s+1] != 0)?":":"");
+	}
+	set .@c_m$,.@c_m$ + ":Cancel";
+	set .@part,.enchant_equip[select(.@c_m$) - 1] - 1;
+	//if(.@part >= getarraysize(.enchant_equip)) close;
+	next;
+	mes .n$;
+	if(getequipid(.@part) == -1) {
+		mes "Parece que você não tem nada equipado aí.";
+		cutin "4job_robin_02.png",255;
+		close;
+	}
+
+	// Impedir o encantamento de uma arma dupla ou arma de duas mãos acidentalmente
+	if(.@part == 8 && getiteminfo(getequipid(.@part),5) != 32) {
+		mes "Sinto muito, mas o equipamento em sua mão esquerda não é um escudo!";
+		cutin "4job_robin_02.png",255;
+		close;
+	}
+	set .@eq,getequipid(.@part); // Saving Item ID
+	set .@ref,getequiprefinerycnt(.@part); 	// Saving Refine Level, if there is one
+	set .@card1,getequipcardid(.@part,0); // Save Item ID of Card Slot 1
+	set .@card2,getequipcardid(.@part,1); // Save existing Enchantment ID of Slot 2
+	set .@card3,getequipcardid(.@part,2); // Save existing Enchantment ID of Slot 3
+	set .@card4,getequipcardid(.@part,3); // Save existing Enchantment ID of Slot 4
+	mes "Selected Equipment:";
+	mes "["+getitemname(getequipid(.@part))+"]";
+	switch(.enchant_slots) {
+		case 1: if(getequipcardid(.@part,3) != 0) set .@f,1; break;
+		case 2: if(getequipcardid(.@part,3) != 0 && getequipcardid(.@part,2) != 0) set .@f,1; break;
+		case 3:	if(getequipcardid(.@part,3) != 0 && getequipcardid(.@part,2) != 0 && getequipcardid(.@part,1) != 0) set .@f,1; break;
+	}
+	if(.@f) {
+		emotion ET_HUK;
+		mes "Mas parece que você já encantou todos os slots possíveis neste equipamento.";
+		cutin "4job_robin_02.png",255;
+		close;
+	}
+	next;
+	if(!.enchant_type) { // Random Stat Enchantment
+		set .@enc_t,rand(850); // Total of 6 Stats
+		if(.@enc_t < 100) set .@t,1;
+		else if(.@enc_t < 200) set .@t,2;
+		else if(.@enc_t < 300) set .@t,3;
+		else if(.@enc_t < 400) set .@t,4;
+		else if(.@enc_t < 500) set .@t,5;
+		else if(.@enc_t < 600) set .@t,6;
+		else if(.@enc_t < 700) set .@t,7;
+		else if(.@enc_t < 800) set .@t,8;
+		else if(.@enc_t < 900) set .@t,9;
+
+	} else if(.enchant_type) {
+		mes .n$;
+		mes "Por favor, selecione qual tipo de  Encantamento você deseja:";
+		set .@t,select("- STR:- AGI:- VIT:- INT:- DEX:- LUK");
+		next;
+	}
+	if(!.enchant_refine) {
+		set .@ref_r,rand(1000);
+		if(.@ref_r < 100) set .@r,0;
+		else if(.@ref_r < 200) set .@r,1;
+		else if(.@ref_r < 300) set .@r,2;
+		else if(.@ref_r < 400) set .@r,3;
+		else if(.@ref_r < 500) set .@r,3;
+		else if(.@ref_r < 600) set .@r,4;
+		else if(.@ref_r < 700) set .@r,6;
+		else if(.@ref_r < 800) set .@r,7;
+		else if(.@ref_r < 900) set .@r,8;
+		else if(.@ref_r < 1000) set .@r,9;
+		
+	} else if(.enchant_refine) {
+		
+		// Selected Equipment is not refineable
+		if(getequipisenableref(.@part) == 0) {
+			set .@ref_r,rand(1000);
+			if(.@ref_r < 100) set .@r,0;
+			else if(.@ref_r < 200) set .@r,1;
+			else if(.@ref_r < 300) set .@r,2;
+			else if(.@ref_r < 400) set .@r,3;
+			else if(.@ref_r < 500) set .@r,3;
+			else if(.@ref_r < 600) set .@r,4;
+			else if(.@ref_r < 700) set .@r,6;
+			else if(.@ref_r < 800) set .@r,7;
+			else if(.@ref_r < 900) set .@r,8;
+			else if(.@ref_r < 1000) set .@r,9;
+		
+		// O equipamento Selectd não tem um refino e é refinável
+		} else if(!.@ref) {
+			mes .n$;
+			mes "Sinto muito, mas você precisa de pelo menos +1 em seu equipamento para um Encantamento.";
+			cutin "4job_robin_02.png",255;
+			close;
+		
+		// Selected Equipment has refine
+		} else {
+			// Maximum +10 Refine
+			if(.@ref > 10) 
+				set .@r,9;
+			else 
+				set .@r,.@ref - 1;
+		}
+	}
+	mes .n$;
+	switch(.enchant_price) {
+		case 0: break;
+		case 1:
+		if(Zeny < .enchant_cost) {
+			mes "Mas parece que você não tem Zeny suficiente!";
+			cutin "4job_robin_02.png",255;
+			close;
+		}
+		set Zeny,Zeny - .enchant_cost;
+		break;
+		
+		case 2:
+		if(countitem(.enchant_item) < .enchant_cost) {
+			mes "Mas parece que você não tem o suficiente "+getitemname(.enchant_item)+"!";
+			cutin "4job_robin_02.png",255;
+			close;
+		}
+		delitem .enchant_item,.enchant_cost;
+		break;
+		
+		case 3:
+		if(#CASHPOINTS < .enchant_cost) {
+			mes "Mas parece que você não tem Cash Points suficientes!";
+			cutin "4job_robin_02.png",255;
+			close;
+		}
+		set #CASHPOINTS,#CASHPOINTS - .enchant_cost;
+		break;
+	}
+
+	if(rand(100) <= .enchant_chance[.@r]){
+		delequip .@part;
+		if(!.@card4) // First slot is empty
+			getitem2 .@eq,1,1,.@ref,0,.@card1,0,0,getd(".enchant_id"+.@t+"["+.@r+"]");
+		else if(!.@card3) // 2nd slot is empty
+			getitem2 .@eq,1,1,.@ref,0,.@card1,0,getd(".enchant_id"+.@t+"["+.@r+"]"),.@card4;
+		else if(!.@card2) // 3rd slot is empty
+			getitem2 .@eq,1,1,.@ref,0,.@card1,getd(".enchant_id"+.@t+"["+.@r+"]"),.@card3,.@card4;	
+		equip .@eq;
+		mes "O encantamento foi um sucesso.";
+		cutin "4job_robin_02.png",255;
+	} else 
+		mes "Me desculpe, mas o encantamento falhou..";
+		mes "até aproxima!";
+		cutin "4job_robin_02.png",255;
+	break;
+
+	case 2:
+	mes .n$;
+	mes "Selecione o equipamento que deseja que eu reinicie o encantamento!";
+	for ( set .@s,0; .@s < getarraysize(.enchant_equip); set .@s,.@s + 1) {
+		switch(.enchant_equip[.@s]) {
+
+			case 1: set .@c_slot$,"Acessório Esquerdo"; break;
+			case 2: set .@c_slot$,"Acessório direito"; break;
+			case 3: set .@c_slot$,"Sapatos"; break;
+			case 4: set .@c_slot$,"Capa"; break;
+			case 5: set .@c_slot$,"Baixo"; break;
+			case 6: set .@c_slot$,"Meio"; break;
+			case 7: set .@c_slot$,"Cabeça"; break;
+			case 8: set .@c_slot$,"Armadura"; break;
+			case 9: set .@c_slot$,"Escudo"; break;
+
+		}
+		set .@c_m$,.@c_m$ + ((getequipid(.enchant_equip[.@s]-1) != -1)?.@c_slot$ + "-["+getitemname(getequipid(.enchant_equip[.@s]-1))+"]":"") + ( (.enchant_equip[.@s+1] != 0)?":":"");
+	}
+	set .@c_m$,.@c_m$ + ":Cancel";
+	set .@part,.enchant_equip[select(.@c_m$) - 1] - 1;
+	//if(.@part >= getarraysize(.enchant_equip)) close;
+	next;
+	mes .n$;
+	if(getequipcardid(.@part,3) == 0) {
+		emotion ET_HUK;
+		mes "Parece que você não tem nenhum encantamento neste equipamento.";
+		cutin "4job_robin_02.png",255;
+		close;
+	}
+	// Prevenir o desencantamento de uma arma dupla ou arma de duas mãos acidentalmente
+	if(.@part == 8 && getiteminfo(getequipid(.@part),5) != 32) {
+		emotion ET_HUK;
+		mes "Sinto muito, mas o equipamento em sua mão esquerda não é um escudo!";
+		cutin "4job_robin_02.png",255;
+		close;
+	}
+	set .@eq,getequipid(.@part); // Saving Item ID
+	set .@ref,getequiprefinerycnt(.@part); 	// Saving Refine Level, if there is one
+	set .@card1,getequipcardid(.@part,0); // Save Item ID of Card Slot 1
+	mes "Selected Equipment:";
+	mes "["+getitemname(getequipid(.@part))+"]";
+	mes "Continuar?";
+	if(select("- Sim:- Não") - 1) close;
+	next;
+	switch(.enchant_reset) {
+		case 0: break;
+		case 1:
+		if(Zeny < .enchant_rcost) {
+			emotion ET_HUK;
+			mes "Parece que você não tem Zeny suficiente!";
+			cutin "4job_robin_02.png",255;
+			close;
+		}
+		set Zeny,Zeny - .enchant_rcost;
+		cutin "4job_robin_02.png",255;
+		break;
+		
+		case 2:
+		if(countitem(.enchant_ritem) < .enchant_rcost) {
+			emotion ET_HUK;
+			mes "Parece que você não tem o suficiente "+getitemname(.enchant_ritem)+"!";
+			cutin "4job_robin_02.png",255;
+			close;
+		}
+		delitem .enchant_ritem,.enchant_rcost;
+		break;
+		
+		case 3:
+		if(#CASHPOINTS < .enchant_rcost) {
+			emotion ET_HUK;
+			mes "Parece que você não tem Cash Points suficientes!";
+			cutin "4job_robin_02.png",255;
+			close;
+		}
+		set #CASHPOINTS,#CASHPOINTS - .enchant_rcost;
+		break;
+	}
+	specialeffect 102;
+	delequip .@part;
+	getitem2 .@eq,1,1,.@ref,0,.@card1,0,0,0;
+	equip .@eq;
+	mes .n$;
+	mes "O encantamento foi reiniciado.";
+	mes "Até a próxima.";
+	cutin "4job_robin_02.png",255;
+	break;
+	
+	case 3:
+	mes .n$;
+	mes "Se você quiser posso encantar seu equipamento até "+.enchant_slots+" slots com qualquer encantamento que tenho guardado";
+	mes ( (!.enchant_price)?"de graça":"em troca de "+.enchant_cost+"x "+( (.enchant_price == 1)?"Zeny":( (.enchant_price == 2)?getitemname(.enchant_price):"Cash Points")))+".";
+	mes "O próprio tipo de Encantamento será "+( (.enchant_type == 1)?"selectable":"aleatório")+".";
+	mes "Para cada tipo de Encantamento também existem vários níveis, que variam de +1 a +10.";
+	mes "Qual vai "+( (.enchant_refine == 1)?"dependem do nível de refinamento do equipamento, o que significa que qualquer refinamento desbloqueia o mesmo nível de encantamento. Não posso encantar um equipamento +0, exceto acessórios, que serão selecionados aleatoriamente":"ser selecionado aleatoriamente")+".";
+	next;
+	mes .n$;
+	mes "Os níveis de encantamento de estatísticas têm certas chances de acontecer:";
+	for ( set .@l,0; .@l < getarraysize(.enchant_chance); set .@l,.@l + 1)
+		mes "STAT+"+(.@l+1)+" = "+.enchant_chance[.@l]+"%";
+	mes " ";
+	mes "Eu também posso redefinir um encantamento"+ ( (!.enchant_reset)?" de graça":", mas eu exijo "+.enchant_rcost+"x "+ ((.enchant_reset == 1)?"Zeny":( (.enchant_reset == 2)?getitemname(.enchant_ritem):"Cash Points")))+".";
+	cutin "4job_robin_02.png",255;
+	break;
+
+
+	case 4: break;
+}
+end;
+
+OnInit:
+set .n$,"[^0000FFEncantador de Equipamentos^000000]";
+
+// Insira aqui todos os slots de equipamento que você deseja que sejam encantáveis
+// Entradas válidas:
+// Nota: A ordem desses valores define como eles serão exibidos!
+// - 7 = EQI_HEAD_TOP
+// - 6 = EQI_HEAD_MID
+// - 5 = EQI_HEAD_LOW
+// - 8 = EQI_ARMOR
+// - 9 = EQI_HAND_L
+// - 4 = EQI_GARMENT
+// - 3 = EQI_SHOES
+// - 2 = EQI_ACC_R
+// - 1 = EQI_ACC_L
+//setarray .enchant_equip[0],7,6,5,8,9,4,3,2,1;
+setarray .enchant_equip[0],8;
+
+// Tipo de emcantamentos > +1-+10
+setarray .enchant_id1[0],4700,4701,4702; // STR Stat 1-3
+setarray .enchant_id2[0],4730,4731,4732; // AGI Stat 1-3
+setarray .enchant_id3[0],4740,4741,4742; // VIT Stat 1-3
+setarray .enchant_id4[0],4710,4711,4712; // INT Stat 1-3
+setarray .enchant_id5[0],4720,4721,4722; // DEX Stat 1-3
+setarray .enchant_id6[0],4750,4751,4752; // LUK Stat 1-3
+
+
+// Chances de encantamento em porcentagem
+setarray .enchant_chance[0],90,80,60,50,45,25,20,15,10;
+
+// Tipo de Encantamento
+// O encantamento deve ser aleatório ou você pode selecionar qual Stat deseja
+// 1 = Selectable
+// 0 = Aleatório
+set .enchant_type,0;
+
+// Enchantment Slots
+// Quantos slots podem ser encantados?
+// Valid values: 1-3
+set .enchant_slots,1;
+
+// Enchantment Refine Type
+// O nível de encantamentos deve ser desbloqueado com base no refinamento do equipamento?
+// Exemplo: +5 de armadura pode receber +5 de FOR
+// 1 = Refinar desbloqueios baseados
+// 0 = Aleatório
+set .enchant_refine,0;
+
+// Preço para encantamento:
+// 0 = Disable
+// 1 = Zeny
+// 2 = Item ID
+// 3 = Cash Points
+set .enchant_price,2;
+switch(.enchant_price) {
+	case 1:
+	set .enchant_cost,5000000; // 50k Zeny
+	break;
+	
+	case 2:
+	set .enchant_item,6417; // Item ID (Default: 7539 = Poring Coin)
+	set .enchant_cost,10; // Amount
+	break;
+	
+	case 3:
+	set .enchant_cost,1000; // Cash Points
+	break;
+}
+// Preço para redefinição:
+// 0 = Disable
+// 1 = Zeny
+// 2 = Item ID
+// 3 = Cash Points
+set .enchant_reset,2;
+
+switch(.enchant_reset) {
+	case 1:
+	set .enchant_rcost,10000000; // 50k Zeny
+	break;
+	
+	case 2:
+	set .enchant_ritem,6417; // Item ID (Default: 7539 = Poring Coin)
+	set .enchant_rcost,1; // Amount
+	break;
+	
+	case 3:
+	set .enchant_rcost,5000; // Cash Points
+	break;
+}
+end;
+}

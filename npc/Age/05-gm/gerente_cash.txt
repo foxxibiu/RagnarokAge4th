@@ -1,0 +1,107 @@
+-	script	add_cash_Kyo	-1,{
+OnInit:
+	bindatcmd "addcash","add_cash_Kyo::OnCash",99;
+end;
+	//add_cash_points(<valor atual de cash points>,<account_id>,<quantidade de cash points>);
+	function add_cash_points {
+		if(getarg(0) == 0){
+			query_sql "INSERT INTO `acc_reg_num` (`account_id`, `key`, `index`, `value`) VALUES ('"+getarg(1)+"', '#CASHPOINTS', 0, '"+getarg(2)+"')";
+		}else if( getarg(0) >= 1 ){
+			query_sql "update `acc_reg_num` set `value`=`value` + '"+getarg(2)+"' where `account_id`= '"+getarg(1)+"' and `key`= '#CASHPOINTS' ";
+		}
+		return;
+	}
+	function remover_cash_points {
+		if(getarg(0) == 0){
+			return;
+		}else if( getarg(0) >= 1 ){
+			query_sql "update `acc_reg_num` set `value`=`value` - '"+getarg(2)+"' where `account_id`= '"+getarg(1)+"' and `key`= '#CASHPOINTS' ";
+		}
+		return;
+	}
+	//add_item_cash(<char_id>,<titulo da msg 1>,<titulo da msg 2>,<body>,<id do item>,<quantidade>);
+	function	add_item_cash	{
+		.@char_id = getarg(0)
+		.@sender$ = getarg(1);
+		.@title$ = getarg(2);
+		.@body$ = getarg(3);
+		.@zeny = 0;
+		.@item1 = getarg(4);	
+		.@quantidade1 = getarg(5);
+
+		mail .@char_id, .@sender$, .@title$, .@body$, .@zeny, .@item1, .@quantidade1;
+		return;
+	}
+	
+OnCash:
+	switch(select("Adicionar cash","remover cash","Enviar item")){
+	case 1:
+		mes "insira o login da conta que você deseja adicionar os cash points.";
+		input .@login$;
+		query_sql "select `account_id` from `login` where `userid`= '"+.@login$+"'",.@account_id;
+		if(.@account_id == 0){ mes "está login não existe."; end; }
+		clear;
+		mes "O account_id da conta selecionada é "+.@account_id;
+		query_sql "select `value` from `acc_reg_num` where `account_id`= '"+.@account_id+"' and `key`= '#CASHPOINTS' ",.@cash_Points;
+		mes "é possui "+.@cash_Points+" cash points";
+		switch(select("deseja adicionar mais cash Points?","cancelar")){
+		case 1:
+			clear;
+			mes "digite a quantidade de cash points que desejá adicionar na conta: "+.@login$;
+			input .@quantidade;
+			if(.@quantidade == 0) end;
+			add_cash_points(.@cash_Points,.@account_id,.@quantidade);
+			clear;
+			mes "Cash adicionado com sucesso";
+			end;
+		case 2:
+		end;
+		}
+	end;
+	case 2:
+		mes "insira o login da conta que você deseja remover os cash points.";
+		input .@login$;
+		query_sql "select `account_id` from `login` where `userid`= '"+.@login$+"'",.@account_id;
+		if(.@account_id == 0){ mes "está login não existe."; end; }
+		clear;
+		mes "O account_id da conta selecionada é "+.@account_id;
+		query_sql "select `value` from `acc_reg_num` where `account_id`= '"+.@account_id+"' and `key`= '#CASHPOINTS' ",.@cash_Points;
+		mes "é possui "+.@cash_Points+" cash points";
+		switch(select("deseja remover mais cash Points?","cancelar")){
+		case 1:
+			clear;
+			mes "digite a quantidade de cash points que desejá remover da conta: "+.@login$;
+			input .@quantidade;
+			if(.@quantidade == 0) end;
+			remover_cash_points(.@cash_Points,.@account_id,.@quantidade);
+			clear;
+			mes "Cash Points Removidos com sucesso";
+			end;
+		case 2:
+		end;
+		}
+	end;
+	case 3:
+		mes "insira o nome do personagem que você deseja mandar o item";
+		input .@nome_do_char$;
+		query_sql "select `char_id` from `char` where `name`= '"+.@nome_do_char$+"'",.@char_id;
+		.@titulo$ = strcharinfo(0);
+		clear;
+		mes "insira o titulo da msg";
+		input .@titulo2$;
+		clear;
+		mes "insira o corpo da msg";
+		input .@corpo$;
+		clear;
+		mes "insira o id do item";
+		input .@id_item;
+		clear;
+		mes "insira a quantidade do item";
+		input .@quantidade_item;
+		add_item_cash(.@char_id,.@titulo$,.@titulo2$,.@corpo$,.@id_item,.@quantidade_item);
+		clear;
+		mes "item enviado com sucesso";
+		end;
+	}
+end;
+}

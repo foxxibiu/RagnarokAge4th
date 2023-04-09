@@ -1,0 +1,36 @@
+s_room,65,64,3	script	General de Batalha	4_EP18_SHULANG,{
+cutin "ep18_shulang.png",2;
+mes "[^cc0000General de Batalha^000000]";
+mes "Olá "+strcharinfo(0)+", eu posso contribuir com táticas de batalha para seu clã atingir o nível 50 rapidamente, você deseja aprender?";
+menu "Sim",-,"Não",nao;
+
+if (getgroupid() < 1) {
+mes "Apenas jogadores VIP tem acesso ao serviços";
+cutin "ep18_shulang.png",255;
+close;
+
+} else {
+
+next;
+mes "[^cc0000General de Batalha^000000]";
+mes "Seu clã agora possuí nível 50, boa sorte nas batalhas.";
+atcommand "@guildlvup 50";
+
+}
+cutin "ep18_shulang.png",255;
+close;
+
+nao:
+next;
+mes "[^cc0000General de Batalha^000000]";
+mes "Tudo bem caso precise de meus serviços pode voltar aqui!";
+cutin "ep18_shulang.png",255;
+close;
+
+OnInit:
+.@UID = getnpcid(0);
+setunittitle(.@UID, "[Mestre da Guerra]");
+setunitdata .@UID, UNPC_GROUP_ID, 9;
+
+
+}

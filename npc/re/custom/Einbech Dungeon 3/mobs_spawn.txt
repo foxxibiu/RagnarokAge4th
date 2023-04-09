@@ -1,0 +1,12 @@
+//= < Mob Spawn > Einbech Dungeon 3
+ein_dun03,0,0	monster	Poisonous	20592,35,5000,5000,"#EinF3_Drop::OnEin3MobDead"
+ein_dun03,0,0	monster	Toxious	20593,35,5000,5000,"#EinF3_Drop::OnEin3MobDead"
+ein_dun03,0,0	monster	Mineral Verde	20594,40,5000,5000,"#EinF3_Drop::OnEin3MobDead"
+ein_dun03,0,0	monster	Mineral Vermelho	20595,40,5000,5000,"#EinF3_Drop::OnEin3MobDead"
+ein_dun03,0,0	monster	Mineral Branco	20596,40,5000,5000,"#EinF3_Drop::OnEin3MobDead"
+ein_dun03,0,0	monster	Mineral Roxo	20597,40,5000,5000,"#EinF3_Drop::OnEin3MobDead"
+ein_dun03,0,0	monster	Jeweliant	20598,20,5000,5000,"#EinF3_Drop::OnEin3MobDead"
+ein_dun03,0,0	monster	Jewel	20600,3,5000,5000,"#EinF3_Drop::OnEin3MobDead"
+ein_dun03,0,0	boss_monster	Jungoliant	20601,1,21600000,600000,0,"#EinF3_Drop::OnEin3MobDead"
+ein_dun03,0,0	monster	Porcellio	20602,22,5000,5000,"#EinF3_Drop::OnEin3MobDead"
+ein_dun03,0,0	monster	Abyssman	20603,40,5000,5000,"#EinF3_Drop::OnEin3MobDead"

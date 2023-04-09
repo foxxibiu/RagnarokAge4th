@@ -1,0 +1,86 @@
+s_room,30,53,6	script	Empacotador	4_EXJOB_MASTER_J,{
+	cutin "ex_sa_masterj03.png",2;
+	function checkPeso90; function getPresente;
+
+	//////////////////////////////////////////////// ADICIONE OS IDS DAS CAIXAS AQUI:
+	setarray .@caixasid[0], 603, 617, 644, 12130;
+	/////////////////////////////////////////////////////////////////////////////////
+
+	mes "[^0000ff" + strnpcinfo(0)+ "^000000]";
+	if (agitcheck() || agitcheck2()) {
+		mes "Estamos em guerra! Não posso ajuda-lo durante esse periodo!";
+		mes " ";
+		mes "^b25900Volte após o terminio da Guerra do Emperium.^000000";
+		cutin "ex_sa_masterj03.png",255;
+		close;
+	}
+	mes "Uauu!!!! Já imaginou se pudesse abrir ^995050TODAS^000000 as suas caixas de uma só vez?!";
+	mes "Então! Posso fazer isso por você...";
+	mes "^309930Quer abrir as suas caixas?^000000";
+	next;
+	.@menu$ = "Não, por enquanto!:";
+	for(set .@i,0; .@i <= (getarraysize(.@caixasid)-1); set .@i,.@i+1) {
+		set .@menu$, .@menu$+"^993030Abrir^000000 " + getitemname(.@caixasid[.@i]) + ":";
+	}
+	.@item = select(.@menu$);
+	if (.@item == 1) {
+		mes "[^0000ff" + strnpcinfo(0)+ "^000000]";
+		mes "Ok! Volte quando precisar de meus serviços!";
+		cutin "ex_sa_masterj03.png",255;
+		close;
+	} else {
+		.@selecId = .@caixasid[(.@item-2)];
+		mes "[^0000ff" + strnpcinfo(0)+ "^000000]";
+		if( countitem(.@selecId) > 0 ) {
+			mes "Vamos abrir a caixa ^309930" + getitemname(.@selecId) + "^000000.";
+		} else {
+			mes "^992020Você não tem nenhuma " + getitemname(.@selecId) + "!^000000";
+			cutin "ex_sa_masterj03.png",255;
+			close;
+		}
+		next;
+		freeloop(true);
+		while (checkPeso90() == false && countitem(.@selecId) > 0) {
+			getPresente(.@selecId);
+		}
+		freeloop(false);
+		mes "[^0000ff" + strnpcinfo(0)+ "^000000]";
+		if(checkPeso90()) {
+			mes "Seu inventário está cheio ou você atingiu 90% do peso máximo!";
+			mes "Guarde alguns itens para continuarmos.";
+		} else {
+			mes "Todas as caixas foram abertas!";
+			mes "Volte quando precisar dos meus serviços.";
+		}
+		cutin "ex_sa_masterj03.png",255;
+		close;
+	}
+
+	function getPresente {
+		switch(getarg(0))
+		{
+			case 603: getrandgroupitem(IG_BlueBox),1; break;
+			case 617: getrandgroupitem(IG_VioletBox),1; break;
+			case 644: getrandgroupitem(IG_GiftBox),1; break;
+			case 12130: getrandgroupitem(IG_CookieBag),1; break;
+			default:
+				mes "[Erro 404]: Por favor, informe este erro a um administrado.";
+				cutin "ex_sa_masterj03.png",255;
+				close;
+		}
+		delitem(getarg(0), 1);
+		return true;
+	}
+
+	function checkPeso90 {
+		getinventorylist;
+		if (@inventorylist_count > 99 || Weight > ((MaxWeight / 100) * 90)) {
+			return true;
+		} else {
+			return false;
+		}
+
+end;
+	}
+
+}

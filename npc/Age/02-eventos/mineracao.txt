@@ -1,0 +1,244 @@
+ver_dun00,19,171,4	script	#pedra01	4_ELEPHANT,{ // <<<< ADICIONE O ID DA PEDRA GRANDE.
+
+
+	OnTouch:
+
+	//=======================================================//
+	// QUANTO TEMPO O PLAYER PRECISA ESPERAR PARA QUEBRAR NOVAMENTE.
+	// PADRAO: 10 SEGUNDOS
+	set @Tempo_p,10;
+	//
+	//=======================================================//
+	// O PLAYER VAI PRECISAR DE UM ITEM PARA QUEBRAR PEDRAS? SE NAO, COLOQUE // NO IF
+	if(countitem(11816)<=0){ dispbottom "[Sistema] você não tem uma picareta, para conseguir uma basta votar no nosso servidor!"; end; }
+	//=======================================================//
+	
+
+	if(#TimeOn_p >= gettimetick(2)){ npctalk "Você só pode minerar daqui a "+(#TimeOn_p-gettimetick(2))+" Segundos"; end;}
+	set #TimeOn_p, gettimetick(2) + @Tempo_p; specialeffect2 457;
+	cutin "p_00",2; sleep2 100; specialeffect2 457;
+	cutin "p_01",2; sleep2 200;
+	cutin "p_02",2; sleep2 500;
+	cutin "p_03",2; sleep2 800;
+	cutin "p_04",2; sleep2 700;
+
+	//==========================================================//
+	// MUDE O ID PARA O ID DA PEDRA QUE VOCÊ ESCOLHER COMO NPC OU MOB(IDEAL COMO MOB) = TROCA PARA A PEDRA QUEBRADA
+	// 
+	classchange 4_ELEPHANT, ""+strnpcinfo(3); 
+	//==========================================================//
+	cutin "p_00",2; sleep2 100; specialeffect2 457; 
+	cutin "p_01",2; sleep2 200; 
+	cutin "p_02",2; sleep2 500; 
+	cutin "p_03",2; sleep2 800; specialeffect2 457; 
+	cutin "p_04",2; sleep2 700; 
+	cutin "p_00",2; sleep2 100; specialeffect2 457; 
+	cutin "p_01",2; sleep2 200;
+	cutin "p_02",2; sleep2 500; 
+	cutin "p_03",2; sleep2 800; 
+	cutin "p_04",2; sleep2 700; specialeffect2 457;
+	
+	cutin "p_05",2; sleep2 500; specialeffect2 457;
+	
+	set @randOBB,rand(100);
+	if(@randOBB==0){dispbottom "Boa tentativa, mas não foi dessa vez !"; }
+	if(@randOBB==1){dispbottom "Boa tentativa, mas não foi dessa vez !"; }
+	if(@randOBB==2){getitem 501,4;}
+	if(@randOBB==3){dispbottom "Boa tentativa, mas não foi dessa vez !"; }
+	if(@randOBB==4){dispbottom "Boa tentativa, mas não foi dessa vez !"; }
+	if(@randOBB==5){getitem 501,1;}
+	if(@randOBB==6){dispbottom "Boa tentativa, mas não foi dessa vez !";}
+	if(@randOBB==7){dispbottom "Boa tentativa, mas não foi dessa vez !"; }
+	if(@randOBB==8){dispbottom "Boa tentativa, mas não foi dessa vez !"; }
+	if(@randOBB==9){dispbottom "Boa tentativa, mas não foi dessa vez !"; }
+	if(@randOBB==10){getitem 501,1;}
+	if(@randOBB==11){getitem 501,2;}
+	if(@randOBB==12){getitem 501,3;}
+	if(@randOBB==13){getitem 501,4;}
+	if(@randOBB==14){getitem 501,5;}
+	if(@randOBB==15){getitem 501,1;}
+	if(@randOBB==16){getitem 501,2;}
+	if(@randOBB==17){getitem 501,1;}
+	if(@randOBB==18){getitem 501,2;}
+	if(@randOBB==19){getitem 501,3;}
+	if(@randOBB==20){getitem 501,4;}
+	if(@randOBB==21){getitem 501,5;}
+	if(@randOBB==22){getitem 501,2;}
+	if(@randOBB==23){getitem 501,1;}
+	if(@randOBB==24){getitem 501,5;}
+	if(@randOBB==25){getitem 501,4;}
+	if(@randOBB==26){getitem 501,3;}
+	if(@randOBB==27){getitem 1011,5;}
+	if(@randOBB==28){getitem 1011,4;}
+	if(@randOBB==29){getitem 1011,2;}
+	if(@randOBB==30){getitem 1011,1;}
+	if(@randOBB==31){getitem 1011,3;}
+	if(@randOBB==32){getitem 501,1;}
+	if(@randOBB==33){getitem 501,2;}
+	if(@randOBB==34){getitem 501,1;}
+	if(@randOBB==35){getitem 501,5;}
+	if(@randOBB==36){getitem 501,10;}
+	if(@randOBB==37){getitem 501,5;}
+	if(@randOBB==38){getitem 501,10;}
+	if(@randOBB==39){getitem 969,5;}
+	if(@randOBB==40){getitem 969,1;}
+	if(@randOBB==41){getitem 969,15;}
+	if(@randOBB==42){getitem 969,5;}
+	if(@randOBB==43){getitem 969,10;}
+	if(@randOBB==44){getitem 12210,1;}
+	if(@randOBB==45){getitem 12210,2;}
+	if(@randOBB==46){getitem 12210,3;}
+	if(@randOBB==47){getitem 12210,4;}
+	if(@randOBB==48){getitem 12210,1;}
+	if(@randOBB==49){dispbottom "Boa tentativa, mas não foi dessa vez !";}
+	if(@randOBB==50){getitem 501,1;}
+	if(@randOBB==51){getitem 501,2;}
+	if(@randOBB==52){getitem 501,3;}
+	if(@randOBB==53){getitem 501,4;}
+	if(@randOBB==54){getitem 501,5;}
+	if(@randOBB==55){getitem 501,1;}
+	if(@randOBB==56){getitem 501,5;}
+	if(@randOBB==57){getitem 501,2;}
+	if(@randOBB==58){getitem 501,1;}
+	if(@randOBB==59){dispbottom "Boa tentativa, mas não foi dessa vez !";}
+	if(@randOBB==60){dispbottom "Boa tentativa, mas não foi dessa vez !";}
+	if(@randOBB==61){getitem 501,1;}
+	if(@randOBB==62){getitem 501,2;}
+	if(@randOBB==63){getitem 501,3;}
+	if(@randOBB==64){getitem 501,4;}
+	if(@randOBB==65){getitem 501,5;}
+	if(@randOBB==66){dispbottom "Boa tentativa, mas não foi dessa vez !";}
+	if(@randOBB==67){dispbottom "Boa tentativa, mas não foi dessa vez !";}
+	if(@randOBB==68){dispbottom "Boa tentativa, mas não foi dessa vez !";}
+	if(@randOBB==69){getitem 3195,1;}
+	
+	if(@randOBB==70){getitem 501,3;}
+	if(@randOBB==71){getitem 501,1;}
+	if(@randOBB==72){getitem 501,1;}
+	if(@randOBB==73){getitem 501,1;}
+	if(@randOBB==74){getitem 501,2;}
+	if(@randOBB==75){getitem 501,1;}
+	if(@randOBB==76){getitem 501,2;}
+	if(@randOBB==77){getitem 501,3;}
+	if(@randOBB==78){getitem 501,4;}
+	if(@randOBB==79){getitem 501,5;}
+	
+	if(@randOBB==80){getitem 501,2;}
+	if(@randOBB==81){getitem 501,1;}
+	if(@randOBB==82){getitem 501,5;}
+	if(@randOBB==83){getitem 501,4;}
+	if(@randOBB==84){getitem 501,3;}
+	if(@randOBB==85){getitem 1011,5;}
+	if(@randOBB==86){getitem 1011,4;}
+	if(@randOBB==87){getitem 1011,2;}
+	if(@randOBB==88){getitem 1011,1;}
+	if(@randOBB==89){getitem 1011,3;}
+	if(@randOBB==90){getitem 7444,1;}
+	if(@randOBB==91){getitem 7444,3;}
+	if(@randOBB==92){getitem 7444,2;}
+	if(@randOBB==93){getitem 7444,5;}
+	if(@randOBB==94){ dispbottom "Boa tentativa, mas não foi dessa vez !";}
+	if(@randOBB==95){ dispbottom "Boa tentativa, mas não foi dessa vez !";}
+	if(@randOBB==96){ dispbottom "Boa tentativa, mas não foi dessa vez !";}
+	if(@randOBB==97){dispbottom "Boa tentativa, mas não foi dessa vez !";}
+	if(@randOBB==98){getitem 501,1;}
+	if(@randOBB==99){ dispbottom "Boa tentativa, mas não foi dessa vez !";}
+
+	
+	cutin "p_06",2; sleep2 1000; specialeffect2 457;
+	cutin "",255;
+	
+	disablenpc strnpcinfo (0);
+	//================================================//
+	// AQUI É O TEMPO QUE A PEDRA VAI NASCER ALEATORIAMENTE PELO MAPA
+	// PADRAO:  - 20 SEGUNDOS
+	sleep 180000;
+	//================================================//
+	while( !checkcell( strnpcinfo(4),( .@x = rand( 1,400 ) ),( .@y = rand( 1,400 ) ),cell_chkpass ) ); //celulas
+	movenpc strnpcinfo(0),.@x,.@y;
+	enablenpc strnpcinfo (0); end;
+end;
+}
+
+//=================================== 
+// AQUI É A DUPLICATA DO SISTEMA PELO MAPA.
+ver_dun00,151,167,4	duplicate(#pedra01)	#Pedra2	4_ELEPHANT
+ver_dun00,25,167,4	duplicate(#pedra01)	#Pedra3	4_ELEPHANT
+ver_dun00,28,157,4	duplicate(#pedra01)	#Pedra4	4_ELEPHANT
+ver_dun00,36,157,4	duplicate(#pedra01)	#Pedra5	4_ELEPHANT
+ver_dun00,44,164,4	duplicate(#pedra01)	#Pedra6	4_ELEPHANT
+ver_dun00,57,163,4	duplicate(#pedra01)	#Pedra7	4_ELEPHANT
+ver_dun00,72,166,4	duplicate(#pedra01)	#Pedra8	4_ELEPHANT
+ver_dun00,86,163,4	duplicate(#pedra01)	#Pedra9	4_ELEPHANT
+ver_dun00,87,156,4	duplicate(#pedra01)	#Pedra10	4_ELEPHANT
+ver_dun00,111,144,4	duplicate(#pedra01)	#Pedra11	4_ELEPHANT
+ver_dun00,121,147,4	duplicate(#pedra01)	#Pedra12	4_ELEPHANT
+ver_dun00,119,137,4	duplicate(#pedra01)	#Pedra13	4_ELEPHANT
+ver_dun00,125,140,4	duplicate(#pedra01)	#Pedra14	4_ELEPHANT
+ver_dun00,100,158,4	duplicate(#pedra01)	#Pedra16	4_ELEPHANT
+ver_dun00,134,150,4	duplicate(#pedra01)	#Pedra17	4_ELEPHANT
+ver_dun00,146,143,4	duplicate(#pedra01)	#Pedra18	4_ELEPHANT
+ver_dun00,152,157,4	duplicate(#pedra01)	#Pedra19	4_ELEPHANT
+ver_dun00,142,165,4	duplicate(#pedra01)	#Pedra20	4_ELEPHANT
+ver_dun00,163,142,4	duplicate(#pedra01)	#Pedra21	4_ELEPHANT
+ver_dun00,146,137,4	duplicate(#pedra01)	#Pedra22	4_ELEPHANT
+ver_dun00,127,127,4	duplicate(#pedra01)	#Pedra23	4_ELEPHANT
+ver_dun00,153,125,4	duplicate(#pedra01)	#Pedra24	4_ELEPHANT
+ver_dun00,136,113,4	duplicate(#pedra01)	#Pedra25	4_ELEPHANT
+ver_dun00,130,105,4	duplicate(#pedra01)	#Pedra26	4_ELEPHANT
+ver_dun00,140,102,4	duplicate(#pedra01)	#Pedra27	4_ELEPHANT
+ver_dun00,133,100,4	duplicate(#pedra01)	#Pedra28	4_ELEPHANT
+ver_dun00,123,96,4	duplicate(#pedra01)	#Pedra29	4_ELEPHANT
+ver_dun00,130,82,4	duplicate(#pedra01)	#Pedra30	4_ELEPHANT
+ver_dun00,113,82,4	duplicate(#pedra01)	#Pedra31	4_ELEPHANT
+ver_dun00,138,130,4	duplicate(#pedra01)	#Pedra32	4_ELEPHANT
+ver_dun00,121,61,4	duplicate(#pedra01)	#Pedra33	4_ELEPHANT
+ver_dun00,114,66,4	duplicate(#pedra01)	#Pedra34	4_ELEPHANT
+ver_dun00,109,61,4	duplicate(#pedra01)	#Pedra35	4_ELEPHANT
+ver_dun00,101,65,4	duplicate(#pedra01)	#Pedra36	4_ELEPHANT
+ver_dun00,99,51,4	duplicate(#pedra01)	#Pedra37	4_ELEPHANT
+ver_dun00,105,44,4	duplicate(#pedra01)	#Pedra38	4_ELEPHANT
+ver_dun00,117,32,4	duplicate(#pedra01)	#Pedra39	4_ELEPHANT
+ver_dun00,121,23,4	duplicate(#pedra01)	#Pedra40	4_ELEPHANT
+ver_dun00,139,22,4	duplicate(#pedra01)	#Pedra41	4_ELEPHANT
+ver_dun00,145,29,4	duplicate(#pedra01)	#Pedra42	4_ELEPHANT
+ver_dun00,101,86,4	duplicate(#pedra01)	#Pedra43	4_ELEPHANT
+ver_dun00,89,81,4	duplicate(#pedra01)	#Pedra44	4_ELEPHANT
+ver_dun00,75,86,4	duplicate(#pedra01)	#Pedra45	4_ELEPHANT
+ver_dun00,71,71,4	duplicate(#pedra01)	#Pedra46	4_ELEPHANT
+ver_dun00,51,69,4	duplicate(#pedra01)	#Pedra47	4_ELEPHANT
+ver_dun00,48,54,4	duplicate(#pedra01)	#Pedra48	4_ELEPHANT
+ver_dun00,27,45,4	duplicate(#pedra01)	#Pedra49	4_ELEPHANT
+ver_dun00,39,37,4	duplicate(#pedra01)	#Pedra50	4_ELEPHANT
+ver_dun00,44,23,4	duplicate(#pedra01)	#Pedra51	4_ELEPHANT
+ver_dun00,26,26,4	duplicate(#pedra01)	#Pedra52	4_ELEPHANT
+ver_dun00,16,39,4	duplicate(#pedra01)	#Pedra53	4_ELEPHANT
+ver_dun00,180,38,4	duplicate(#pedra01)	#Pedra54	4_ELEPHANT
+ver_dun00,172,32,4	duplicate(#pedra01)	#Pedra55	4_ELEPHANT
+ver_dun00,165,40,4	duplicate(#pedra01)	#Pedra56	4_ELEPHANT
+ver_dun00,157,46,4	duplicate(#pedra01)	#Pedra57	4_ELEPHANT
+ver_dun00,147,37,4	duplicate(#pedra01)	#Pedra58	4_ELEPHANT
+ver_dun00,106,23,4	duplicate(#pedra01)	#Pedra59	4_ELEPHANT
+ver_dun00,92,22,4	duplicate(#pedra01)	#Pedra60	4_ELEPHANT
+ver_dun00,83,26,4	duplicate(#pedra01)	#Pedra61	4_ELEPHANT
+ver_dun00,71,22,4	duplicate(#pedra01)	#Pedra62	4_ELEPHANT
+ver_dun00,69,34,4	duplicate(#pedra01)	#Pedra63	4_ELEPHANT
+ver_dun00,54,29,4	duplicate(#pedra01)	#Pedra64	4_ELEPHANT
+ver_dun00,13,69,4	duplicate(#pedra01)	#Pedra65	4_ELEPHANT
+ver_dun00,26,81,4	duplicate(#pedra01)	#Pedra66	4_ELEPHANT
+ver_dun00,34,96,4	duplicate(#pedra01)	#Pedra67	4_ELEPHANT
+ver_dun00,25,117,4	duplicate(#pedra01)	#Pedra68	4_ELEPHANT
+ver_dun00,46,116,4	duplicate(#pedra01)	#Pedra69	4_ELEPHANT
+ver_dun00,59,133,4	duplicate(#pedra01)	#Pedra70	4_ELEPHANT
+
+//No Flag
+
+ver_dun00	mapflag	nowarp
+ver_dun00	mapflag	nowarpto
+ver_dun00	mapflag	noteleport
+ver_dun00	mapflag	nosave	SavePoint
+ver_dun00	mapflag	nomemo
+ver_dun00	mapflag	nobranch
+ver_dun00	mapflag	nopenalty
+ver_dun00	mapflag	pvp	off
+ver_dun00	mapflag	gvg	off

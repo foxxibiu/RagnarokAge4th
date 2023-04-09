@@ -1,0 +1,11 @@
+//= < Mob Spawn > Magma Dungeon 3
+mag_dun03,0,0	monster	Blazer Rígido	20372,18,5000,5000,"#MagmaF3_Drop::OnMagma3MobDead"
+mag_dun03,0,0	monster	Pesadelo Rígido	20373,27,5000,5000,"#MagmaF3_Drop::OnMagma3MobDead"
+mag_dun03,0,0	monster	Deletério Rígido	20374,32,5000,5000,"#MagmaF3_Drop::OnMagma3MobDead"
+mag_dun03,0,0	monster	Deletério Rígido	20375,32,5000,5000,"#MagmaF3_Drop::OnMagma3MobDead"
+mag_dun03,0,0	monster	Explosão Rígido	20376,20,5000,5000,"#MagmaF3_Drop::OnMagma3MobDead"
+mag_dun03,0,0	monster	Kaho Rígido	20377,20,5000,5000,"#MagmaF3_Drop::OnMagma3MobDead"
+mag_dun03,0,0	monster	Golem de Lava Rígido	20378,18,5000,5000,"#MagmaF3_Drop::OnMagma3MobDead"
+
+mag_dun03,0,0	boss_monster	Muspellskoll Rígido	20419,1,7200000,600000,"#MagmaF3_Drop::OnMagma3MobDead"
+

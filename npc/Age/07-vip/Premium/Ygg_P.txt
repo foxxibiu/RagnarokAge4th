@@ -1,0 +1,40 @@
+s_room,57,37,5	script	Aventureiro de Sanctum	4_EP18_IMRIL,{
+	cutin "ep18_imril_04.png",2;
+	mes "^0EEB2B[Ymir]^000000";
+	mes (gettime(3)>= 6&&gettime(3)<= 12?"Bom-dia":(gettime(3)>=13&&gettime(3)<=18?"Boa-tarde":"Boa-noite"))+", sou o ^0EEB2BYmir^000000, posso te transportar para a sala do OURO, ela fica em Anexus!.";
+	next;
+	mes "Aqui você pode se teletransportar para Sanctum.";
+	mes "Deseja ir para algum dos lugares abaixo?";
+	next;
+	switch(select("^0EEB2BSanctum - Sala de Ygg^000000:Cancelar")){
+		case 1:
+			mes "Até mais!";
+			cutin "ep18_imril_04.png",255;
+			close2;
+			warp "sanctum",0,0;
+			end;
+		case 2:
+			mes "Até mais!";
+			cutin "ep18_imril_04.png",255;
+			close2;
+			end;
+		}
+	OnInit:
+	.@UID = getnpcid(0);
+	setunittitle(.@UID, "Ymyr");
+	setunitdata .@UID, UNPC_GROUP_ID, 9;
+	end;
+			
+}	
+
+
+//----------------------------MOBS ---------------------
+
+sanctum,0,0	monster	YGG MOB	1101,500,5000
+
+sanctum	mapflag	noreturn
+sanctum	mapflag	nosave
+sanctum	mapflag	nowarp
+sanctum	mapflag	noicewall
+sanctum	mapflag	nowarpto
+

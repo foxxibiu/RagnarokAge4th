@@ -1,0 +1,71 @@
+//===== Por: ==================================================
+//= Near
+//===== Versão: =====================================
+//= 1.0
+//============================================================
+prt_in,136,34,3	script	Quests Age Ragnarok	4_EP17_AS,{
+	cutin "ep171_as03.png",2;
+	set .np$,"^00B2EE[=== Quests Age Ragnarok ===]^000000";
+
+	mes .np$;
+	mes (gettime(3)>= 6&&gettime(3)<= 12?"^FFA500"+strcharinfo(0)+"^000000, Bom-dia bem vindo!.":(gettime(3)>=13&&gettime(3)<=18?"^FFA500"+strcharinfo(0)+"^000000, Boa-tarde bem vindo!":"^FFA500"+strcharinfo(0)+"^000000, Boa-noite bem vindo!"));
+	mes "Eu sou atualmente o representante do ^00B2EEQuests Age Ragnarok^000000 e estou aqui para te ajudar "+(gettime(3)>= 6&&gettime(3)<= 12?"nesta linda manhã":(gettime(3)>=13&&gettime(3)<=18?"nesta tarde maravilhosa":"nesta noite maravilhosa"));
+	mes "O que eu posso fazer por você?";
+	switch(select("^3CB371[»]^000000Quests^FCBA03 MITÍCOS^000000:^3CB371[»]^000000Quests^AD03FC LENDÁRIOS^000000:^3CB371[»]^000000Quests^FC0303 TOPO^000000:^3CB371[»]^000000Quests^030BFC MEIO^000000:^3CB371[»]^000000Quests^00B2EE BAIXO^000000:^ff0000[»]^000000 Sair")) {
+		case 1:
+			next;
+			mes .np$;
+			mes "Aqui estão as Quests Miticas";
+			mes "Feche está janela para abrir a loja";
+			close2;
+			cutin "ep171_as03.png",255;
+			callshop "miticos#barter",1;
+			end;
+		case 2:
+			next;
+			mes .np$;
+			mes "Aqui estão as Quests Lendárias";
+			mes "Feche está janela para abrir a loja";
+			close2;
+			cutin "ep171_as03.png",255;
+			callshop "lendarios#barter",1;
+			end;			
+		case 3:
+			next;
+			mes .np$;
+			mes "Aqui estão as Quests do Topo";
+			mes "Feche está janela para abrir a loja";
+			close2;
+			cutin "ep171_as03.png",255;
+			callshop "topo#barter",1;
+			end;
+		case 4:
+			next;
+			mes .np$;
+			mes "Aqui estão as Quests do Meio";
+			mes "Feche está janela para abrir a loja";
+			close2;
+			cutin "ep171_as03.png",255;
+			callshop "meio#barter",1;
+			end;
+		case 5:
+			next;
+			mes .np$;
+			mes "Aqui estão as Quests do Baixo";
+			mes "Feche está janela para abrir a loja";
+			close2;
+			cutin "ep171_as03.png",255;
+			callshop "baixo#barter",1;
+			end;
+		case 6:
+			next;
+			mes .np$;
+			mes "Tudo bem, me procure quando precisar.";
+			cutin "ep171_as03.png",255;
+			close3;
+	}
+OnInit:
+	.@UID = getnpcid(0);
+	setunittitle(.@UID, "[ Quests Age Ragnarok ]");
+    setunitdata .@UID, UNPC_GROUP_ID, 7;
+}

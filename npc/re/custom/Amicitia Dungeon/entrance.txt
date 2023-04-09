@@ -1,0 +1,54 @@
+ein_fild08,158,96,3	script	Lara	4_F_REBELLION2,{
+	set .np$,"^00B2EE[ Lara ]^000000";
+
+	mes .np$;
+	mes (gettime(3)>= 6&&gettime(3)<= 12?"Bom-dia":(gettime(3)>=13&&gettime(3)<=18?"Boa-tarde":"Boa-noite"))+", ^FFA500"+strcharinfo(0)+"^000000!";
+	mes "Este local não é tão seguro assim para você andar por ai...";
+		switch(select("^3CB371[»]^000000 Entrar no mapa 215+:^3CB371[»]^000000 Entrar no mapa 240+:^ff0000[»]^000000 Sair")) {
+			case 1:
+				next;
+				mes .np$;
+				mes "Beleza, só deixa eu checar uma coisa...";
+					if ((BaseLevel < 214)) {
+						mes .np$;
+						mes "Você não é forte o suficiente, saia e só volte com um nível adequado.";
+						end;
+					}
+				next;
+				mes .np$;
+				mes "Você é forte o suficiente... Eu acho... Boa sorte!";
+				next;
+				warp "amicitia1",256,244;
+				end;
+			case 2:
+				next;
+				mes .np$;
+				mes "Beleza, só deixa eu checar uma coisa...";
+					if ((BaseLevel < 239)) {
+						mes .np$;
+						mes "Você não é forte o suficiente, saia e só volte com um nível adequado.";
+						end;
+					}
+				next;
+				mes .np$;
+				mes "Você é forte o suficiente... Eu acho... Boa sorte!";
+				next;
+				warp "amicitia2",146,277;
+				end;
+			case 3:
+				next;
+				mes .np$;
+				mes "Bom, estarei aqui quando precisar...";
+				end;
+		}
+	end;
+
+OnInit:
+	setunitdata (getnpcid(0), UNPC_GROUP_ID, 7);
+	setunittitle(getnpcid(0), "[ Amicitia Dungeon ]");
+	end;
+
+}
+
+amicitia1,260,244,0	warp	amicitia1	1,1,ein_fild08,152,95,0
+amicitia2,146,282,0	warp	amicitia2	1,1,ein_fild08,152,95,0

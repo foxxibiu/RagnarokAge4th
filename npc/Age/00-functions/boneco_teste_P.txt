@@ -1,0 +1,49 @@
+sala_vip,99,89,5	script	Sala de Testes	843,{
+//que_q10,99,89,5	script	Testador de Dano	65,{
+
+	mes "Olá "+strcharinfo(0)+"!";
+	mes "aqui você pode testar o dano do seu personagem?";
+	next;
+	switch(select("Arena de Testes")){
+		case 1:
+			mes "Até mais!";
+			close2;
+			warp "force_3-3",100,178;
+			end;
+OnInit:
+	waitingroom "[ Sala de Testes ]",0;
+end;
+
+	}
+}
+
+//force_3-3,19,145,4	script	Exit	682,{
+//
+//	mes "Olá "+strcharinfo(0)+"!";
+//	mes "deseja retornar a prontera?";
+//	next;
+//	switch(select("Prontera - [Capital]")){
+//		case 1:
+//			mes "Até mais!";
+//			close2;
+//			warp "prontera",155,185;
+//			end;
+//	}
+//}
+
+force_3-3,99,166,0	warp	force	1,1,prontera,155,187
+
+force_3-3,92,179	monster	Boneco Teste10 Lv150	2411,1,5000,0,0
+force_3-3,92,183	monster	Boneco Teste11	2411,1,5000,0,0
+force_3-3,92,187	monster	Boneco Teste12	2411,1,5000,0,0
+force_3-3,92,191	monster	Boneco Teste13	2411,1,5000,0,0
+
+force_3-3,107,179	monster	Boneco Teste14	2411,1,5000,0,0
+force_3-3,107,183	monster	Boneco Teste16	2411,1,5000,0,0
+force_3-3,107,187	monster	Boneco Teste17	2411,1,5000,0,0
+
+force_3-3,97,179	monster	Boneco Teste18	2411,1,5000,0,0
+force_3-3,102,179	monster	Boneco Teste19	2411,1,5000,0,0
+
+
+

@@ -1,0 +1,37 @@
+// ======================================================================
+//  					  Brasil Ragnarok Services
+// ======================================================================
+-	script	ContadorMVP	-1,{
+	end;
+
+OnNPCKillEvent:
+	// ID de MVP's
+	setarray .@mvpID[0],1312,1251,1159,2022,1492,1038,1086,1511,1630,1688,1252,1583,1751,1768,1734,1147,1785,1112,1373,1046,1059,1039,1874,2068,1719,1389,1115,1658,1157,1150,1885,1832,1779,1990,1708,1917,1087,1623,1272,1190,1418,1646,1647,1648,1649,1650,1651,1685;
+	for(set @i,0; @i <= getarraysize(.@mvpID); set @i,@i+1)
+		if(killedrid == .@mvpID[@i]) {
+			set mvp_points,mvp_points+1;
+			dispbottom "[Ranking MvP] Você possui "+mvp_points+" pontos no ranking.";
+		}
+	end;
+
+}
+
+sec_in01,76,30,3	script	Reset-mvp	4_M_ACROSS,{
+                mes "Redefinir Ranking? Ação não pode ser desfazer. Confirme sua ação.";
+                if ( select( "Confirm","Cancel" ) == 1 ) {
+                    query_sql "SELECT `key` FROM `char_reg_num` WHERE `key` = 'mvp_points'",@mvppoints$;
+                    if(@mvppoints$ == ""){
+                        clear;
+                        mes "o rank já foi resetado.";
+                        end;
+                    }else{
+                        query_sql("DELETE FROM `char_reg_num` WHERE `key` = 'mvp_points'");
+                        set mvp_points, 0;
+                        mes "resetado com sucesso!.";
+                        end;
+                    }
+                }
+}
+
+//================================================================
+//			set mvp_points, 0;

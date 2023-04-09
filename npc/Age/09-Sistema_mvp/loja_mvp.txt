@@ -1,0 +1,139 @@
+-	script	Pontos MvP	-1,{
+OnNPCKillEvent:
+// facil
+//killedrid== 3029
+//1086, 1087, 1115, 1147, 1150, 1159, 1190, 1251, 1252, 1389, 1583, 1688, 1885, 1980, 2068, 2094, 2131, 2194
+if(killedrid== 1086 || killedrid== 1087 || killedrid== 1115 || killedrid== 1147 || killedrid== 1150 || 
+	killedrid== 1159 || killedrid== 1190 || killedrid== 1251 || killedrid== 1252 || killedrid== 1389 || 
+	killedrid== 1583 || killedrid== 1688 || killedrid== 1885 || killedrid== 1980 || killedrid== 2068 ||
+	killedrid== 2094 || killedrid== 2131 || killedrid== 2194){
+set mvp_points,mvp_points+1;
+
+dispbottom "[Pontos MvP] Parabéns "+strcharinfo(0)+", sua recompensa por derrotar esses monstros são 1 [Ponto MvP] Agora você agora possui "+mvp_points+" pontos.";
+}
+// medio
+//killedrid== 3000
+//killedrid== 3073
+//1038, 1039, 1046, 1059, 1112, 1157, 1272, 1312, 1373, 1418, 1492, 1511, 1623, 1630, 1785, 1957, 2022, 2087, 2187, 2188, 2253, 2317, 2321,  2441, 2442, 2996
+if(killedrid== 1038 || killedrid== 1039 || killedrid== 1046 || killedrid== 1059 || killedrid== 1112 || 
+	killedrid== 1157 || killedrid== 1272 || killedrid== 1312 || killedrid== 1373 || killedrid== 1418 || 
+	killedrid== 1492 || killedrid== 1511 || killedrid== 1623 || killedrid== 1630 || killedrid== 1785 || 
+	killedrid== 1957 || killedrid== 2022 || killedrid== 2087 || killedrid== 2187 || killedrid== 2188 || 
+	killedrid== 2253 || killedrid== 2317 || killedrid== 2321 || killedrid== 2441 || killedrid== 2442 || 
+	killedrid== 2996){
+set mvp_points,mvp_points+1;
+
+dispbottom "[Pontos MvP] Parabéns "+strcharinfo(0)+", sua recompensa por derrotar esses monstros são 1 [Ponto MvP] Agora você agora possui "+mvp_points+" pontos.";
+}
+// dificil
+//1658, 1685, 1708, 1719, 1734, 1768, 1779, 1917, 1929, 1956, 2189, 2190, 2202, 2251, 2255, 2319, 2362
+if(killedrid== 1658 || killedrid== 1685 || killedrid== 1708 || killedrid== 1719 || killedrid== 1734 || 
+	killedrid== 1768 || killedrid== 1779 || killedrid== 1917 || killedrid== 1929 || killedrid== 1956 || 
+	killedrid== 2189 || killedrid== 2190 || killedrid== 2202 || killedrid== 2251 || killedrid== 2255 || 
+	killedrid== 2319 || killedrid== 2362){
+set mvp_points,mvp_points+1;
+
+dispbottom "[Pontos MvP] Parabéns "+strcharinfo(0)+", sua recompensa por derrotar esses monstros são 1 [Ponto MvP] Agora você agora possui "+mvp_points+" pontos.";
+}
+// tenso
+//killedrid== 3097
+//1646, 1647, 1648, 1649, 1650, 1651, 1751, 1832, 1871, 1874, 2165, 2235, 2236, 2237, 2238, 2239, 2240, 2241, 2249, 
+if(killedrid== 1646 || killedrid== 1647 || killedrid== 1648 || killedrid== 1649 || killedrid== 1650 || 
+	killedrid== 1651 || killedrid== 1751 || killedrid== 1832 || killedrid== 1871 || killedrid== 1874 || 
+	killedrid== 2165 || killedrid== 2235 || killedrid== 2236 || killedrid== 2237 || killedrid== 2238 || 
+	killedrid== 2239 || killedrid== 2240 || killedrid== 2241 || killedrid== 2249){
+set mvp_points,mvp_points+1;
+
+dispbottom "[Pontos MvP] Parabéns "+strcharinfo(0)+", sua recompensa por derrotar esses monstros ï¿½ 1 [Pontos MvP] Agora Você possui "+mvp_points+" pontos.";
+}
+end;
+}
+-	shop	MVSHOP1	-1,512:-1
+-	shop	MVSHOP2	-1,512:-1
+//-	shop	MVSHOP3	-1,512:-1
+
+
+prt_in,136,27,3	script	Loja MVP	4_F_GELKA,{
+cutin "gelca03",2;
+mes "^A020F0[Pontos MVP]^000000";
+mes "Olá, eu sou a Gelka, você pode trocar seus pontos MVP comigo, o que você deseja?";
+next;
+switch(select("[^339966$^000000] Sim.:[^FF0000+^000000] Não."))
+{
+case 1:
+	mes "^A020F0[Pontos MVP]^000000";
+	mes "Escolha a categoria de itens que lhe interessa.";
+	
+	set @s, select("Equipamentos:Consumíveis");
+	message strcharinfo(0),"Esta loja só aceita Pontos MVP.";
+	dispbottom "Você tem "+mvp_points+" Pontos MVP.";
+	callshop "MVSHOP"+@s,1;
+	npcshopattach "MVSHOP"+@s;
+	end;
+	cutin "",255;
+case 2:
+	mes "^A020F0[Pontos MVP]^000000";
+	mes "Estarei aqui caso mude de ideia!.";
+	cutin "",255;
+close;
+}
+
+OnBuyItem:
+mes "^A020F0[Pontos MVP]^000000";
+if (mvp_points==0){
+mes "Você não possui Pontos MVP.";
+close;
+}
+if (mvp_points>=1){
+	set .@i,0;
+	while (.@i < getarraysize(@bought_nameid)) {
+		set .@j, 0;
+		while (.@j < getarraysize(getd(".Shop"+@s))) {
+			if(getd(".Shop"+@s+"["+.@j+"]") == @bought_nameid[.@i]) {
+				set @itemcost, (getd(".Shop"+@s+"["+(.@j+1)+"]") * @bought_quantity[.@i]);
+				set @totalcost, @totalcost + @itemcost;
+				break; }
+			set .@j, .@j+2; }
+		set .@i, .@i+1; }
+	if (@totalcost > mvp_points) dispbottom "Você não possui Pontos MVP suficiente!"; 
+	else {
+		set .@i,0;
+		while (.@i < getarraysize(@bought_nameid)) {
+			getitem @bought_nameid[.@i], @bought_quantity[.@i];
+			
+			dispbottom "Você comprou ["+@bought_quantity[.@i]+"x "+getitemname(@bought_nameid[.@i])+"]";
+
+			set .@i, .@i+1; }
+		set mvp_points,mvp_points-@totalcost;
+		mes "Seu total de Pontos MVP agora são ["+mvp_points+"]";
+		}
+	set @totalcost, 0;
+	deletearray @bought_nameid[0], 128;
+	deletearray @bought_quantity[0], 128;
+	cutin"",255;
+close;
+	end;
+}
+
+OnInit:
+
+	setarray .Currency[1],507-1;
+	setarray .Shop1[0],2177,60,18574,60;
+	setarray .Shop2[0],12887,1500,12045,1,12060,1,12055,1,12050,1,12065,1,12070,1;
+	//setarray .Shop3[0],2177,500,18574,500;
+
+	set .@i,1;
+	while (.@i <= getarraysize(.Currency)) {
+		set .@j,0;
+while (.@j < getarraysize(getd(".Shop"+.@i))) {
+			npcshopdelitem "MVSHOP"+.@i,512;
+			npcshopadditem "MVSHOP"+.@i, getd(".Shop"+.@i+"["+.@j+"]"), getd(".Shop"+.@i+"["+(.@j+1)+"]");
+			set .@j, .@j+2; }
+		set .@i, .@i+1; }
+	
+	.@UID = getnpcid(0);
+	setunittitle(.@UID, "Gelka, a Monja");
+	setunitdata .@UID, UNPC_GROUP_ID, 15;
+	end;
+
+}

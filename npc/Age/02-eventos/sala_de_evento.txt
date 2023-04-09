@@ -1,0 +1,23 @@
+-	script	go_evento	-1,{
+    OnInit:
+        bindatcmd("evento",strnpcinfo(0)+"::Onevento",0,99);
+        end;
+
+	Onevento:
+
+		atcommand "@warp tavern 44,39 ";
+        dispbottom "Prontinho, divirta-se";
+
+}
+
+tavern,37,39,0	warp	qz01	2,2,prontera,149,153
+prontera,144,153,0	warp	qz02	2,2,tavern,42,39
+
+tavern	mapflag	nomemo
+//new_1-2	mapflag	nowarp
+//new_1-2	mapflag	nowarpto
+tavern	mapflag	noicewall
+tavern	mapflag	nosave
+tavern	mapflag	noreturn
+tavern	mapflag	noteleport
+tavern	mapflag	nobranch

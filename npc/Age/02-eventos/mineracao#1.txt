@@ -1,0 +1,23 @@
+tavern,41,46,5	script	Mineradora	4_4JOB_MAURA,{
+	cutin "4job_maura_02.png",2;
+	mes "Olá "+strcharinfo(0)+", gostaria de minerar um pouco?";
+	mes "Dentro dessa caverna você pode minerar vários recursos, o tempo de ^ff0000Mineração^000000 é bem rápido.";
+	next;
+switch(select("- Sim, quero ir!:- Não, obrigado..")){
+
+	case 1:
+		if(countitem(11815)<=0){	
+			mes "Você não possui a ^ff0000Picareta de Mineração^000000, necessária para minerar no mapa. para adiquirir você pode conseguir pelo sistema de presença PREMIUM do servidor!";
+			cutin "4job_maura_02.png",255;
+        }else{
+		warp "ver_dun00",114,162;
+		}
+    close;
+
+	case 2:
+		mes "[Minerador]";
+		mes "Tudo bem, volte quando quiser.";
+		cutin "4job_maura_02.png",255;
+	end;
+}
+}

@@ -1,0 +1,42 @@
+vip_lounge,150,118,6	script	Saída	4_PURPLE_WARP,{
+
+	mes "[ ^008000Saída^000000 ]";
+	mes "Seja bem vindo ao sistema VIP!";
+	next;
+	switch(select("^DAA520[>]^000000 Retornar","^DC143C[>]^000000 Cancelar")){
+		case 1:
+    if (getgroupid() < 5) {
+		mes "[ ^008000Saï¿½da^000000 ]";
+        mes "Torne-se VIP PREMIUM comprando o passe VIP na loja de cash para poder utilizar meus serviï¿½os..";
+		cutin "",255;
+        close;
+    }
+		mes "[^008000 AUTENTICANDO ^000000]";		
+		mes "Teleportando para Prontera.";
+		next;
+		mes " Teleportando... ";
+		warp "prontera",156,188;
+		close; 
+
+		case 2:
+		mes "[ ^008000Saï¿½da^000000 ]";
+		mes "caso necessite dos meus serviços estarei aqui!.";
+		//cutin "",2;
+		cutin "",255;
+		end;
+	}
+
+OnInit:
+//waitingroom "Ichimaru",0;
+.@UID = getnpcid(0);
+setunittitle(.@UID, "Prontera");
+setunitdata .@UID, UNPC_GROUP_ID, 7;
+.@npc$ = strnpcinfo(0);
+		while (1) {
+			showscript .@npc$ +"";
+			sleep 100;
+		}
+end;
+}
+//==================DUPLICATES
+vip_lounge,153,118,6	duplicate(Saída)	Saida	4_PURPLE_WARP

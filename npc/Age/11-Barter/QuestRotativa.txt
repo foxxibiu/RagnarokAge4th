@@ -1,0 +1,15 @@
+//===== Compatible With: =====================================
+//= rAthena
+//============================================================
+
+prt_in,133,31,3	script	Elyumina	4_EP17_ELYUMINA,{
+	
+
+	mes "[Elyumina]";
+	mes "Quests Rotativas, a cada 15 dias elas vão mudar.";
+	mes "Traga-me os itens indicados, e receba os itens.";
+	callshop "QuestRotativa#barter",1;
+	cutin "ep171_elyumina01.png",2;
+	end;
+
+}

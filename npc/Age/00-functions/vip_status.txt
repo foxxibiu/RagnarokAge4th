@@ -1,0 +1,20 @@
+-   script  vip_status   -1,{
+
+OnPcloginEvent:
+
+if(vip_status(1)) {
+
+set .@timer, vip_status(2);
+dispbottom "Bem-Vindo ao Age Ragnarok";
+dispbottom "==================================="; 
+dispbottom "Você é um jogador VIP.";
+dispbottom "==================================="; 
+dispbottom "Status da conta: VIP PREMIUM";
+dispbottom "Bônus VIP: EXP & JOB acresentado 15%";
+dispbottom "Bônus VIP: DROP acresentado 10%";
+dispbottom "Tempo Restante: "+callfunc("Time2Str",.@timer);
+dispbottom "===================================";
+end;
+    }
+
+}

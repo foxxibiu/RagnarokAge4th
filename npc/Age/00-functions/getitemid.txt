@@ -1,0 +1,42 @@
+/*.---------------------------------------------------------------------.
+  .		 ____                          __                          		.
+  .		/\  _`\                       /\ \__  __                   		.
+  .		\ \ \/\_\  _ __    __     __  \ \ ,_\/\_\  __  __     __   		.
+  .		 \ \ \/_/_/\`'__\/'__`\ /'__`\ \ \ \/\/\ \/\ \/\ \  /'__`\ 		.
+  .		  \ \ \s\ \ \ \//\  __//\ \d\.\_\ \ \_\ \ \ \ \_/ |/\  __/ 		.
+  .		   \ \____/\ \_\\ \____\ \__/.\_\\ \__\\ \_\ \___/ \ \____\		.
+  .		    \/___/  \/_/ \/____/\/__/\/_/ \/__/ \/_/\/__/   \/____/		.
+  .																		.
+  .            2014~2020 © Creative Services and Development            .
+  .						  www.creativesd.com.br							.
+  .---------------------------------------------------------------------.
+  . Function:													        .
+  .  getitemid	                                                        .
+  .---------------------------------------------------------------------.
+  . Autor: Romulo SM (sbk_)                                 Versão: 1.0	.
+  .                                                                     .
+  . Compátivel:	rAthena / Hercules e derivações.                    	.
+  .---------------------------------------------------------------------.
+  . Descrição:															.
+  .	   Pega o ID de um item no Banco de Dados SQL.                      .
+  *---------------------------------------------------------------------*/
+function	script	getitemid	{
+	deletearray .@tmp_item_id;
+	if( checkre(0) ) {
+		query_sql "SELECT `id` FROM `item_db_re` WHERE `id`='" + getarg(0) + "' OR `name_english`='" + getarg(0) + "' OR `name_japanese`='" + getarg(0) + "' LIMIT 1", .@tmp_item_id;
+		if( getarraysize(.@tmp_item_id) )
+			return .@tmp_item_id;
+		query_sql "SELECT `id` FROM `item_db2_re` WHERE `id`='" + getarg(0) + "' OR `name_english`='" + getarg(0) + "' OR `name_japanese`='" + getarg(0) + "' LIMIT 1", .@tmp_item_id;
+		if( getarraysize(.@tmp_item_id) )
+			return .@tmp_item_id;
+	}
+	else {
+		query_sql "SELECT `id` FROM `item_db` WHERE `id`='" + getarg(0) + "' OR `name_english`='" + getarg(0) + "' OR `name_japanese`='" + getarg(0) + "' LIMIT 1", .@tmp_item_id;
+		if( getarraysize(.@tmp_item_id) )
+			return .@tmp_item_id;
+		query_sql "SELECT `id` FROM `item_db2` WHERE `id`='" + getarg(0) + "' OR `name_english`='" + getarg(0) + "' OR `name_japanese`='" + getarg(0) + "' LIMIT 1", .@tmp_item_id;
+		if( getarraysize(.@tmp_item_id) )
+			return .@tmp_item_id;
+	}
+	return 0;
+}

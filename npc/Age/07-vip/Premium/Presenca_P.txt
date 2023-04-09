@@ -1,0 +1,57 @@
+s_room,56,72,3	script	Presença Premium	4_4JOB_SILLA,{
+   
+    OnClick:
+        .@npcName$ = "[Loja de Presença]";
+        
+        for(.@i = 1; .@i < getarraysize(.items$); .@i++) {
+            explode(.@array$, .items$[.@i], ":");
+            .@menu$ += ":["+atoi(.@array$[2])+"] "+atoi(.@array$[1])+"x "+getitemname(atoi(.@array$[0]));
+        }
+        cutin "4job_silla_03.png",1;
+        mes .@npcName$;
+        mes "O que você deseja comprar?";
+        .@s = select(.@menu$)-1;
+        next;
+        if(.@s == 0) {
+            mes "Ok, volte sempre!";
+            cutin "4job_silla_03.png",255;
+            close;
+        }
+        explode(.@array$, .items$[.@s], ":");
+        .@itemid = atoi(.@array$[0]);
+        .@amount = atoi(.@array$[1]);
+        .@cost = atoi(.@array$[2]);
+        mes .@npcName$;
+        mes "Tem certeza que quer comprar "+.@amount+"x ^0000FF"+getitemname(.@itemid)+"^000000 por ^0000FF"+.@cost+" pontos^000000?";
+        next;
+        if(select("Não","Sim") == 1) {
+            mes .@npcName$;
+            mes "Ok, volte sempre!";
+            cutin "4job_silla_03.png",255;
+            close;
+        }
+        if(#GOLDPCPOINTS < .@cost) {
+            mes .@npcName$;
+            mes "Você não tem pontos o suficiente.";
+            cutin "4job_silla_03.png",255;
+            close;
+        }
+        mes .@npcName$;
+        mes "Obrigado!";
+        delgoldpoints(.@cost);
+        getitem .@itemid, .@amount;
+        cutin "4job_silla_03.png",255;
+        close;
+    
+    
+    
+    OnInit:
+        // ID:AMOUNT:PRICE
+        setarray .items$[1],
+        "12208:2:2",
+        "17067:1:2",
+        "17069:1:2",
+        "14216:1:5";
+    
+    }
+    

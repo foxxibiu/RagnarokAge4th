@@ -1,0 +1,98 @@
+-	script	senhastorage	FAKE_NPC,{
+
+OnSenha:
+mes "[Sistema @storage]";
+mes "Selecione uma opção:";
+next;
+if(#kafra_code > 1) {
+	switch(select("Alterar Minha Senha","Esqueci a Senha","Fechar")) {
+
+		case 1:
+			mes "[Sistema @storage]";
+			mes "Coloque sua senha atual.";
+			next;
+			input .@pass;
+			if (.@pass != #kafra_code) {
+				mes "Senha inválida, tente novamente.";
+				close;
+			}
+			mes "[Sistema @storage]";
+			mes "Coloque sua nova senha.";
+			next;
+			input .@passn;
+			if (.@passn < 1000 || .@pass > 9999) {
+				mes "Senha inválida, tente novamente ^FFF000(1000 - 9999)^000000.";
+				close;
+			}
+			mes "[Sistema @storage]";
+			mes "Confirme sua nova senha.";
+			next;
+			input .@passnc;
+			if (.@passnc != .@passn) {
+				mes "Por favor tente novamente.";
+				close;
+			}
+			set #kafra_code, .@passn;
+
+		case 2:
+			mes "[Sistema @storage]";
+			mes "Por favor coloque o email da sua conta.";
+			next;
+			input .@email$;
+			query_sql "SELECT email FROM login WHERE account_id = "+ getcharid(3) +";",.@emaill$[0];
+			if (.@email$ != .@emaill$[0]) {
+				mes "Email inválido, tente novamente";
+				close;
+			}
+			
+			mes "[Sistema @storage]";
+			mes "Coloque sua nova senha.";
+			next;
+			input .@passn;
+			if (.@passn < 1000 || .@pass > 9999) {
+				mes "Senha inválida, tente novamente ^FFF000(1000 - 9999)^000000.";
+				close;
+			}
+			mes "[Sistema @storage]";
+			mes "Confirme sua nova senha";
+			next;
+			input .@passnc;
+			if (.@passnc != .@passn) {
+				mes "Por favor tente novamente.";
+				close;
+			}
+			set #kafra_code, .@passn;
+
+		case 3:
+			close;
+
+		}
+	}
+else if (!#kafra_code) {
+		switch(select("Configurar senha:Fechar")) {
+
+			case 1:
+				mes "[Sistema @storage]";
+				mes "Coloque sua nova senha.";
+				next;
+				input .@passn;
+				if (.@passn < 1000 || .@pass > 9999) {
+					mes "Senha inválida, tente novamente ^FFF000(1000 - 9999)^000000.";
+					close;
+				}
+				mes "[Sistema @storage]";
+				mes "Confirme sua nova senha.";
+				next;
+				input .@passnc;
+				if (.@passnc != .@passn) {
+					mes "Por favor tente novamente.";
+					close;
+				}
+				set #kafra_code, .@passn;
+
+			case 2:
+				close;
+
+		}
+	}
+}

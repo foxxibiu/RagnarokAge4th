@@ -1,0 +1,45 @@
+prontera,162,92,5	script	Resetadora	893,{
+
+mes "[Resetadora]";
+mes "Olá, " + (Sex?"Mr.":"Mrs.") + " " + strcharinfo(0);
+mes "O que deseja resetar hoje ?";
+next;
+switch(select("- Atributos","- Habilidades","- Ambos","- Remover pontos skill","- Nada, obrigado")){
+
+case 1:
+mes "[Resetadora]";
+mes "Prontinho !";
+resetstatus;
+close;
+
+case 2:
+mes "[Resetadora]";
+mes "Prontinho !";
+resetskill;
+close;
+
+case 3:
+mes "[Resetadora]";
+mes "Prontinho !";
+resetskill;
+resetstatus;
+close;
+
+case 4:
+mes "[Resetadora]";
+mes "Pontos de skill removidos !";
+set SkillPoint,0;
+close;
+
+case 5:
+mes "[Resetadora]";
+mes "Volte quando precisar de mim !";
+close;
+
+OnInit:
+	waitingroom "[Resetadora]",0;
+	end;
+
+
+}
+}

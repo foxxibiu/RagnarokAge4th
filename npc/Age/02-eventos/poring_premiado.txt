@@ -1,0 +1,147 @@
+// Original concept by sandbox.
+// re-vised by Mabuhay
+// map i used is poring_w01, change it to any of your desired map
+// the current map will have conflict with poring war event.
+// edit as you wish.
+
+
+-	script	Poring_Catcher	-1,{
+OnInit:
+	// item reward
+	setarray .item,
+		480083, 10;
+
+	// @poringstart - gm manual start
+	bindatcmd "poringstart", strnpcinfo(0)+"::OnStart",60,60;
+	
+	// @poring - player join event
+	bindatcmd "poring", strnpcinfo(0)+"::OnJoinEvent";
+	
+	// Event cooldown
+	.event_cd = 120 * 120 * 1; // 1hr
+	
+	// Mapflags
+	setarray .@mapflag,
+		mf_nowarp,
+		mf_nowarpto,
+		mf_noskill,
+		mf_noloot,
+		mf_noteleport,
+		mf_nomemo,
+		mf_nosave,
+		mf_noicewall,
+		mf_nobranch,
+		mf_noreturn;
+		
+	for ( .@i = 0; .@i < getarraysize(.@mapflag); .@i++)
+		setmapflag "poring_w01", .@mapflag[.@i];
+		
+		
+	.@min = gettime(DT_MINUTE)*60;
+	.@sec = gettime(DT_SECOND);
+	.event_time = (gettimetick(2) - ( .@min + .@sec )) + .event_cd - 5;
+	end;
+	
+OnJoinEvent:
+	mes " [Status do Evento] ";
+	if ( !.start ) mes "Próximo evento começa em: ^FF0000"+ Time2Str(.event_time) +"^000000.";
+	if ( .start == 1 ) mes "Evento está ativo.";
+	if ( .start == 2 ) mes "Evento está atualmente ocorrendo.";
+	next;
+	switch(select(
+		"[Poring Premiado] - "+ ((.start == 1) ? "^00ff00Participar do Evento":((.start == 2) ? "^00ff00Evento Ativo":"^ff0000Evento Insdisponível"))+"^000000" )) {
+	case 1:
+		if ( !.start ) {
+			mes "O evento não está ativo.";
+			close;
+		} else if ( .start == 2 ) {
+			mes "Evento está ativo.";
+			close;
+		}
+		else
+			warp "poring_w01",100,100;
+	}
+	end;
+
+OnStart: .@force = true;
+OnMinute00: // runs hourly
+	.@time = gettimetick(2);
+	.@min = gettime(DT_MINUTE)*60;
+	.@sec = gettime(DT_SECOND);
+	if ( .event_time > .@time && !.@force || .start && !.@force ) end; // doesnt start if cd isn't done.
+	.event_time = (.@time - ( .@min + .@sec )) + .event_cd - 5; 
+	.start = 1;
+	announce "[Poring Premiado]: O evento do Poring premiado irá começar em breve.",0;
+	sleep 10000;
+	announce "[Poring Premiado]: Se Você deseja entrar, digite: @poring",0;
+	sleep 10000;
+	announce "[Poring Premiado]: Após 1 minuto o acesso serão fechado.",0;
+	sleep 10000;
+	announce "[Poring Premiado]: Então, se deseja participar, digite: @poring",0;
+	sleep 60000;
+	announce "[Poring Premiado]: A entrada do Evento está fechada.",bc_all,0x0ceedb;
+	.start = 2;
+	sleep 3500;
+	if( !getmapusers("poring_w01") ) {
+		announce "[Poring Premiado]: Evento cancelado por não existirem participantes o suficiente.",bc_all,0x0ceedb;
+		sleep 2500;
+		announce "[Poring Premiado] : Evento serão cancelado.",bc_all,0x0ceedb;
+		.start = false;
+		end;
+	}
+	mapannounce "poring_w01","O evento está prestes a começar.",bc_map,0x0ceedb;
+	sleep 2500;
+	mapannounce "poring_w01","As regras são básicas",bc_map,0x0ceedb;
+	sleep 2500;
+	mapannounce "poring_w01","Em alguns segundos muitos porings irão aparecer.",bc_map,0x0ceedb;
+	sleep 2500;
+	mapannounce "poring_w01","..Você são precisa matar o Poring com o nome correto..",bc_map,0x0ceedb;
+	sleep 2500;
+	mapannounce "poring_w01",".E então serão recompensado com moedas de evento.",bc_map,0x0ceedb;
+	sleep 2000;
+	mapannounce "poring_w01","Se matar o poring errado, serão chutado pra fora.",bc_map,0x0ceedb;
+	sleep 2000;
+	mapannounce "poring_w01","Isso é tudo, vamos começar!",bc_map,0x0ceedb;
+	sleep 3000;
+	areamonster "poring_w01",84,119,124,90,"Poring",1002,1,strnpcinfo(0)+"::OnMobKilledWin";
+	areamonster "poring_w01",84,119,124,90,"Poking",1002,5*getmapusers("poring_w01"),strnpcinfo(0)+"::OnMobKilled";
+	areamonster "poring_w01",84,119,124,90,"Poiring",1002,5*getmapusers("poring_w01"),strnpcinfo(0)+"::OnMobKilled";
+	areamonster "poring_w01",84,119,124,90,"Poling",1002,5*getmapusers("poring_w01"),strnpcinfo(0)+"::OnMobKilled";
+	areamonster "poring_w01",84,119,124,90,"Porng",1002,5*getmapusers("poring_w01"),strnpcinfo(0)+"::OnMobKilled";
+	areamonster "poring_w01",84,119,124,90,"pH0ur1n6",1002,5*getmapusers("poring_w01"),strnpcinfo(0)+"::OnMobKilled";
+	areamonster "poring_w01",84,119,124,90,"P0ring",1002,5*getmapusers("poring_w01"),strnpcinfo(0)+"::OnMobKilled";
+	areamonster "poring_w01",84,119,124,90,"Porong",1002,5*getmapusers("poring_w01"),strnpcinfo(0)+"::OnMobKilled";
+	areamonster "poring_w01",84,119,124,90,"Powing",1002,5*getmapusers("poring_w01"),strnpcinfo(0)+"::OnMobKilled";
+	areamonster "poring_w01",84,119,124,90,"Poriing",1002,5*getmapusers("poring_w01"),strnpcinfo(0)+"::OnMobKilled";
+	areamonster "poring_w01",84,119,124,90,"Boring",1002,5*getmapusers("poring_w01"),strnpcinfo(0)+"::OnMobKilled";
+	areamonster "poring_w01",84,119,124,90,"Lolwut!?",1002,5*getmapusers("poring_w01"),"::OnMobKilled";
+	areamonster "poring_w01",84,119,124,90,"Kill me to win!",1002,5*getmapusers("poring_w01"),strnpcinfo(0)+"::OnMobKilled";
+	end;
+
+OnMobKilled:
+	dispbottom "Você matou o Poring errado, como pode ser tão estúpido?";
+	warp "prontera",rand(148,163),rand(167,186);
+	sleep 5000;
+	if ( !getmapusers("poring_w01") ) {
+		.start = false;
+		killmonsterall "poring_w01";
+		announce "[Poring Premiado]: Ninguém venceu o evento Poring.",bc_all,0x0ceedb;
+	}
+	end;
+	
+OnMobKilledWin:
+	announce strcharinfo(0)+" venceu o evento Poring Premiado!",bc_all,0xFF7F50;
+	.@amt = getarraysize(.item);
+	for ( .@j = 0; .@j < .@amt; .@j += 2 )
+		getitem .item[.@j], .item[.@j+1];
+	killmonsterall "poring_w01";
+	sleep 5000;
+	mapwarp "poring_w01","prontera",rand(148,163),rand(167,186);
+	.start = false;
+	end;	
+}
+
+poring_w01,105,123,3	script	Back to Prontera	4_BULLETIN_BOARD2,{
+	warp "prontera",rand(148,163),rand(167,186);
+	end;
+}

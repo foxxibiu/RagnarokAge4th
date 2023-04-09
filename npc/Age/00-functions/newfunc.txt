@@ -1,0 +1,17 @@
+-	script	dummy_npc5	-1,{
+	end;
+}
+
+-	script	dummy_cloaked_npc5	-1,{
+	end;
+OnInit:
+	cloakonnpc();
+	end;
+}
+
+-	script	dummy_instance_disabled_npc5	-1,{
+	end;
+OnInit:
+	cloakonnpc();
+	end;
+}

@@ -1,0 +1,359 @@
+salao,56,34,4	script	Susan Grey#enchanter	4_F_HUWOMAN,{
+	set .np$,"^00B2EE[ Susan Grey ]^000000";
+
+    disable_items;
+	if (MaxWeight - Weight < 1000) {
+		mes .np$;
+        mes "Sua bolsa está muito pesada. Reduza algum peso e volte.";
+		close;
+	}
+    mes .np$;
+    mes "Olá! Sou Susan Grey, estudando sobre o Templo de Odin. Você precisa da minha ajuda?";
+    next;
+    switch(select("^006400[»]^000000 O que fazemos aqui?:^3CB371[»]^000000 Encantar equipamentos:^ff0000[»]^000000 Redefinir encantamentos")){
+    case 1:
+    mes .np$;
+    mes "Você sabe, há muitos aventureiros que amam Odin.";
+    next;
+    mes .np$;
+    mes "E às vezes eles me trazem isso...";
+    mes "[<ITEM>Relíquias de Odin<INFO>23986</INFO></ITEM>].";
+    next;
+    mes .np$;
+    mes "Como você deve ter notado, existem muitos tipos diferentes de equipamentos neste estabelecimento. Eu sou um estudioso que os estuda.";
+    next;
+    mes .np$;
+    mes "Eu posso lidar com alguns deles com minhas próprias mãos, então agora é possível fortalecê-los.";
+    next;
+    if(select("^3CB371[»]^000000 Mostre-me o que você pode fazer") == 1){
+    mes .np$;
+    mes "[<ITEM>For Soutane<INFO>15397</INFO></ITEM>]";
+    mes "[<ITEM>Agi Soutane<INFO>15398</INFO></ITEM>]";
+    mes "[<ITEM>Vit Soutane<INFO>15399</INFO></ITEM>]";
+    mes "[<ITEM>Int Soutane<INFO>15401</INFO></ITEM>]";
+    mes "[<ITEM>Des Soutane<INFO>15400</INFO></ITEM>]";
+    mes "[<ITEM>Sor Soutane<INFO>15402</INFO></ITEM>]";
+    mes "[<ITEM>Botas do Clero<INFO>22209</INFO></ITEM>]";
+    mes "[<ITEM>Manteau do Clero<INFO>20947</INFO></ITEM>]";
+    next;
+    mes .np$;
+    mes "Isso é o que eu posso lidar.";
+    next;
+    mes .np$;
+    mes "Como de costume, vou precisar de 5 [<ITEM>Sonho de Anjo<INFO>25767</INFO></ITEM>] e 500,000z.";
+    mes "Este é o meu pagamento.";
+    next;
+    mes .np$;
+    mes "Se o refinamento for maior que 7 para Clergy's Manteau ou Clergy's Boots e se você me trouxer 3 [<ITEM>Fruta de Prata<INFO>6909</INFO></ITEM>], posso fortalecer o equipamento com opções melhores.";
+    next;
+    mes .np$;
+    mes "Se o refinamento for superior a 9 para Soutanes e se você me trouxer 3 [<ITEM>Fruta de Prata<INFO>6909</INFO></ITEM>], posso reforçar o equipamento com opções melhores.";
+    next;
+    mes .np$;
+    mes "Para resetar os encantamentos, preciso de 500.000z ou 2 [<ITEM>Fruta de Prata<INFO>6909</INFO></ITEM>]. Há 30% de chance de falha ao redefinir com zeny (o equipamento não é destruído em caso de falha), então leve isso em consideração.";
+    close;
+    }
+	case 2:
+    mes .np$;
+    mes "Em qual equipamento você quer que eu trabalhe?";
+    next;
+    switch(select("^ff0000[»]^000000 Cancelar:^3CB371[»]^000000 Armadura:^3CB371[»]^000000 Capa:^3CB371[»]^000000 Sapatos")){   
+        case 1:
+        mes .np$;
+        mes "Volte sempre que quiser.";
+        close;
+        case 2:
+		.@part = EQI_ARMOR;
+		break;
+	case 3:
+		.@part = EQI_GARMENT;
+		break;
+	case 4:
+		.@part = EQI_SHOES;
+		break;
+	}
+	.@equip_id = getequipid(.@part);
+    switch( .@equip_id ){
+        case 15397:
+        case 15398:
+        case 15399:
+        case 15400:
+        case 15401:
+        case 15402:
+        case 20947:
+        case 22209:
+            break;
+        case -1:
+		    mes .np$;
+		    mes "Você está vestindo o item?";
+		    close;
+        default:
+        	mes .np$;
+		    mes "Eu não lido com itens como este.";
+    }
+    .@refine = getequiprefinerycnt(.@part);
+    if(.@refine < 9){
+    mes .np$;
+    mes "[<ITEM>"+getitemname(.@equip_id)+"<INFO>"+.@equip_id+"</INFO></ITEM>]";
+    mes "======================";
+    mes "[<ITEM>Sonho de Anjo<INFO>25767</INFO></ITEM>] x5";
+    mes "500,000z";
+    mes "Tem certeza de que deseja fortalecer este equipamento?";
+    next;
+    if(select("^ff0000[»]^000000 Cancelar:^3CB371[»]^000000 Continuar") == 1){
+        mes .np$;
+        mes "Por favor, volte quando estiver pronto para fortalecer seu equipamento.";
+        close;
+    }
+    else{
+            .@cost = 5;
+            setarray .@card[0],getequipcardid(.@part,0),getequipcardid(.@part,1),getequipcardid(.@part,2),getequipcardid(.@part,3);
+            copyarray .@tmp_card[0], .@card[0], 4;
+            if ((.@card[1] && getiteminfo(.@card[1], ITEMINFO_SUBTYPE) == CARD_NORMAL) || (.@card[2] && getiteminfo(.@card[2], ITEMINFO_SUBTYPE) == CARD_NORMAL) || (.@card[3] && getiteminfo(.@card[3], ITEMINFO_SUBTYPE) == CARD_NORMAL)) {// armor enchant system custom check
+		        mes .np$;
+		        mes "Algo de errado aconteceu.";
+		        close;
+	        }
+            if(.@card[1] > 0 && .@card[2] > 0 && .@card[3] > 0){
+                mes .np$;
+                mes "Este equipamento é reforçado ao seu limite. Nenhum reforço adicional é possível.";
+                close;
+            }
+            if(countitem(25767) < .@cost ||  Zeny < 500000){
+                mes .np$;
+                mes "Hum, você está em falta " + (.@cost - countitem(25767)) + " Sonho de Anjos ou você não tem 500000z. Vá buscar mais, e então podemos falar sobre mais encantamentos.";
+                specialeffect2 EF_PHARMACY_FAIL;
+                close;
+                end;
+            }
+            else{
+                if (.@card[3] == 0){
+                    .@card[3] = callfunc("F_Rand", 4705,4706,4707,4735,4736,4737,4725,4726,4727,4745,4746,4747,4715,4716,4717,4755,4756,4757,4764,4765,29241,4762,29238,4794,4902,4786,4787,4867,4900,4801,4802);
+                }
+                else if(.@card[2] == 0){
+                    .@card[2] = callfunc("F_Rand", 4705,4706,4707,4735,4736,4737,4725,4726,4727,4745,4746,4747,4715,4716,4717,4755,4756,4757,4764,4765,29241,4762,29238,4794,4902,4786,4787,4867,4900,4801,4802);
+                    }
+                else if (.@card[1] == 0){
+                    .@card[1] = callfunc("F_Rand", 4705,4706,4707,4735,4736,4737,4725,4726,4727,4745,4746,4747,4715,4716,4717,4755,4756,4757,4764,4765,29241,4762,29238,4794,4902,4786,4787,4867,4900,4801,4802);
+                }  
+                specialeffect2 EF_REPAIRWEAPON;
+                delitem 25767,.@cost;
+                set Zeny, Zeny - 500000;
+                if (callfunc("F_IsEquipIDHack", .@part, .@equip_id) || callfunc("F_IsEquipRefineHack", .@part, .@refine) || callfunc("F_IsEquipCardHack", .@part, .@tmp_card[0], .@tmp_card[1], .@tmp_card[2], .@tmp_card[3]))
+		close;
+                delequip .@part;
+                getitem2 .@equip_id,1,1,.@refine,0,.@card[0],.@card[1],.@card[2],.@card[3];
+                mes .np$;
+                mes "Reforço de [<ITEM>"+getitemname(.@equip_id)+"<INFO>"+.@equip_id+"</INFO></ITEM>] foi completado.";
+                close;
+        }
+        }
+        }
+        else{
+            mes .np$;
+            mes "[<ITEM>"+getitemname(.@equip_id)+"<INFO>"+.@equip_id+"</INFO></ITEM>]";
+            mes "======================";
+            mes "[<ITEM>"+getitemname(25767)+"<INFO>25767</INFO></ITEM>] x5";
+            mes "500,000z";
+            mes "Tem certeza de que deseja fortalecer este equipamento?";
+            next;
+            if(select("^ff0000[»]^000000 Cancelar:^3CB371[»]^000000 Continuar") == 1){
+                mes .np$;
+                mes "Por favor, volte quando estiver pronto para fortalecer seu equipamento.";
+                close;
+            }
+            .@itemused = 25767;
+            .@cost = 5;
+            .@zeny_cost = 500000;
+            setarray .@card[0], getequipcardid(.@part,0), getequipcardid(.@part,1), getequipcardid(.@part,2), getequipcardid(.@part,3);
+            copyarray .@tmp_card[0], .@card[0], 4;
+            if ((.@card[1] && getiteminfo(.@card[1], ITEMINFO_SUBTYPE) == CARD_NORMAL) || (.@card[2] && getiteminfo(.@card[2], ITEMINFO_SUBTYPE) == CARD_NORMAL) || (.@card[3] && getiteminfo(.@card[3], ITEMINFO_SUBTYPE) == CARD_NORMAL)) {// armor enchant system custom check
+		        mes .np$;
+		        mes "Algo de errado aconteceu.";
+		        close;
+	        }
+            if(.@card[1] > 0 && .@card[2] > 0 && .@card[3] > 0){
+                mes .np$;
+                mes "Este equipamento é reforçado ao seu limite. Nenhum reforço adicional é possível.";
+                close;
+            }
+            if(countitem(.@itemused) < .@cost ||  Zeny < 500000){
+                mes .np$;
+                mes "Hum, você está em falta " + (.@cost - countitem(.@itemused)) + " Sonho de Anjos ou você não tem 500000z. Vá buscar mais, e então podemos falar sobre mais encantamentos.";
+                specialeffect2 EF_PHARMACY_FAIL;
+                close;
+                end;
+            }
+            else{
+                if (.@card[3] == 0){
+                    .@card[3] = callfunc("F_Rand", 4705,4706,4707,4735,4736,4737,4725,4726,4727,4745,4746,4747,4715,4716,4717,4755,4756,4757,4764,4765,29241,4762,29238,4794,4902,4786,4787,4867,4900,4801,4802);
+                }
+                else if(.@card[2] == 0){
+                    .@card[2] = callfunc("F_Rand", 4705,4706,4707,4735,4736,4737,4725,4726,4727,4745,4746,4747,4715,4716,4717,4755,4756,4757,4764,4765,29241,4762,29238,4794,4902,4786,4787,4867,4900,4801,4802);
+                    }
+                else if (.@card[1] == 0){
+                    mes .np$;
+                    mes "Oh espere! Parece que você tem um equipamento poderoso lá. Eu posso te dar um encantamento melhor se você me der 3x [<ITEM>"+getitemname(6909)+"<INFO>6909</INFO></ITEM>].";
+                    mes "O que você diria?";
+                    next;
+                    switch(select("^ff0000[»]^000000 Cancelar:^3CB371[»]^000000 Prossiga com Sonho de Anjo:^3CB371[»]^000000 Prossiga com "+getitemname(6909)+"")){
+                        case 1:
+                            mes .np$;
+                            mes "Por favor, volte quando estiver pronto para fortalecer seu equipamento.";
+                            close;
+                            break;
+                        case 2:
+                        .@card[1] = callfunc("F_Rand", 4705,4706,4707,4735,4736,4737,4725,4726,4727,4745,4746,4747,4715,4716,4717,4755,4756,4757,4764,4765,29241,4762,29238,4794,4902,4786,4787,4867,4900,4801,4802);
+                        break;
+                        case 3:
+                        .@cost = 3;
+                        .@itemused = 6909;
+                        .@zeny_cost = 0;
+                        if(countitem(.@itemused) < .@cost){
+                            mes .np$;
+                            mes "Hum, você está em falta " + (.@cost - countitem(.@itemused)) +" "+ getitemname(6909) +". Vá buscar mais, e então podemos falar sobre mais encantamentos.";
+                            specialeffect2 EF_PHARMACY_FAIL;
+                            close;
+                            end;
+                        }
+                        else{
+                            if(.@part == EQI_ARMOR){
+                            .@card[1] = callfunc("F_Rand", 4706,4707,4736,4737,4726,4727,4746,4747,4716,4717,4756,4757,29241,29238,4903,4790,4900,4802, 4820,4821,4812,4826,4835,4836,4843,4844,4873,4881,310076,310077,310078,310079,310080,310081);       
+                            }
+                            else{
+                            .@card[1] = callfunc("F_Rand", 4706,4707,4736,4737,4726,4727,4746,4747,4716,4717,4756,4757,4765,4762,29241,29238,4902, 29026,4788,4789,4900,4801, 4802);           
+                            }
+                        }
+                    }
+                }  
+                specialeffect2 EF_REPAIRWEAPON;
+                delitem .@itemused,.@cost;
+                set Zeny, Zeny - .@zeny_cost;
+                if (callfunc("F_IsEquipIDHack", .@part, .@equip_id) || callfunc("F_IsEquipRefineHack", .@part, .@refine) || callfunc("F_IsEquipCardHack", .@part, .@tmp_card[0], .@tmp_card[1], .@tmp_card[2], .@tmp_card[3]))
+		        close;
+                delequip .@part;
+                getitem2 .@equip_id,1,1,.@refine,0,.@card[0],.@card[1],.@card[2],.@card[3];
+                mes .np$;
+                mes "Reforço de [<ITEM>"+getitemname(.@equip_id)+"<INFO>"+.@equip_id+"</INFO></ITEM>] foi completado.";
+                close;
+        }
+        }
+        case 3:
+            mes .np$;
+            mes "Em qual equipamento você quer que eu trabalhe?";
+            next;
+            switch(select("^ff0000[»]^000000 Cancelar:^3CB371[»]^000000 Armadura:^3CB371[»]^000000 Capa:^3CB371[»]^000000 Sapatos")){   
+                case 1:
+                mes .np$;
+                mes "Volte sempre que quiser.";
+                close;
+                case 2:
+                .@part = EQI_ARMOR;
+                break;
+            case 3:
+                .@part = EQI_GARMENT;
+                break;
+            case 4:
+                .@part = EQI_SHOES;
+                break;
+            }
+            .@equip_id = getequipid(.@part);
+            switch( .@equip_id ){
+                case 15397:
+                case 15398:
+                case 15399:
+                case 15400:
+                case 15401:
+                case 15402:
+                case 20947:
+                case 22209:
+                    break;
+                case -1:
+                    mes .np$;
+                    mes "Você está vestindo o item?";
+                    close;
+                default:
+                    mes .np$;
+                    mes "Eu não lido com itens como este.";
+            }
+            .@refine = getequiprefinerycnt(.@part);
+            setarray .@card[0], getequipcardid(.@part,0), getequipcardid(.@part,1), getequipcardid(.@part,2), getequipcardid(.@part,3);
+                mes .np$;
+                mes "[<ITEM>"+getitemname(.@equip_id)+"<INFO>"+.@equip_id+"</INFO></ITEM>]";
+                mes "and";
+                mes "[<ITEM>"+getitemname(6909)+"<INFO>6909</INFO></ITEM>] x2";
+                mes "OR";
+                mes "[<ITEM>"+getitemname(.@equip_id)+"<INFO>"+.@equip_id+"</INFO></ITEM>]";
+                mes "and";
+                mes "500,000z (30% de falha, não destrói o item em caso de falha)";
+                mes "Que tipo de reset você vai usar?";
+                next;
+                switch(select("^ff0000[»]^000000 Cancelar:^3CB371[»]^000000 Usando "+getitemname(6909)+":^3CB371[»]^000000 Usando zeny")){
+                    case 1:
+                    mes .np$;
+                    mes "Por favor, volte quando estiver pronto para fortalecer seu equipamento.";
+                    close;
+                    break;
+                    case 2:
+                        if(.@card[1] >0){
+                            if(countitem(6909) < 2){
+                                mes .np$;
+                                mes "Hmmm, acho que você esqueceu alguma coisa... preciso que me traga mais "+2 - countitem(6909)+" "+ getitemname(6909)+" para resetar.";
+                                close;                        
+                            }
+                            else{
+                                delitem 6909, 2;
+                                delequip .@part;
+                                specialeffect2 EF_REPAIRWEAPON;
+                                getitem2 .@equip_id,1,1,.@refine,0,.@card[0],0,0,0;
+                                mes .np$;
+                                mes "Feito. Aqui está o seu limpo [<ITEM>"+getitemname(.@equip_id)+"<INFO>"+.@equip_id+"</INFO></ITEM>]";                      
+                                close;
+                            }
+                        }
+                        else{
+                            mes .np$;
+                            mes "Para usar este serviço, preciso que você encante totalmente seu equipamento antes de resetar.";
+                            close;
+                            end;
+                        }
+                    case 3:
+                        if(.@card[1] >0){
+                            if(Zeny < 500000){
+                                mes .np$;
+                                mes "Hmmm, acho que você esqueceu alguma coisa... preciso que me traga 500.000z para resetar.";
+                                close;                        
+                            }
+                            else{
+                                set Zeny, Zeny - 500000;
+                                if(rand(100) < 30){
+                                    specialeffect2 EF_LORD;
+                                    mes .np$;
+                                    mes "Ops, falhou!.";
+                                    mes "Tente novamente outra vez.";
+                                    close;
+                                }
+                                delequip .@part;
+                                specialeffect2 EF_REPAIRWEAPON;
+                                getitem2 .@equip_id,1,1,.@refine,0,.@card[0],0,0,0;
+                                mes .np$;
+                                mes "Feito. Aqui está o seu limpo [<ITEM>"+getitemname(.@equip_id)+"<INFO>"+.@equip_id+"</INFO></ITEM>]";                      
+                                close;
+                            }
+                        }
+                        else{
+                            mes .np$;
+                            mes "Para usar este serviço, preciso que você encante totalmente seu equipamento antes de redefinir.";
+                            close;
+                            end;
+                        }
+
+                }
+    }
+    end;
+
+OnInit:
+	setunitdata (getnpcid(0), UNPC_GROUP_ID, 2);
+	setunittitle(getnpcid(0), "[ Odin's Past ]");
+	end;
+}

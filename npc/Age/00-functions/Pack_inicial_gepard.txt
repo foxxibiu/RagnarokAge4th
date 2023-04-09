@@ -1,0 +1,339 @@
+//
+-	script	packiniciante	-1,{
+
+	OnPCLoginEvent:
+	query_sql " SELECT `account_id`, `name`, `get_date` FROM `Kyo_PackIniciante` WHERE `account_id` = "+getcharid(3),.@acc_id, .@name$, .@get_date$;
+	query_sql "SELECT `last_ip` FROM `login` WHERE `account_id` = '"+getcharid(3)+"'",@LIP$; // sem gepard
+	//query_sql "SELECT `last_unique_id` FROM `login` WHERE `account_id` = '"+getcharid(3)+"'",@LIP$;  //com gepard
+
+	if(#Packiniciante == 1){
+		query_sql "INSERT INTO `Kyo_PackIniciante` (`account_id`,`char_id`,`name`,`ip`,`get_date`) VALUES ("+getcharid(3)+","+getcharid(0)+",'"+strcharinfo(0)+"','"+@LIP$+"','"+gettimestr("%d/%m/%Y - %H:%M:%S", 25)+"')";	
+		set #Packiniciante,0;
+		end;
+	}
+	if(!.@acc_id){
+        query_sql "SELECT `ip` FROM  `Kyo_PackIniciante` WHERE  `ip` = '"+@LIP$+"'",@GIP$;
+	if(@GIP$ != @LIP$){
+		mes .npc$;
+		mes (gettime(3)>= 6&&gettime(3)<= 12?"Bom-dia":(gettime(3)>=13&&gettime(3)<=18?"Boa-tarde":"Boa-noite"))+", ^008aff"+strcharinfo(0)+"^000000 !";
+		mes "^008aff[•]^000000 Bem-Vindo ao pbRO.";
+		mes "^008aff[•]^000000 Vejo que é novo aqui no Servidor .";
+		mes "^008aff[•]^000000 Esse aqui é o Pack Iniciante.";
+	}else{
+		end;
+	}
+	}else{
+		end;
+	}
+	next;
+	mes .npc$;
+	mes "^008aff[•]^000000 Sou responsavel pelo o Pack iniciante.";
+	mes "^008aff[•]^000000 Ele consiste em itens basicos para que possa iniciar sua jornada!";
+	mes "^008aff[•]^000000 Além de ^008aff[1]^000000 Char Level Maxímo na classe de sua escolha.";
+	mes "^008aff[•]^000000 Agora você irá selecionar a classe que deseja.";
+	next;
+	mes .npc$;
+	mes "^008aff[•]^000000 Escolha com Sabedoria.";
+		switch(select(""+.bcor$+"Algoz:"+.bcor$+"Arquimago:"+.bcor$+"Atirador de Elite:"+.bcor$+"Criador:"+.bcor$+"Desordeiro:"+.bcor$+"Espiritualista:"+.bcor$+"Lorde:"+.bcor$+"Mestre:"+.bcor$+"Mestre-Ferreiro:"+.bcor$+"Mestre Taekwon:"+.bcor$+"Menestrel/Cigana:"+.bcor$+"Ninja:"+.bcor$+"Paladino:"+.bcor$+"Professor:"+.bcor$+"Sumo Sacerdote:"+.bcor$+"Pistoleiro")) {
+			case 1:
+				mes .npc$;
+				mes "^008aff"+strcharinfo(0)+"^000000, Vejo que escolheu Algoz";
+				mes "Sábia decisão.";
+				next;
+				jobchange 4013;
+				set baselevel,255;
+				set joblevel,70;
+				set SkillPoint,SkillPoint+58;
+				atcommand "@zeny 500";
+
+
+				getitem 41008,1;
+				//rentitem 30003,864000;
+				
+				
+				query_sql "INSERT INTO `Kyo_PackIniciante` (`account_id`,`char_id`,`name`,`ip`,`get_date`) VALUES ("+getcharid(3)+","+getcharid(0)+",'"+strcharinfo(0)+"','"+@LIP$+"','"+gettimestr("%d/%m/%Y - %H:%M:%S", 25)+"')";	
+				goto Mensagem1;
+				end;
+			case 2:
+				mes .npc$;
+				mes "^008aff"+strcharinfo(0)+"^000000, Vejo que escolheu Arquimago";
+				mes "Sábia decisão.";
+				next;
+				jobchange 4010;
+				set baselevel,255;
+				set joblevel,70;
+				set SkillPoint,SkillPoint+58;
+				atcommand "@zeny 500";
+
+
+				getitem 41008,1;
+
+
+				query_sql "INSERT INTO `Kyo_PackIniciante` (`account_id`,`char_id`,`name`,`ip`,`get_date`) VALUES ("+getcharid(3)+","+getcharid(0)+",'"+strcharinfo(0)+"','"+@LIP$+"','"+gettimestr("%d/%m/%Y - %H:%M:%S", 25)+"')";	
+				goto Mensagem1;
+				end;	
+			case 3:
+				mes .npc$;
+				mes "^008aff"+strcharinfo(0)+"^000000, Vejo que escolheu Atirador de Elite";
+				mes "Sábia decisão.";
+				next;
+				jobchange 4012;
+				set baselevel,255;
+				set joblevel,70;
+				set SkillPoint,SkillPoint+58;
+				atcommand "@zeny 500";
+
+
+				getitem 41008,1;
+
+				query_sql "INSERT INTO `Kyo_PackIniciante` (`account_id`,`char_id`,`name`,`ip`,`get_date`) VALUES ("+getcharid(3)+","+getcharid(0)+",'"+strcharinfo(0)+"','"+@LIP$+"','"+gettimestr("%d/%m/%Y - %H:%M:%S", 25)+"')";	
+				goto Mensagem1;
+				end;
+			case 4:
+				mes .npc$;
+				mes "^008aff"+strcharinfo(0)+"^000000, Vejo que escolheu Criador";
+				mes "Sábia decisão.";
+				next;
+				jobchange 4019;
+				set baselevel,255;
+				set joblevel,70;
+				set SkillPoint,SkillPoint+58;
+				atcommand "@zeny 500";
+
+
+				getitem 41008,1;
+
+				query_sql "INSERT INTO `Kyo_PackIniciante` (`account_id`,`char_id`,`name`,`ip`,`get_date`) VALUES ("+getcharid(3)+","+getcharid(0)+",'"+strcharinfo(0)+"','"+@LIP$+"','"+gettimestr("%d/%m/%Y - %H:%M:%S", 25)+"')";	
+				goto Mensagem1;
+				end;
+			case 5:
+				mes .npc$;
+				mes "^008aff"+strcharinfo(0)+"^000000, Vejo que escolheu Desordeiro";
+				mes "Sábia decisão.";
+				next;
+				jobchange 4018;
+				set baselevel,255;
+				set joblevel,70;
+				set SkillPoint,SkillPoint+58;
+				atcommand "@zeny 500";
+
+
+				getitem 41008,1;
+
+				query_sql "INSERT INTO `Kyo_PackIniciante` (`account_id`,`char_id`,`name`,`ip`,`get_date`) VALUES ("+getcharid(3)+","+getcharid(0)+",'"+strcharinfo(0)+"','"+@LIP$+"','"+gettimestr("%d/%m/%Y - %H:%M:%S", 25)+"')";	
+				goto Mensagem1;
+				end;
+			case 6:
+				mes .npc$;
+				mes "^008aff"+strcharinfo(0)+"^000000, Vejo que escolheu Espiritualista";
+				mes "Sábia decisão.";
+				next;
+				jobchange 4049;
+				set baselevel,255;
+				set joblevel,70;
+				set SkillPoint,SkillPoint+58;
+				atcommand "@zeny 500";
+
+
+				getitem 41008,1;
+				
+				query_sql "INSERT INTO `Kyo_PackIniciante` (`account_id`,`char_id`,`name`,`ip`,`get_date`) VALUES ("+getcharid(3)+","+getcharid(0)+",'"+strcharinfo(0)+"','"+@LIP$+"','"+gettimestr("%d/%m/%Y - %H:%M:%S", 25)+"')";	
+				goto Mensagem1;
+				end;
+			case 7:
+				mes .npc$;
+				mes "^008aff"+strcharinfo(0)+"^000000, Vejo que escolheu Lorde";
+				mes "Sábia decisão.";
+				next;
+				jobchange 4008;
+				set baselevel,255;
+				set joblevel,70;
+				set SkillPoint,SkillPoint+58;
+				atcommand "@zeny 500";
+
+
+				getitem 41008,1;
+
+				query_sql "INSERT INTO `Kyo_PackIniciante` (`account_id`,`char_id`,`name`,`ip`,`get_date`) VALUES ("+getcharid(3)+","+getcharid(0)+",'"+strcharinfo(0)+"','"+@LIP$+"','"+gettimestr("%d/%m/%Y - %H:%M:%S", 25)+"')";	
+				goto Mensagem1;
+				end;
+			case 8:
+				mes .npc$;
+				mes "^008aff"+strcharinfo(0)+"^000000, Vejo que escolheu Mestre";
+				mes "Sábia decisão.";
+				next;
+				jobchange 4016;
+				set baselevel,255;
+				set joblevel,70;
+				set SkillPoint,SkillPoint+58;
+				atcommand "@zeny 500";
+
+
+				getitem 41008,1;
+
+
+				query_sql "INSERT INTO `Kyo_PackIniciante` (`account_id`,`char_id`,`name`,`ip`,`get_date`) VALUES ("+getcharid(3)+","+getcharid(0)+",'"+strcharinfo(0)+"','"+@LIP$+"','"+gettimestr("%d/%m/%Y - %H:%M:%S", 25)+"')";	
+				goto Mensagem1;
+				end;
+			case 9:
+				mes .npc$;
+				mes "^008aff"+strcharinfo(0)+"^000000, Vejo que escolheu Mestre-Ferreiro";
+				mes "Sábia decisão.";
+				next;
+				jobchange 4011;
+				set baselevel,255;
+				set joblevel,70;
+				set SkillPoint,SkillPoint+58;
+				atcommand "@zeny 500";
+
+
+				getitem 41008,1;
+
+
+				query_sql "INSERT INTO `Kyo_PackIniciante` (`account_id`,`char_id`,`name`,`ip`,`get_date`) VALUES ("+getcharid(3)+","+getcharid(0)+",'"+strcharinfo(0)+"','"+@LIP$+"','"+gettimestr("%d/%m/%Y - %H:%M:%S", 25)+"')";	
+				goto Mensagem1;
+				end;
+			case 10:
+				mes .npc$;
+				mes "^008aff"+strcharinfo(0)+"^000000, Vejo que escolheu Mestre Taekwon";
+				mes "Sábia decisão.";
+				next;
+				jobchange 4047;
+				set baselevel,255;
+				set joblevel,70;
+				set SkillPoint,SkillPoint+58;
+				atcommand "@zeny 500";
+
+
+				getitem 41008,1;
+
+
+				query_sql "INSERT INTO `Kyo_PackIniciante` (`account_id`,`char_id`,`name`,`ip`,`get_date`) VALUES ("+getcharid(3)+","+getcharid(0)+",'"+strcharinfo(0)+"','"+@LIP$+"','"+gettimestr("%d/%m/%Y - %H:%M:%S", 25)+"')";	
+				goto Mensagem1;
+				end;
+			case 11:
+				mes .npc$;
+				mes "^008aff"+strcharinfo(0)+"^000000, Vejo que escolheu Menestrel/Cigana";
+				mes "Sábia decisão.";
+				next;
+				jobchange 4020;
+				set baselevel,255;
+				set joblevel,70;
+				set SkillPoint,SkillPoint+58;
+				atcommand "@zeny 500";
+
+
+				getitem 41008,1;
+
+				query_sql "INSERT INTO `Kyo_PackIniciante` (`account_id`,`char_id`,`name`,`ip`,`get_date`) VALUES ("+getcharid(3)+","+getcharid(0)+",'"+strcharinfo(0)+"','"+@LIP$+"','"+gettimestr("%d/%m/%Y - %H:%M:%S", 25)+"')";	
+				goto Mensagem1;
+				end;
+			case 12:
+				mes .npc$;
+				mes "^008aff"+strcharinfo(0)+"^000000, Vejo que escolheu Ninja";
+				mes "Sábia decisão.";
+				next;
+				jobchange 25;
+				set baselevel,255;
+				set joblevel,70;
+				set SkillPoint,SkillPoint+58;
+				atcommand "@zeny 500";
+
+
+				getitem 41008,1;
+
+
+				query_sql "INSERT INTO `Kyo_PackIniciante` (`account_id`,`char_id`,`name`,`ip`,`get_date`) VALUES ("+getcharid(3)+","+getcharid(0)+",'"+strcharinfo(0)+"','"+@LIP$+"','"+gettimestr("%d/%m/%Y - %H:%M:%S", 25)+"')";	
+				goto Mensagem1;
+				end;
+			case 13:
+				mes .npc$;
+				mes "^008aff"+strcharinfo(0)+"^000000, Vejo que escolheu Paladino";
+				mes "Sábia decisão.";
+				next;
+				jobchange 4015;
+				set baselevel,255;
+				set joblevel,70;
+				set SkillPoint,SkillPoint+58;
+				atcommand "@zeny 500";
+
+
+				getitem 41008,1;
+				
+				query_sql "INSERT INTO `Kyo_PackIniciante` (`account_id`,`char_id`,`name`,`ip`,`get_date`) VALUES ("+getcharid(3)+","+getcharid(0)+",'"+strcharinfo(0)+"','"+@LIP$+"','"+gettimestr("%d/%m/%Y - %H:%M:%S", 25)+"')";	
+				goto Mensagem1;
+				end;
+			case 14:
+				mes .npc$;
+				mes "^008aff"+strcharinfo(0)+"^000000, Vejo que escolheu Professor";
+				mes "Sábia decisão.";
+				next;
+				jobchange 4017;
+				set baselevel,255;
+				set joblevel,70;
+				set SkillPoint,SkillPoint+58;
+				atcommand "@zeny 500";
+
+
+				getitem 41008,1;
+
+				query_sql "INSERT INTO `Kyo_PackIniciante` (`account_id`,`char_id`,`name`,`ip`,`get_date`) VALUES ("+getcharid(3)+","+getcharid(0)+",'"+strcharinfo(0)+"','"+@LIP$+"','"+gettimestr("%d/%m/%Y - %H:%M:%S", 25)+"')";	
+				goto Mensagem1;
+				end;	
+
+			case 15:
+				mes .npc$;
+				mes "^008aff"+strcharinfo(0)+"^000000, Vejo que escolheu Sumo Sacerdote";
+				mes "Sábia decisão.";
+				next;
+				jobchange 4009;
+				set baselevel,255;
+				set joblevel,70;
+				set SkillPoint,SkillPoint+58;
+				atcommand "@zeny 500";
+
+
+				getitem 41008,1;
+
+				query_sql "INSERT INTO `Kyo_PackIniciante` (`account_id`,`char_id`,`name`,`ip`,`get_date`) VALUES ("+getcharid(3)+","+getcharid(0)+",'"+strcharinfo(0)+"','"+@LIP$+"','"+gettimestr("%d/%m/%Y - %H:%M:%S", 25)+"')";	
+				goto Mensagem1;
+				end;
+			case 16:
+				mes .npc$;
+				mes "^008aff"+strcharinfo(0)+"^000000, Vejo que escolheu Pistoleiro";
+				mes "Sábia decisão.";
+				next;
+				jobchange 24;
+				set baselevel,255;
+				set SkillPoint,SkillPoint+58;
+				atcommand "@zeny 500";
+
+
+				getitem 41008,1;
+
+				
+				query_sql "INSERT INTO `Kyo_PackIniciante` (`account_id`,`char_id`,`name`,`ip`,`get_date`) VALUES ("+getcharid(3)+","+getcharid(0)+",'"+strcharinfo(0)+"','"+@LIP$+"','"+gettimestr("%d/%m/%Y - %H:%M:%S", 25)+"')";	
+				goto Mensagem1;
+				end;
+
+				}
+	
+	Mensagem1:
+	mes .npc$;
+	mes "^008aff"+strcharinfo(0)+"^000000, Você irá começar sua jornada agora.";
+	mes "Se precisar de ajuda. Por favor procure pela Staff. Obrigado.";
+	close;
+	
+	Recebido:
+	end;
+	
+
+OnInit:
+
+set .npc$, "^FF7F00[ Pack Iniciante]^000000";         // Nome do NPC
+.bcor$ = "^008aff[»]^000000";									// Simbolo do botão de opções;
+.rcor$ = "^ff0000[»]^000000";									// Simbolo do botão de Cancelar;
+
+
+
+}

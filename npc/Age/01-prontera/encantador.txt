@@ -1,0 +1,242 @@
+//===== rAthena Script =======================================
+//= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
+//= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
+
+prontera,138,198,5	script	Mestre de Encantamento	1_M_SMITH,{
+emotion ET_SCRATCH;
+
+	disable_items;
+	// ==============================================================
+	// CONFIGURAÇÕES GERAIS
+	set .npc$,"[^0000FF Encantador ^000000]"; // NOME DO NPC
+	set .zeny, 10000000; // PREÇO A PAGAR
+
+	// ==============================================================
+	// CONFIGURAÇÕES PORCENTAGENS
+	.enchant5 = 10; // 10% de chance de encantamentos +5
+	.enchant4 = 25; // 15% de chance de encantamentos +4
+	.enchant3 = 45; // 20% de chance de encantamentos +3
+	.enchant2 = 70; // 25% de chance de encantamentos +2
+	// 30% de chance de encantamento +1
+	// 10% + 15% + 20% + 25% + 30% = 100%.
+	.fail = 100; // Chance de falha
+	// Cálculo do sistema: 100 + chance de falha
+	// Se o usuário sortear um número entre 1 e 100, recebe o encantamento
+	// Se o usuário sortear um número entre 100 e .fail, o equipamento não é encantado
+	// ==============================================================
+
+	// 1 para não encantar se tiver slot, 0 para encantar independente.
+	set @sys,0; // Se o equipamento tiver slot, não fará o enchant.
+
+
+	// ==============================================================
+	mes .npc$;
+	mes "Olá, "+strcharinfo(0)+"!";
+	mes "Gostaria de encantar seu equipamento?";
+	next;
+	mes .npc$;
+	mes "Você vai precisar de:";
+	mes .zeny+" Zenys.";
+	mes "Deseja usar os meus poderes mágicos?";
+	next;
+	switch(select("Sim","Não")) {
+		case 1:
+			next;
+			mes .npc$;
+			mes "Selecione o item que você quer encantar.";
+			next;
+			menu getequipname(7),ARMOR,"Eu mudei de ideia.",L_Cancel;
+
+			ARMOR:
+				set @part,7;
+				goto M_Check;
+
+		case 2:
+			goto L_Cancel;
+	}
+
+	M_Check:
+	if (getequipisequiped(@part)) {
+		.@item = getequipid(@part);
+		mes .npc$;
+		mes "Deseja encantar: "+getitemname(.@item)+"?";
+		mes "Lembre-se que você só pode ter ^FF0000UM^000000 desse item no inventário.";
+		next;
+		switch(select("Sim","Não")) {
+			case 1:
+				if (countitem(.@item) > 1) {
+					mes .npc$; mes "Você tem itens demais. Volte com apenas UM.";
+					close;
+				} else if (getequipcardid(@part,3)) {
+					emotion ET_HUK;
+					mes .npc$;
+					mes "Seu equipamento já está encantado.";
+					close;
+				} else if (countitem(.@item) == 0) {
+					mes .npc$;
+					mes "VocÊ não tem nenhum item. Volte depois.";
+					close;
+				} else if (zeny < .zeny) {
+					emotion ET_HUK;
+					mes .npc$;
+					mes "Você não possui zeny suficiente. Volte aqui quando tiver "+.zeny+" Zenys.";
+					close;
+				} else if (@sys == 1 && getitemslots(.@item) > 0) {
+					emotion ET_HUK;
+					mes .npc$; mes "O equipamento não pode haver nenhum slot.";
+					close;
+				} else {
+					mes .npc$;
+					mes "Okay, vamos lá!!!";
+					next;
+					callsub S_EnchantArmor;
+				}
+
+			case 2:
+				goto L_Cancel;
+		}
+	}
+	mes .npc$;
+	mes "Eu não posso encantar o ar...";
+	close;
+
+	S_EnchantArmor:
+	set .npc$,"[^0000FF Encantador ^000000]";
+	.@item = getequipid(@part);
+	.@card0 = getequipcardid(@part,0);
+	.@refine = getequiprefinerycnt(@part);
+	.@enchants = rand (1,6);
+	zeny -= .zeny;
+	//str
+	if (.@enchants == 1){
+	specialeffect 96;
+	progressbar "ffff00",2;
+		@randEnchant = rand (1,(100+.fail));
+		if (@randEnchant <= .enchant5)
+			set @addpart,4704;
+		else if (@randEnchant > .enchant5 && @randEnchant <= .enchant4)
+			set @addpart,4703;
+		else if (@randEnchant > .enchant4 && @randEnchant <= .enchant3)
+			set @addpart,4702;
+		else if (@randEnchant > .enchant3 && @randEnchant <= .enchant2)
+			set @addpart,4701;
+		else if (@randEnchant > .enchant4 && @randEnchant <= 100)
+			set @addpart,4700;
+		else
+			.@failed = 1;
+
+	}
+	//int
+	else if (.@enchants == 2){
+	specialeffect 96;
+	progressbar "ffff00",2;
+		@randEnchant = rand (1,(100+.fail));
+		if (@randEnchant <= .enchant5)
+			set @addpart,4714;
+		else if (@randEnchant > .enchant5 && @randEnchant <= .enchant4)
+			set @addpart,4713;
+		else if (@randEnchant > .enchant4 && @randEnchant <= .enchant3)
+			set @addpart,4712;
+		else if (@randEnchant > .enchant3 && @randEnchant <= .enchant2)
+			set @addpart,4711;
+		else if (@randEnchant > .enchant4 && @randEnchant <= 100)
+			set @addpart,4710;
+		else
+			.@failed = 1;
+	}
+	//dex
+	else if (.@enchants == 3){
+	specialeffect 96;
+	progressbar "ffff00",2;
+		@randEnchant = rand (1,(100+.fail));
+		if (@randEnchant <= .enchant5)
+			set @addpart,4724;
+		else if (@randEnchant > .enchant5 && @randEnchant <= .enchant4)
+			set @addpart,4723;
+		else if (@randEnchant > .enchant4 && @randEnchant <= .enchant3)
+			set @addpart,4722;
+		else if (@randEnchant > .enchant3 && @randEnchant <= .enchant2)
+			set @addpart,4721;
+		else if (@randEnchant > .enchant4 && @randEnchant <= 100)
+			set @addpart,4720;
+		else
+			.@failed = 1;
+	}
+	//agi
+	else if (.@enchants == 4){
+	specialeffect 96;
+	progressbar "ffff00",2;
+		@randEnchant = rand (1,(100+.fail));
+		if (@randEnchant <= .enchant5)
+			set @addpart,4734;
+		else if (@randEnchant > .enchant5 && @randEnchant <= .enchant4)
+			set @addpart,4733;
+		else if (@randEnchant > .enchant4 && @randEnchant <= .enchant3)
+			set @addpart,4732;
+		else if (@randEnchant > .enchant3 && @randEnchant <= .enchant2)
+			set @addpart,4731;
+		else if (@randEnchant > .enchant4 && @randEnchant <= 100)
+			set @addpart,4730;
+		else
+			.@failed = 1;
+	}
+	//vit
+	else if (.@enchants == 5){
+	specialeffect 96;
+	progressbar "ffff00",2;
+		@randEnchant = rand (1,(100+.fail));
+		if (@randEnchant <= .enchant5)
+			set @addpart,4744;
+		else if (@randEnchant > .enchant5 && @randEnchant <= .enchant4)
+			set @addpart,4743;
+		else if (@randEnchant > .enchant4 && @randEnchant <= .enchant3)
+			set @addpart,4742;
+		else if (@randEnchant > .enchant3 && @randEnchant <= .enchant2)
+			set @addpart,4741;
+		else if (@randEnchant > .enchant4 && @randEnchant <= 100)
+			set @addpart,4740;
+		else
+			.@failed = 1;
+	}
+	//luk
+	else if (.@enchants == 6){
+	specialeffect 96;
+	progressbar "ffff00",2;
+		@randEnchant = rand (1,(100+.fail));
+		if (@randEnchant <= .enchant5) 
+			set @addpart,4754;
+		else if (@randEnchant > .enchant5 && @randEnchant <= .enchant4)
+			set @addpart,4753;
+		else if (@randEnchant > .enchant4 && @randEnchant <= .enchant3)
+			set @addpart,4752;
+		else if (@randEnchant > .enchant3 && @randEnchant <= .enchant2)
+			set @addpart,4751;
+		else if (@randEnchant > .enchant4 && @randEnchant <= 100)
+			set @addpart,4750;
+		else
+			.@failed = 1;
+	}
+	if (.@failed) {	specialeffect 155;
+	//progressbar "ffff00",2;
+		mes .npc$;
+		specialeffect2 611;
+		mes "Me desculpe, mas o encantamento falhou..";
+		mes "até aproxima!";
+		close;
+	}
+	delitem .@item,1;
+	specialeffect2 EF_REPAIRWEAPON;
+	specialeffect2 154;
+	specialeffect2 610;
+	mes .npc$;
+	mes "O encantamento foi um sucesso.";
+	mes "Você recebeu um adicional de: "+getitemname(@addpart);
+	mes "Tome seu item!";
+	getitem2 .@item,1,1,.@refine,0,.@card0,.@card1,.@card2,@addpart;
+	close;
+	
+	L_Cancel:
+	mes .npc$;
+	mes "Okay. Volte quando precisar de algo.";
+	close;
+}

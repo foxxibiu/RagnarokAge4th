@@ -1,0 +1,312 @@
+//         ______  __    __                                 
+//        /\  _  \/\ \__/\ \                                
+//        \ \ \_\ \ \ ,_\ \ \___      __    ___      __     
+//    _____\ \  __ \ \ \/\ \  _ `\  /'__`\/' _ `\  /'__`\   
+//   /\  __\\ \ \/\ \ \ \_\ \ \ \ \/\  __//\ \/\ \/\ \_\.\_ 
+//   \ \_\_/ \ \_\ \_\ \__\\ \_\ \_\ \____\ \_\ \_\ \__/.\_\
+//    \/_/    \/_/\/_/\/__/ \/_/\/_/\/____/\/_/\/_/\/__/\/_/
+//
+//============================================================
+//= Weapon Enchanter
+//===== By: ================================================== 
+//= DanielArt
+//===== Current Version: ===================================== 
+//= 2.0
+//===== Compatible With: ===================================== 
+//= rAthena SVN (Episode of Malangdo)
+//===== Description: ========================================= 
+//= Enchant a weapon with two extra bonus.
+//===== Additional Comments: ================================= 
+//= 1.0 First version.
+//= 1.1 Fixed id weapon order.
+//= 1.2 Added Coin Grades with respective bonus.
+//= 1.3 Added Mayomayo, the coin trader.
+//= 1.4 Success rate depend the coin be used.
+//= 1.5 Fixed card get ID.
+//= 1.6 Check if the weapon is equipped.
+//= 1.7 For reset enchants now required a Gaedarae Fruit.
+//= 1.8 Fixed Item ID of enchants and order of it.
+//= 1.9 Added Guns and Huuma shurikens lvl 4.
+//= 2.0 Fixed a exploit with the bar progress.
+//============================================================ 
+prontera,150,150,3	script	Melonmelon	544,{
+function Encantar; function General;
+	mes "[^cc6600Melonmelon^000000]";
+	if (Zeny > 399999) {
+		mes "He estado estudiando las distintas armas mediante las ca�as de pesca.";
+		next;
+		mes "[^cc6600Melonmelon^000000]";
+		mes "Descubri que puedo ingresar magia a las armas con un metodo secreto, pero para eso requiero ^5533ffMalangdo Coins^000000 y 400,000z dependiendo de cuantos slots tenga tu arma.";
+		next;
+		mes "[^cc6600Melonmelon^000000]";
+		mes "Puedes encantar una gran gama de armas, a continuacion de las presentare.";
+		next;
+		if(select("Armas sin slot:Armas con slot") == 2) {
+			if(select("Armas con ^ff0000un^000000 slot:Armas con ^5533ffdos^000000 slots") == 1) {
+				switch(select("^ff6060Salir^000000:Daggers:Katars:Two-Handed Axe:One-handed Sword:Two-handed Sword:One-handed Spear:Two-handed Spear:One-handed Staff:Two-handed Staff:Maces:Books:Knuckles:Bows:Instruments:Whip:Wrist Guard")){
+					case 1: close;
+					case 2: setarray .@wep_id[0],13061,13018,13044; break;
+					case 3: setarray .@wep_id[0],1270,1268,1266; break;
+					case 4: setarray .@wep_id[0],1387,1376,1377,1371; break;
+					case 5: setarray .@wep_id[0],13400,1148,13421; break;
+					case 6: setarray .@wep_id[0],1188,1179,1175; break;
+					case 7: setarray .@wep_id[0],1420,1433,1421,1422; break;
+					case 8: setarray .@wep_id[0],1476,1479,1484; break;
+					case 9: setarray .@wep_id[0],1629,1631,1654; break;
+					case 10: setarray .@wep_id[0],2005,2000,2003; break;
+					case 11: setarray .@wep_id[0],1524,1610,1540; break;
+					case 12: setarray .@wep_id[0],1558,1561,1562; break;
+					case 13: setarray .@wep_id[0],1816,1815,1830; break;
+					case 14: setarray .@wep_id[0],1727,1725,1737,1741; break;
+					case 15: setarray .@wep_id[0],1913,1930; break;
+					case 16: setarray .@wep_id[0],1973,1984; break;
+					case 17: setarray .@wep_id[0],2171,2172,2173; break;
+				}
+				set .@j,30;
+				set .@k,1;
+				goto L_continue;
+			} else {
+				switch(select("^ff6060Salir^000000:Daggers:Katars:One-Handed Axe:Two-handed Sword:One-handed Spear:Two-handed Spear:Maces:Books:Bows:Instruments:Whip")){
+					case 1: close;
+					case 2: setarray .@wep_id[0],13047; break;
+					case 3: setarray .@wep_id[0],1271,1284,1285; break;
+					case 4: setarray .@wep_id[0],1311; break;
+					case 5: setarray .@wep_id[0],1180,1178,1171,1176,1181,1182,1185,1186; break;
+					case 6: setarray .@wep_id[0],1418; break;
+					case 7: setarray .@wep_id[0],1480; break;
+					case 8: setarray .@wep_id[0],1539,16000,16001,1538; break;
+					case 9: setarray .@wep_id[0],1565; break;
+					case 10: setarray .@wep_id[0],1740,1745; break;
+					case 11: setarray .@wep_id[0],1922,1926; break;
+					case 12: setarray .@wep_id[0],1976,1972,1979; break;
+				}
+				set .@j,40;
+				set .@k,2;
+				goto L_continue;
+			}
+		} else {
+			switch(select("^ff6060Salir^000000:Daggers:Katars:One-Handed Axe:Two-Handed Axe:One-handed Sword:Two-handed Sword:One-handed Spear:Two-handed Spear:One-handed Staff:Two-handed Staff:Maces:Books:Knuckles:Bows:Instruments:Whip:Guns:Huuma Shuriken")){
+					case 1: close;
+					case 2: setarray .@wep_id[0],1224,1225,1227,1229,1232,1233,1235,1236,1237,1240,1241,1242,1244,1223,1228,1234,1230,1231,13062; break;
+					case 3: setarray .@wep_id[0],1263,1269,1265,1261; break;
+					case 4: setarray .@wep_id[0],1305; break;
+					case 5: setarray .@wep_id[0],1364,1365,1385,1367,1368,1369,1363,1366,1370; break;
+					case 6: setarray .@wep_id[0],1131,1133,1134,1135,1136,1138,1139,1140,1141,13431,1137,1130,1132; break;
+					case 7: setarray .@wep_id[0],1164,1166,1167,1168,1170,1196,1165,1169; break;
+					case 8: setarray .@wep_id[0],1413,1414,1416,1415; break;
+					case 9: setarray .@wep_id[0],1466,1467,1468,1469,1470,1471,1474,1477,1478; break;
+					case 10: setarray .@wep_id[0],1616,1643,1636,1637; break;
+					case 11: setarray .@wep_id[0],1473,2004,2001; break;
+					case 12: setarray .@wep_id[0],1525,1527,1541,1523,1526,1528; break;
+					case 13: setarray .@wep_id[0],1557,1559; break;
+					case 14: setarray .@wep_id[0],1813,1814; break;
+					case 15: setarray .@wep_id[0],1719,1722,1724,18103,1720; break;
+					case 16: setarray .@wep_id[0],1918,1920; break;
+					case 17: setarray .@wep_id[0],1962,1963,1964,1969,1970,1974,1985; break;
+					case 18: setarray .@wep_id[0],13106,13110,13111,13167,13176,13177,13178,13179; break;
+					case 19: setarray .@wep_id[0],13300,13303,13307,13308,13312,13314,13315; break;
+			}
+			set .@j,20;
+			set .@k,0;
+		}
+		L_continue:
+		set .@menu$,"";
+		for(set .@i,0; .@i<getarraysize(.@wep_id); set .@i,.@i+1)
+			set .@menu$, .@menu$+(countitem(.@wep_id[.@i])?"^5533ff":"^DADADA")+getitemname(.@wep_id[.@i])+((.@k)?" ["+.@k+"]":"")+"^000000:";
+		Encantar(.@wep_id[select(.@menu$)-1],.@j,.@k);
+		end;
+	} else {
+		mes "Yo estoy encargado de encantar armas. Simplemente incremento el poder de ellas";
+		next;
+		mes "[^cc6600Melonmelon^000000]";
+		mes "Para una oportunidad de encantar una arma necesito un pago de al menos 400,000 zeny.";
+		close;
+	}
+	function	Encantar	{
+		function General;
+		set .@itemid,getarg(0);
+		set .@failrate,getarg(1);
+		set .@slot,getarg(2);
+		set @card1,getequipcardid(4,0);
+		set @card2,getequipcardid(4,1);
+		set @card3,getequipcardid(4,2);
+		set @card4,getequipcardid(4,3);
+		if (.@slot)
+			set .@price,(400000*.@slot);
+		else
+			set .@price,400000;
+		if(getequipid(4) != .@itemid) {
+			mes "Debes tener equipado tu ^5533ff"+getitemname(.@itemid)+"^000000.";
+			close;
+		}
+		if(@card3 > 0) {
+			mes "Al parecer tu enchant ya esta completo.";
+			next;
+			mes "[^cc6600Melonmelon^000000]";
+			mes "�Deseas eliminarles los encantamientos?";
+			next;
+				if(select("Eliminar","No, gracias") == 2) {
+					mes "[^cc6600Melonmelon^000000]";
+					mes "Te deseo suerte con tu arma.";
+					close;
+				}
+				if(countitem(501) < 1) {
+					mes "[^cc6600Melonmelon^000000]";
+					mes "Lo siento, pero necesitas un ^ff6060Gaedarae Fruit^000000 para reiniciar tu encantamiento.";
+					close;
+				}
+				mes "[^cc6600Melonmelon^000000]";
+				mes "Entonces removere su encantamiento.";
+				close2;
+				delitem 501,1;
+				delitem .@itemid,1;
+				getitem2 .@itemid,1,1,0,0,@card1,@card2,0,0;
+				end;
+			}
+		mes "[^cc6600Melonmelon^000000]";
+		mes "Antes de continuar por favor elige la calidad de la moneda que usaras, o si usaras un Sea God's Wrath.";
+		next;
+		switch (select("^5533ffSea God's Wrath^000000(^008800SAFE!^000000):^5533ffA Grade Coin^000000(^ff8800+20% Exito^000000):^5533ffB Grade Coin^000000(^ff8800+15% Exito^000000):^5533ffC Grade Coin^000000(^ff8800+10% Exito^000000):^5533ffD Grade Coin^000000(^ff8800+5% Exito^000000):^5533ffE Grade Coin^000000")) {
+			case 1: set .@coin,6423; set .@failrate,0; break;
+			case 2: set .@coin,6418; set .@failrate,.@failrate-20; break;
+			case 3: set .@coin,6419; set .@failrate,.@failrate-15; break;
+			case 4: set .@coin,6420; set .@failrate,.@failrate-10; break;
+			case 5: set .@coin,6421; set .@failrate,.@failrate-5; break;
+			case 6: set .@coin,6422; break;
+		}
+			switch (.@coin) {
+				case 6418:
+					mes "[^cc6600Melonmelon^000000]";
+					mes "Ahora elige el tipo de encantamiento:";
+					next;
+					switch (select("Caster:Ranged:Melee")) {
+						case 1: set .@addpart,General(5,4826,4826,4812,4814,4760,4761,4711,4714,4721,4722); break;
+						case 2: set .@addpart,General(4,4807,4807,4833,4836,4816,4817,4731,4734); break;
+						case 3: set .@addpart,General(4,4807,4808,4820,4822,4816,4817,4701,4704); break;
+					}
+				goto L_break;
+				case 6419: set .@addpart,General(3,4700,4703,4710,4713,4730,4733); break; 
+				case 6420: set .@addpart,General(6,4700,4702,4710,4712,4730,4732,4720,4720,4740,4740,4750,4750); break; 
+				case 6421: set .@addpart,General(8,4700,4701,4710,4711,4730,4731,4720,4720,4740,4740,4750,4750,4795,4796,4819,4819); break; 
+				case 6422: set .@addpart,General(11,4700,4700,4710,4710,4730,4730,4720,4720,4740,4740,4750,4750,4795,4796,4819,4819,4787,4787,4792,4792,4801,4801); break;
+				case 6423:
+					mes "[^cc6600Melonmelon^000000]";
+					mes "Ahora elige el tipo de encantamiento:";
+					next;
+					switch (select("Caster:Ranged:Melee")) {
+						case 1: set .@addpart,General(6,4826,4827,4812,4813,4760,4761,4806,4806,4712,4715,4722,4722); break;
+						case 2: set .@addpart,General(4,4807,4807,4834,4837,4843,4844,4732,4735); break;
+						case 3: set .@addpart,General(4,4807,4807,4820,4823,4843,4844,4702,4705); break;
+					}
+			}
+L_break:
+		next;
+		mes "[^cc6600Melonmelon^000000]";
+		if(countitem(.@coin) < 2) {
+			mes "Necesitas al menos dos objetos para comenzar el encantamiento como minimo.";
+			close;
+		}
+		if ((countitem(.@itemid) > 0) && (countitem(.@itemid) < 2)) {
+			mes "El encantamiento de los slots te costara "+.@price+" zeny. ^ff0000Hay probabilidad de perder todas las cartas de tu arma^000000.";
+			next;
+			mes "[^cc6600Melonmelon^000000]";
+			mes "Primero y mas importante.";
+			mes "^ff5555El refine de la arma y";
+			mes "encantamientos elementales se IRAN.^000000";
+			mes "�Estas seguro de encantar?";
+			next;
+			if(select("Hmm... creo que aqui terminamos:Estoy seguro de lo que hago, sigamos")==1) {
+				mes "[^cc6600Melonmelon^000000]";
+				mes "Bueno, no te puedo culpar, la seguridad es primero";
+				mes "Que tengas un bonito dia.";
+				close;
+			}
+			mes "[^cc6600Melonmelon^000000]";
+			mes "Eres un gran aventurero, bien, aqui vamos";
+			close2;
+			specialeffect2 EF_MAPPILLAR;
+			if (Zeny < .@price) {
+				mes "[^cc6600Melonmelon^000000]";
+				mes "No tienes suficiente zeny";
+				close;
+			}
+			progressbar "ffff00",1;
+			set zeny,zeny-.@price;
+			delitem .@coin,2;
+			set @c,rand(1,100);
+				if(@c < .@failrate) {
+					specialeffect2 EF_PHARMACY_FAIL;
+					mes "[^cc6600Melonmelon^000000]";
+					mes "Bueno esto es malo.";
+					mes "Has perdido todas las cartas de tu arma.";
+					delitem .@itemid,1;
+					getitem .@itemid,1;
+					close;
+				}
+			specialeffect2 EF_PHARMACY_OK;
+				if(@card4 > 0 ) {
+					delitem .@itemid,1;
+					getitem2 .@itemid,1,1,0,0,@card1,@card2,.@addpart,@card4;
+					mapannounce "malangdo","[ "+strcharinfo(0)+" ] ha encantado su [ "+getitemname(.@itemid)+" +"+getitemname(@card4)+" ] con [ "+getitemname(.@addpart)+" ].",bc_map,0xFF8800;
+					end;
+				} else {
+					delitem .@itemid,1;
+					getitem2 .@itemid,1,1,0,0,@card1,@card2,0,.@addpart;
+					mapannounce "malangdo","[ "+strcharinfo(0)+" ] ha encantado su [ "+getitemname(.@itemid)+" ] con [ "+getitemname(.@addpart)+" ].",bc_map,0xFF8800;
+					end;
+				}
+		} else {
+			mes "Hmm? aqui no hay nada para encantar";
+			mes "No porque sea un gato significa que sea idiota, ademas solo puedo trabajar con un arma a la vez.";
+			close;
+		}
+	}
+	function	General	{
+		if(getarg(0) > 0) setarray @a[1],(rand(getarg(1),getarg(2)));
+		if(getarg(0) > 1) setarray @a[2],(rand(getarg(3),getarg(4)));
+		if(getarg(0) > 2) setarray @a[3],(rand(getarg(5),getarg(6)));
+		if(getarg(0) > 3) setarray @a[4],(rand(getarg(7),getarg(8)));
+		if(getarg(0) > 4) setarray @a[5],(rand(getarg(9),getarg(10)));
+		if(getarg(0) > 5) setarray @a[6],(rand(getarg(11),getarg(12)));
+		if(getarg(0) > 6) setarray @a[7],(rand(getarg(13),getarg(14)));
+		if(getarg(0) > 7) setarray @a[8],(rand(getarg(15),getarg(16)));
+		if(getarg(0) > 8) setarray @a[9],(rand(getarg(17),getarg(19)));
+		if(getarg(0) > 9) setarray @a[10],(rand(getarg(20),getarg(21)));
+		if(getarg(0) > 10) setarray @a[11],(rand(getarg(22),getarg(23)));
+			set @prom,rand(1,getarg(0));
+			set @r,@a[@prom];
+			return @r;
+	}
+}
+malangdo,163,146,3	script	Mayomayo	544,{
+mes "[^cc6600Mayomayo^000000]";
+mes "Puedo cambiar tus Malangdo Coins por otras de mayor calidad.";
+next;
+mes "[^cc6600Mayomayo^000000]";
+mes "Elige lo que desees cambiar.";
+next;
+	switch(select("Mayor calidad por menor calidad:Menor calidad por mayor calidad")) {
+		case 1:
+			setarray .@a[0],501,6418,6419,6420,6421; setarray .@b[0],10,10,10,10,10;
+			setarray .@c[0],6418,6419,6420,6421,6422; setarray .@d[0],28,28,28,28,28;
+			break;
+		case 2:
+			setarray .@a[0],6422,6421,6420,6419; setarray .@b[0],30,30,30,30;
+			setarray .@c[0],6421,6420,6419,6418; setarray .@d[0],8,8,8,8;
+			break;
+	}
+	set .@menu$,"";
+	for(set .@i,0; .@i < getarraysize(.@a); set .@i,.@i+1)
+		set .@menu$,.@menu$+.@b[.@i]+" "+getitemname(.@a[.@i])+" x "+.@d[.@i]+" "+getitemname(.@c[.@i])+":";
+	set .@j,select(.@menu$)-1;
+	if(countitem(.@a[.@j]) < .@b[.@j]) {
+		mes "[^cc6600Mayomayo^000000]";
+		mes "No cuentas con los items necesarios.";
+		close;
+	}
+	delitem .@a[.@j],.@b[.@j];
+	getitem .@c[.@j],.@d[.@j];
+	mes "[^cc6600Mayomayo^000000]";
+	mes "Aqui tienes, vuelve conmigo si deseas comerciar algo mas.";
+	close;
+}

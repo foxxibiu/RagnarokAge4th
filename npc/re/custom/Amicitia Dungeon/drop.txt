@@ -1,0 +1,40 @@
+nif_dun01,0,0,0	script	#AmitD_Drop	-1,{
+
+OnAmitDMobDead:
+if(getcharid(1)) {
+    getpartymember getcharid(1),1;
+    getpartymember getcharid(1),2;
+    
+    for ( .@p = 0; .@p < $@partymembercount; .@p++)
+        if(attachrid($@partymemberaid[.@p],$@partymembercid[.@p]) == 1) {
+            if(strcharinfo(3) != strnpcinfo(4)) continue;
+            if(rand(1,10000) >= (10000 - .chance)) 
+                getitem .drop_id[rand(getarraysize(.drop_id))],1;
+        }
+
+} else {
+	if(rand(1,10000) >= (10000 - .chance)) 
+		getitem .drop_id[rand(getarraysize(.drop_id))],1;
+}
+end;
+
+OnInit:
+setarray .drop_id[0],19241, // Magical Booster [1]
+					 400001, // Victory Wing Ears
+					 400002, // Victory Wing Ears [1]
+					 420030, // Feather In Mouth
+					 490159; // Rough Core [1]
+
+// ==== Drop Settings ====
+// Multiply the Drop Chance below with the Server Drop Chance
+// 1 = Yes
+// 0 = No
+.battleconf_drop = 0;
+
+// General Drop Chance
+.drop = 20; // 20 = 0.2%
+
+// Calculation
+.chance = .drop * ( (.battleconf_drop)?( (getbattleflag("item_rate_common")%100 > 0)? (getbattleflag("item_rate_common")/100):1):1);
+end;
+}

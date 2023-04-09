@@ -1,0 +1,25 @@
+prontera,145,169,6	script	Utilidades 	4_F_MAYSEL,{
+    cutin "gc_mayssel01",2;
+    mes "[^0000EEJéssica^000000]";
+    mes "Olá ^0055FF"+strcharinfo(0)+"^000000.";
+    mes "Vai levar o que hoje, caro amigo?";
+    next;
+    switch(select("- [ ^339966Utilidades^000000 ].:- ^FF0000Nada^000000.")) {
+    
+        case 1:
+            close2;
+            callshop "Until", 1;
+            end;
+    
+        case 2:
+            mes "Até mais!";	
+            close2;
+            cutin"",255;
+            
+        }
+        end;
+    }
+    
+    
+    //--- Lojas ---------------------------------------------
+    -	shop	Until	-1,501:-1,502:-1,503:-1,504:-1,506:-1,533:-1,523:1000,601:250,610:12000,657:-1,656:-1,645:-1,717:1500,716:1500,715:1500,1750:-1,1751:-1,1752:-1,1754:-1,1755:-1,1756:-1

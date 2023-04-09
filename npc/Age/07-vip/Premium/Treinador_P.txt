@@ -1,0 +1,33 @@
+s_room,41,54,5	script	Alquimista	4_F_GEFFEN_FAY,{
+
+if(Class == 18 || Class == 4019) goto L_OK;
+cutin "paycana_a.bmp",2;
+mes "^FF1493[Fay Kanavian]^000000";
+mes "Eu sou Fay Kanavian, especialista em criação de homúnculos.";
+mes "Caso precise de ajuda para fazer o seu crescer, basta falar comigo.";
+mes "Desculpe eu atendo somente Alquimistas!";
+cutin "paycana_a.bmp",255;
+close;
+
+L_OK:
+cutin "paycana_a.bmp",2;
+mes "^FF1493[Fay Kanavian]^000000";
+mes "Olá ^FF4500"+StrCharInfo(0)+"^000000, Gostaria de evoluir seu Humuculos?";
+next;
+if(select("^FF1493Sim, me ajude com o treinamento!^000000:^FF0000Não, obrigado^000000") == 2 )
+mes "Prontinho! seu homúnculos agora está no nível máximo.";
+next;
+atcommand "@homlvl 49 "+strcharinfo(0);
+atcommand "@homfriendly 1000 "+strcharinfo(0);
+atcommand "@homevolve "+strcharinfo(0);
+atcommand "@homfriendly 1000 "+strcharinfo(0);
+atcommand "@homhungry 100 "+strcharinfo(0);
+cutin "paycana_a.bmp",255;
+close;
+
+OnInit:
+.@UID = getnpcid(0);
+setunittitle(.@UID, "Fay Kanavian");
+setunitdata .@UID, UNPC_GROUP_ID, 7;
+end;
+}

@@ -1,0 +1,42 @@
+mag_dun02,247,67,3	script	Gerente Elmen#emag	4_M_EINMINER,{
+	set .np$,"^00B2EE[ Gerente Elmen ]^000000";
+
+	mes .np$;
+	mes (gettime(3)>= 6&&gettime(3)<= 12?"Bom-dia":(gettime(3)>=13&&gettime(3)<=18?"Boa-tarde":"Boa-noite"))+", ^FFA500"+strcharinfo(0)+"^000000!";
+		switch(select("^3CB371[»]^000000 Entrar no mapa:^006400[»]^000000 Informações:^ff0000[»]^000000 Sair")) {
+			case 1:
+				next;
+				mes .np$;
+				mes "Beleza, só deixa eu checar uma coisa...";
+					if ((BaseLevel < 174)) {
+						mes .np$;
+						mes "Você não é forte o suficiente, saia e só volte com um nível adequado.";
+						end;
+					}
+				next;
+				mes .np$;
+				mes "Você é forte o suficiente... Eu acho... Boa sorte!";
+				next;
+				warp "mag_dun03",120,121;
+				end;
+			case 2:
+				next;
+				mes .np$;
+				mes "Recentemente descobrimos um novo nível nesta Masmorra, mas os monstros lá estão realmente evoluídos, então apenas personagens de nível 175 podem entrar aqui.";
+				next;
+				end;
+			case 3:
+				next;
+				mes .np$;
+				mes "Ok, eu estarei aqui quando você mudar de ideia.";
+				end;
+		}
+	end;
+
+OnInit:
+	setunitdata (getnpcid(0), UNPC_GROUP_ID, 7);
+	setunittitle(getnpcid(0), "[ Magma Dungeon 3 ]");
+	end;
+}
+
+mag_dun03,124,121,0	warp	mag0301	1,1,mag_dun02,245,67,0

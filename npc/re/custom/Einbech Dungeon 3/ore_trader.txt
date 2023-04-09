@@ -1,0 +1,58 @@
+einbech,149,257,3	script	Gerente Elmen#ein	4_M_EINMINER,{
+	set .np$,"^00B2EE[ Gerente Elmen ]^000000";
+
+	mes .np$;
+	mes (gettime(3)>= 6&&gettime(3)<= 12?"Bom-dia":(gettime(3)>=13&&gettime(3)<=18?"Boa-tarde":"Boa-noite"))+", ^FFA500"+strcharinfo(0)+"^000000!";
+		switch(select("^3CB371[»]^000000 Trocar Minérios:^3CB371[»]^000000 Trocar Equipamentos:^3CB371[»]^000000 Encantamentos:^ff0000[»]^000000 Sair")) {
+			case 1:
+				next;
+				mes .np$;
+				mes "Aqui está!";
+				next;
+				callshop "ore#ein03",1;
+				end;
+			case 2:
+				next;
+				mes .np$;
+				mes "Que tipo de equipamento deseja saber mais?";
+					switch(select("^3CB371[»]^000000 Acessórios:^3CB371[»]^000000 Armas:^ff0000[»]^000000 Sair")) {
+					case 1:
+						next;
+						mes .np$;
+						mes "Aqui está!";
+						next;
+						callshop "eqp#ein032",1;
+						end;
+					case 2:
+						next;
+						mes .np$;
+						mes "Aqui está!";
+						next;
+						callshop "eqp#ein03",1;
+						end;
+					case 3:
+						next;
+						mes .np$;
+						mes "Ok, eu estarei aqui quando você mudar de ideia.";
+						end;
+					}
+			case 3:
+				next;
+				mes .np$;
+				mes "Aqui está!";
+				next;
+				callshop "enc#ein03",1;
+				end;
+			case 4:
+				next;
+				mes .np$;
+				mes "Ok, eu estarei aqui quando você mudar de ideia.";
+				end;
+		}
+	end;
+
+OnInit:
+	setunitdata (getnpcid(0), UNPC_GROUP_ID, 7);
+	setunittitle(getnpcid(0), "[ Einbech Dungeon 3 ]");
+	end;
+}

@@ -1,0 +1,145 @@
+-	script	Warper	-1,{
+function Go; function Disp; function Pick; function Restrict;
+
+// --------------------------------------------------
+//	Main Menu:
+// --------------------------------------------------
+cutin "162elena_01",2;
+mes "Se o indicador estiver ^3CB371[»]^000000, a instância está disponível no momento.";
+mes "Se o indicador estiver ^DC143C[>]^000000, a instância está indisponível no momento, e ainda será adicionada ao servidor.";
+
+menu	
+    	"^3CB371[»]^000000 Instâncias Age Ragnarök",Instances;
+
+
+	if (lastwarp$ == "")
+		message strcharinfo(0),"Você ainda não se teleportou pra nenhum lugar.";
+	else
+		warp lastwarp$,lastwarpx,lastwarpy;
+	end;
+
+
+function Go {
+	set lastwarp$, getarg(0);
+	set lastwarpx, getarg(1,0);
+	set lastwarpy, getarg(2,0);
+	warp getarg(0),getarg(1,0),getarg(2,0);
+	end;
+}
+function Disp {
+	if (getargcount() < 3)
+		set @menu$, getarg(0);
+	else {
+		set @menu$,"";
+		for (set .@i,getarg(1); .@i<=getarg(2); set .@i,.@i+1)
+			set @menu$, @menu$+getarg(0)+" "+.@i+":";
+	}
+	return;
+}
+function Pick {
+	set .@warp_block,@warp_block;
+	set @warp_block,0;
+	if((@f && .OnlyFirstFld) || (@d && .OnlyFirstDun)){
+		set .@select,1;
+		if(.@warp_block){
+			while(.@warp_block & (1<<.@select)){
+				.@select += 1;
+			}
+		}
+	}else{
+		set .@select, select(@menu$);
+	}
+	if (getarg(0) == "") {
+		set .@i, .@select;
+		set .@map$, getarg(.@i);
+	} else {
+		set .@i, .@select-getarg(1,0);
+		set .@map$, getarg(0)+((.@i<10)?"0":"")+.@i;
+	}
+	if (.@warp_block & (1<<.@select)) {
+		message strcharinfo(0),"Mapa desativado em "+((checkre(0))?"":"Pre-")+"Renewal.";
+		end;
+	}
+	set .@x, @c[.@i*2];
+	set .@y, @c[.@i*2+1];
+	deletearray @c[0],getarraysize(@c);
+	@f = false; @d = false;
+	Go(.@map$,.@x,.@y);
+}
+function Restrict {
+	if ((getarg(0) == "RE" && !checkre(0)) || (getarg(0) == "Pre-RE" && checkre(0))) {
+		if (getarg(1,0)) {
+			set @warp_block,0;
+			for (set .@i,1; .@i<getargcount(); set .@i,.@i+1)
+				set @warp_block, @warp_block | (1<<getarg(.@i));
+		} else {
+			message strcharinfo(0),"Mapa desativado em "+((checkre(0))?"":"Pre-")+"Renewal.";
+			end;
+		}
+	}
+	return;
+}
+cutin "",255;
+
+// --------------------------------------------------
+	Instances:
+// --------------------------------------------------
+menu	/*"^DC143C[>]^000000Lago de Bakonawa",I1, "^DC143C[>]^000000Hospital de Bangungot",I2, "^DC143C[>]^000000Caverna de Buwaya",I3,
+		"^DC143C[>]^000000Torre do Demônio",I4, "^DC143C[>]^000000Interior de Eclage",I5,*/ "^3CB371[»]^000000Torre Sem Fim",I6,
+		"^3CB371[»]^000000Ninho de Faceworm",I7, /*"^DC143C[>]^000000Torneio Mágico de Geffen",I8,*/ "^3CB371[»]^000000Palácio das Mágoas",I9,
+		/*"^DC143C[>]^000000Floresta Nebulosa",I10,*/ "^3CB371[»]^000000Fábrica do Terror",I11, /*"^DC143C[>]^000000Esgoto de Malangdo",I12,*/
+		"^3CB371[»]^000000Ninho de Nidhogg",I13, /*"^DC143C[>]^000000Caverna do Polvo",I14,*/ /*"^3CB371[»]^000000Antiga Glast Heim (OGH)",I15,*/
+		"^3CB371[»]^000000Memória dos Orcs",I16, /*"^DC143C[>]^000000Sarah e Fenrir",I17, "^DC143C[>]^000000Memórias de Sarah",I18,*/
+		"^3CB371[»]^000000Santuário Selado",I19; /*"^DC143C[>]^000000Wolfchev's Laboratório",I20;*/
+
+I1: Restrict("RE");
+	Go("ma_scene01",172,175);
+I2: Restrict("RE");
+	Go("ma_dun01",151,8);
+I3: Restrict("RE");
+	Go("ma_fild02",316,317);
+I4: Restrict("RE");
+	Go("dali02",137,115);
+I5: Restrict("RE");
+	Go("ecl_hub01",129,12);
+I6: Go("e_tower",72,112);
+I7: Go("dali",85,64);
+I8: Restrict("RE");
+	Go("dali",94,141);
+I9: Go("dali02",46,128);
+	
+I10: Restrict("RE");
+	Go("bif_fild01",161,334);
+I11: Go("xmas",234,298);
+
+I12: Restrict("RE");
+	Go("mal_in01",164,21);
+I13: Go("nyd_dun02",95,193);
+I14: Restrict("RE");
+	Go("mal_dun01",152,230);
+I15: Go("glast_01",204,268);
+	
+I16: Go("gef_fild10",240,198);
+I17: Restrict("RE");
+	Go("dali02",92,141);
+I18: Restrict("RE");
+	Go("dali",133,108);
+I19: Go("monk_test",306,143);
+I20: Restrict("RE");
+	Go("lhz_dun04",148,269);
+
+
+
+OnInit:
+	.Satan_Morocc = true;	//	false will enable moc_fild 4,5,6,8,9,10,14,15 while disable moc_fild 20,21,22 Default is true.
+	.OnlyFirstFld = false;	//	true will teleport to the first level of the Fields  Default is false.
+	.OnlyFirstDun = false;	//	true will teleport to the first level of the Dungeons  Default is false.
+	
+	end;
+	
+}
+
+// --------------------------------------------------
+//	Duplicates:
+// --------------------------------------------------
+prontera,166,162,3	duplicate(Warper)	Instâncias	4_F_ELENA

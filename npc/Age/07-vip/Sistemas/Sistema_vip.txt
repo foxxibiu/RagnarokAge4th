@@ -1,0 +1,135 @@
+//=================================================================
+// SISTEMA VIP
+//=================================================================
+//=================================================================
+// Verificação VIP
+//=================================================================
+//11485,Ticket1,Ticket Vip Plus 1Dias,11,60,,10,,,,,0xFFFFFFFF,7,2,,,,,,{ if(vip_status(1)){ dispbottom "Você já e vip Master."; } if (getgroupid() == 0 ){ callfunc "vip01"; delitem 11485,1; } },{},{}
+//
+
+-	script	statusVIP	-1,{
+
+OnPCLoginEvent:
+	if ( #Premium_Tick >  gettimetick(2) )
+	{
+		if ( getgroupid() == 0 )
+			query_sql("UPDATE `login` SET `group_id`='1' WHERE `account_id`='"+getcharid(3)+"'");
+		dispbottom "[Sistema VIP Normal] : Sua conta vip expira em: " + callfunc("Time2Str",#Premium_Tick) + ".";
+		end;
+	}
+	if ( getgroupid() == 1 )
+		query_sql("UPDATE `login` SET `group_id`='0' WHERE `account_id`='"+getcharid(3)+"'");
+	dispbottom "[Sistema VIP Normal] : Torne-se um jogador VIP e ganhe acesso a benefícios exclusivos!";
+	end;
+}
+
+//=================================================================
+// Remover VIP
+//=================================================================
+
+-	script	updateVIP	-1,{
+
+OnHour0000:
+	if ( #Premium_Tick >  gettimetick(2) )
+		end;
+	if ( getgroupid() == 1 )
+		query_sql("UPDATE `login` SET `group_id`='0' WHERE `account_id`='"+getcharid(3)+"'");
+	end;
+
+}
+
+//=================================================================
+// VIP 1 Dia
+//=================================================================
+
+
+function	script	vip01	{
+	set .@Time,86400;		// 1 dia em segundos
+	query_sql("UPDATE `login` SET `group_id`='1' WHERE `account_id`='"+getcharid(3)+"'");
+	if( #Premium_Tick > gettimetick(2) ){
+		set #Premium_Tick, #Premium_Tick + .@Time; // Tempo Adicional
+		dispbottom "[Sistema VIP Normal] : Sua conta vip expira em: ^FF0000" + callfunc("Time2Str",#Premium_Tick) + "^000000.";
+		return;
+	} else {
+		set #Premium_Tick, gettimetick(2) + .@Time; // New Premium Account
+		dispbottom "[Sistema VIP Normal] : Sua conta vip expira em: ^FF0000" + callfunc("Time2Str",#Premium_Tick) + "^000000.";
+		return;
+	}
+	end;
+}
+
+//=================================================================
+// VIP 3 Dias
+//=================================================================
+
+function	script	vip03	{
+	set .@Time,259200;		// 3 dias em segundos
+	query_sql("UPDATE `login` SET `group_id`='1' WHERE `account_id`='"+getcharid(3)+"'");
+	if( #Premium_Tick > gettimetick(2) ){
+		set #Premium_Tick, #Premium_Tick + .@Time; // Tempo Adicional
+		dispbottom "[Sistema VIP Normal] : Sua conta vip expira em: ^FF0000" + callfunc("Time2Str",#Premium_Tick) + "^000000.";
+		end;
+	} else {
+		set #Premium_Tick, gettimetick(2) + .@Time; // New Premium Account
+		dispbottom "[Sistema VIP Normal] : Sua conta vip expira em: ^FF0000" + callfunc("Time2Str",#Premium_Tick) + "^000000.";
+		end;
+	}
+	end;
+}
+
+//=================================================================
+// VIP 5 Dias
+//=================================================================
+
+function	script	vip05	{
+	set .@Time,604800;		// 7 dias em segundos
+	query_sql("UPDATE `login` SET `group_id`='1' WHERE `account_id`='"+getcharid(3)+"'");
+	if( #Premium_Tick > gettimetick(2) ){
+		set #Premium_Tick, #Premium_Tick + .@Time; // Tempo Adicional
+		dispbottom "[Sistema VIP Normal] : Sua conta vip expira em: ^FF0000" + callfunc("Time2Str",#Premium_Tick) + "^000000.";
+		end;
+	} else {
+		set #Premium_Tick, gettimetick(2) + .@Time; // New Premium Account
+		dispbottom "[Sistema VIP Normal] : Sua conta vip expira em: ^FF0000" + callfunc("Time2Str",#Premium_Tick) + "^000000.";
+		end;
+	}
+	end;
+}
+
+//=================================================================
+// VIP 15 Dias
+//=================================================================
+
+function	script	vip15	{
+	set .@Time,1296000;		// 15 dias em segundos
+	query_sql("UPDATE `login` SET `group_id`='1' WHERE `account_id`='"+getcharid(3)+"'");
+	if( #Premium_Tick > gettimetick(2) ){
+		set #Premium_Tick, #Premium_Tick + .@Time; // Tempo Adicional
+		dispbottom "[Sistema VIP Normal] : Sua conta vip expira em: ^FF0000" + callfunc("Time2Str",#Premium_Tick) + "^000000.";
+		end;
+	} else {
+		set #Premium_Tick, gettimetick(2) + .@Time; // New Premium Account
+		dispbottom "[Sistema Normal Normal] : Sua conta vip expira em: ^FF0000" + callfunc("Time2Str",#Premium_Tick) + "^000000.";
+		end;
+	}
+	end;
+}
+
+//=================================================================
+// VIP 30 Dias
+//=================================================================
+
+function	script	vip30	{
+	set .@Time,2592000;		// 30 dias em segundos
+	query_sql("UPDATE `login` SET `group_id`='1' WHERE `account_id`='"+getcharid(3)+"'");
+	if( #Premium_Tick > gettimetick(2) ){
+		set #Premium_Tick, #Premium_Tick + .@Time; // Tempo Adicional
+		dispbottom "[Sistema VIP Normal] : Sua conta vip expira em: ^FF0000" + callfunc("Time2Str",#Premium_Tick) + "^000000.";
+		end;
+	} else {
+		set #Premium_Tick, gettimetick(2) + .@Time; // New Premium Account
+		dispbottom "[Sistema VIP Normal] : Sua conta vip expira em: ^FF0000" + callfunc("Time2Str",#Premium_Tick) + "^000000.";
+		end;
+	}
+	end;
+}

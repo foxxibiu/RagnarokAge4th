@@ -1,0 +1,46 @@
+/*.---------------------------------------------------------------------.
+  .		 ____                          __                          		.
+  .		/\  _`\                       /\ \__  __                   		.
+  .		\ \ \/\_\  _ __    __     __  \ \ ,_\/\_\  __  __     __   		.
+  .		 \ \ \/_/_/\`'__\/'__`\ /'__`\ \ \ \/\/\ \/\ \/\ \  /'__`\ 		.
+  .		  \ \ \s\ \ \ \//\  __//\ \d\.\_\ \ \_\ \ \ \ \_/ |/\  __/ 		.
+  .		   \ \____/\ \_\\ \____\ \__/.\_\\ \__\\ \_\ \___/ \ \____\		.
+  .		    \/___/  \/_/ \/____/\/__/\/_/ \/__/ \/_/\/__/   \/____/		.
+  .																		.
+  .				2014~2020 © Creative Services and Development			.
+  .						  www.creativesd.com.br							.
+  .---------------------------------------------------------------------.
+  . Script Function:													.
+  .	   format_timer <type>, <timer>;                                    .
+  .---------------------------------------------------------------------.
+  . Autor: Romulo SM (sbk_)                                 Versão: 1.0	.
+  .                                                                     .
+  . Compátivel:	rAthena / Hercules e derivações.                    	.
+  .---------------------------------------------------------------------.
+  . Descrição:															.
+  .	   Formata o tempo de acordo com relações:                          .
+  .       1 = 1min, 60 = 1hr, 1440 = 1d.                                .
+  .       1 = 1seg, 60 = 1min e 1440 = 1hr.                             .
+  .       1mil, 60 = 1seg, 1440 = 1min.                                 .
+  *---------------------------------------------------------------------*/
+function	script	format_timer	{
+	freeloop(1);
+	set .@remove, getarg(1);
+	for( set .@count_time, 0; .@remove >= 1440; set .@remove, .@remove - 1440 )
+		set .@count_time, .@count_time + 1;
+			
+	if( getarg(0) == 0 )
+		return .@count_time;
+
+	for( set .@count_time, 0; .@remove >= 60; set .@remove, .@remove - 60 )
+		set .@count_time, .@count_time + 1;
+			
+	if( getarg(0) == 1 )
+		return .@count_time;
+			
+	for( set .@count_time, 0; .@remove > 0; set .@remove, .@remove - 1 )
+		set .@count_time, .@count_time + 1;
+	
+	freeloop(0);
+	return .@count_time;
+}

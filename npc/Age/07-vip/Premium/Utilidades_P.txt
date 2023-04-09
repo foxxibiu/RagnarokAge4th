@@ -1,0 +1,30 @@
+s_room,56,61,3	script	Lazy 	4_EP19_LAZY,{
+cutin "ep19_leizi01.png",2;
+mes "[^0000EEAmora^000000]";
+mes "Olá ^0055FF"+strcharinfo(0)+"^000000.";
+mes "O que irá levar o que hoje?";
+next;
+switch(select("- [ ^339966Utilidades^000000 ].:- ^FF0000Nada^000000.")) {
+
+	case 1:
+		close2;
+		callshop "Amora",1;
+		end;
+
+	case 2:
+		mes "Até mais!";	
+		close2;
+		cutin"",255;
+		end;
+	}
+	OnInit:
+	.@UID = getnpcid(0);
+	setunittitle(.@UID, "Utilidades Premium");
+	setunitdata .@UID, UNPC_GROUP_ID, 7;
+	.@npc$ = strnpcinfo(0);  
+end;
+}
+
+
+//--- Lojas ---------------------------------------------
+-	shop	Lazy	-1,607:-1,608:-1,501:-1,502:-1,503:-1,504:-1,506:-1,505:-1,533:-1,523:1000,12212:300000,610:12000,657:-1,656:-1,645:-1,717:-1,716:-1,715:-1,1750:-1,1751:-1,1752:-1,1754:-1,1755:-1,1756:-1,12016:35000,12202:115000,12090:115000,12085:115000,12080:115000,12095:115000,12100:115000,14287:10000000,14288:10000000

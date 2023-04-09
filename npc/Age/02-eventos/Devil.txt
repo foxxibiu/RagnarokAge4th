@@ -1,0 +1,242 @@
+//===== rAthena Script =======================================
+//= Devil Square
+//===== By: ==================================================
+//= Kirlein, Stillhard (translation), AnnieRuru (rewrite)
+//===== Current Version: =====================================
+//= 1.0
+//===== Compatible With: =====================================
+//= rAthena Project
+//===== Description: =========================================
+//= Devil Square, based on the event in MU Online.
+//= Defeat three waves of monsters for treasure.
+//===== Additional Comments: =================================
+//= 1.0 First version, edited. [Euphy]
+//============================================================
+
+tavern,41,29,6	script	Gurdiã da Devil Square	4_4JOB_LETICIA,{
+	set .@gm_level, 99; // GM level required to start/stop the event
+	cutin "4job_leticia_04.png",1;
+	mes "[Gurdiã da Devil Square]";
+	mes "Estou abrindo a entrada da ^FF0000Devil Square^000000.";
+	mes "Se você morrer não terá mais volta, a entrada será fechada.";
+	next;
+	switch(select("Entrar.:Informações.:" + ((getgmlevel() >= .@gm_level) ? "Menu do GM" : "") + ":Cancelar.")) {
+	case 1:
+		if (.start != 1) { // registration period
+			mes "[Gurdiã da Devil Square]";
+			mes "A Devil Square está fechada!";
+			mes "O Evento abre nos seguintes horários";
+			mes "00:00 , 06:00 , 12:00 , 18:00"; // display your times here
+			cutin "",255;
+			close;
+			
+		}
+		if (BaseLevel < 150 || Zeny < 50000) { // requirements
+			mes "[Gurdiã da Devil Square]";
+			mes "Você não tem os requisitos necessários.";
+			mes "Requisitos:";
+			mes " - Level de Base: 150";
+			mes " - Taxa de registro de 150,000z";
+			cutin "",255;
+			close;	
+		}
+
+		Zeny -= 150000;
+		announce strcharinfo(0)+" entrou na Devil Square.", bc_npc;
+		percentheal 100,100;
+		warp "ordeal_1-1",183,182;
+		close;
+	case 2:
+		mes "[Gurdiã da Devil Square]";
+		mes "Dentro, você encontrará 3 ondas de monstros. Os monstros ficarão mais fortes a cada onda.";
+		next;
+		mes "[Gurdiã da Devil Square]";
+		mes "Se você derrotar todos os inimigos, você terá a oportunidade de abrir 10 Baús do Tesouro.!";
+		cutin "",255;
+		close;
+	case 3:
+		mes "[Gurdiã da Devil Square]";
+		switch (.start) { // event states
+			case 0: mes "Devil Square ainda não começou."; break;
+			case 1: mes "Devil Square está aceitando participantes."; break;
+			case 2: mes "Devil Square está atualmente em execução no Round "+ .round +" com "+ .mob +" monstros restantes."; break;
+		}
+		next;
+		switch(select("Começar o Evento.:Parar o Evento.:Cancelar.")) {
+		case 1:
+			mes "[Gurdiã da Devil Square]";
+			if (.start)
+				mes "Devil Square já começou.";
+			else {
+				mes "Começando Devil Square...";
+				donpcevent strnpcinfo(0)+"::OnStartEvent";
+			}
+			cutin "",255;
+			close;
+			
+		case 2:
+			mes "[Gurdiã da Devil Square]";
+			if (!.start)
+				mes "Devil Square ainda não começou.";
+			else {
+				mes "Parando a Devil Square";
+				donpcevent strnpcinfo(0)+"::OnStopEvent";
+			}
+			cutin "",255;
+			close;
+			
+		case 3:
+			break;
+		}
+	case 4:
+		mes "[Gurdiã da Devil Square]";
+		mes "Muito bem.";
+		cutin "",255;
+		close;
+		break;
+	}
+
+OnStartEvent:
+OnClock0000:
+OnClock0600:
+OnClock1200:
+OnClock1800:
+	.start = 1;
+	disablenpc "ord11-12"; //from npc/warps/pvp.txt
+	disablenpc "Gurdiã da Devil Square#2";
+	mapannounce "ordeal_1-1","Devil Square está fechada.", bc_map;
+	getmapxy .@map$, .@x, .@y, BL_NPC;
+	mapwarp "ordeal_1-1", .@map$, .@x, .@y;
+	killmonsterall "ordeal_1-1";
+	announce "Devil Square está ABERTA. O evento começará em 5 minutos.", bc_all;
+	sleep 60000;
+	announce "Devil Square começará em 4 minutos.", bc_all;
+	sleep 60000;
+	announce "Devil Square começará em 3 minutos.", bc_all;
+	sleep 60000;
+	announce "Devil Square começará em 2 minutos.", bc_all;
+	sleep 60000;
+	announce "Devil Square começará em 1 minutos.", bc_all;
+	sleep 60000;
+	announce "Devil Square COMEÇOU!", bc_all;
+	if ( !getmapusers("ordeal_1-1") )
+		goto OnStopEvent;
+	.start = 2;
+	.round = 1;
+	.mob = 111;
+	areamonster "ordeal_1-1",183,182,246,244,"[DS] SOLDADO ESQUELETO",1028,15,strnpcinfo(0)+"::OnDevilDead";
+	areamonster "ordeal_1-1",183,182,246,244,"[DS] ORC ARQUEIRO",1189,15,strnpcinfo(0)+"::OnDevilDead";
+	areamonster "ordeal_1-1",183,182,246,244,"[DS] ARENOSO",1165,15,strnpcinfo(0)+"::OnDevilDead";
+	areamonster "ordeal_1-1",183,182,246,244,"[DS] ESQUELETO ARQUEIRO",1016,15,strnpcinfo(0)+"::OnDevilDead";
+	areamonster "ordeal_1-1",183,182,246,244,"[DS] MINOROUS",1149,15,strnpcinfo(0)+"::OnDevilDead";
+	areamonster "ordeal_1-1",183,182,246,244,"[DS] REQUIEM",1164,15,strnpcinfo(0)+"::OnDevilDead";
+	areamonster "ordeal_1-1",183,182,246,244,"[DS] KASA",1835,3,strnpcinfo(0)+"::OnDevilDead";
+	areamonster "ordeal_1-1",183,182,246,244,"[DS] EREMES",1635,2,strnpcinfo(0)+"::OnDevilDead";
+	areamonster "ordeal_1-1",183,182,246,244,"[DS] SHECIL",1638,5,strnpcinfo(0)+"::OnDevilDead";
+	areamonster "ordeal_1-1",183,182,246,244,"[DS] ANUBIS",1098,10,strnpcinfo(0)+"::OnDevilDead";
+	areamonster "ordeal_1-1",183,182,246,244,"[DS] EDDGA",1115,1,strnpcinfo(0)+"::OnDevilDead";
+	end;
+
+OnDevilDead:
+	.mob--;
+	if ( .mob == 111 || .mob == 5 )
+		announce "Devil Square : "+ .mob +" que ainda faltam no ROUND 1.", bc_map;
+	else if ( .mob <= 0 ) {
+		announce "Devil Square o ROUND 2 irá começar..", bc_map;
+		goto OnDevil2;
+	}
+	end;
+
+OnDevil2:
+	.round = 2;
+	.mob = 92;
+	areamonster "ordeal_1-1",183,182,246,244,"[DS] GARGULA",1253,15,strnpcinfo(0)+"::OnDevilDead2";
+	areamonster "ordeal_1-1",183,182,246,244,"[DS] ALARME",1193,15,strnpcinfo(0)+"::OnDevilDead2";
+	areamonster "ordeal_1-1",183,182,246,244,"[DS] KHALITZBURG",1132,15,strnpcinfo(0)+"::OnDevilDead2";
+	areamonster "ordeal_1-1",183,182,246,244,"[DS] ARCLOUSE",1194,15,strnpcinfo(0)+"::OnDevilDead2";
+	areamonster "ordeal_1-1",183,182,246,244,"[DS] MÍMICO",1191,15,strnpcinfo(0)+"::OnDevilDead2";
+	areamonster "ordeal_1-1",183,182,246,244,"[DS] ALMA PENADA",1192,15,strnpcinfo(0)+"::OnDevilDead2";
+	areamonster "ordeal_1-1",183,182,246,244,"[DS] FARAÓ",1157,1,strnpcinfo(0)+"::OnDevilDead2";
+	areamonster "ordeal_1-1",183,182,246,244,"[DS] AMON-RA",1511,1,strnpcinfo(0)+"::OnDevilDead2";
+	end;
+
+OnDevilDead2:
+	.mob--;
+	if ( .mob == 92 || .mob == 5 )
+		announce "Devil Square : "+ .mob +" ainda faltam 2 monstros.", bc_map;
+	else if ( .mob <= 0 ) {
+		announce "Devil Square o ROUND 3 irá começar..", bc_map;
+		goto OnDevil3;
+	}
+	end;
+
+OnDevil3:
+	.round = 3;
+	.mob = 62;
+	areamonster "ordeal_1-1",183,182,246,244,"[DS] ANOLIAN",1206,15,strnpcinfo(0)+"::OnDevilDead3";
+	areamonster "ordeal_1-1",183,182,246,244,"[DS] ANDARILHO",1208,15,strnpcinfo(0)+"::OnDevilDead3";
+	areamonster "ordeal_1-1",183,182,246,244,"[DS] DEVIRUCHI",1109,10,strnpcinfo(0)+"::OnDevilDead3";
+	areamonster "ordeal_1-1",183,182,246,244,"[DS] JOKER",1131,15,strnpcinfo(0)+"::OnDevilDead3";
+	areamonster "ordeal_1-1",183,182,246,244,"[DS] FLOR DO LUAR",1150,1,strnpcinfo(0)+"::OnDevilDead3";
+	areamonster "ordeal_1-1",183,182,246,244,"[DS] ILUSÃO DAS TREVAS",1302,5,strnpcinfo(0)+"::OnDevilDead3";
+	areamonster "ordeal_1-1",183,182,246,244,"[DS] SENHOR DAS TREVAS",1272,1,strnpcinfo(0)+"::OnDevilDead3";
+	end;
+
+OnDevilDead3:
+	.mob--;
+	if ( .mob == 62 || .mob == 5 )
+		announce "Devil Square : "+ .mob +" ainda faltando no ROUND FINAL.", bc_map;
+	else if ( .mob <= 0 ) {
+		announce "Devil Square : PARABÉNS. Estes 10 baús do tesouro são de vocês!.", bc_map;
+		goto OnDevil4;
+	}
+	end;
+
+OnDevil4:
+	.round = 4;
+	.mob = 10;
+	monster "ordeal_1-1",231,250,"Baú do Tesouro",1324,1,strnpcinfo(0)+"::OnTreasureDead";
+	monster "ordeal_1-1",234,247,"Baú do Tesouro",1324,1,strnpcinfo(0)+"::OnTreasureDead";
+	monster "ordeal_1-1",237,244,"Baú do Tesouro",1324,1,strnpcinfo(0)+"::OnTreasureDead";
+	monster "ordeal_1-1",240,241,"Baú do Tesouro",1324,1,strnpcinfo(0)+"::OnTreasureDead";
+	monster "ordeal_1-1",243,238,"Baú do Tesouro",1324,1,strnpcinfo(0)+"::OnTreasureDead";
+	monster "ordeal_1-1",246,235,"Baú do Tesouro",1324,1,strnpcinfo(0)+"::OnTreasureDead";
+	monster "ordeal_1-1",249,232,"Baú do Tesouro",1324,1,strnpcinfo(0)+"::OnTreasureDead";
+	monster "ordeal_1-1",252,229,"Baú do Tesouro",1324,1,strnpcinfo(0)+"::OnTreasureDead";
+	monster "ordeal_1-1",249,241,"Baú do Tesouro",1324,1,strnpcinfo(0)+"::OnTreasureDead";
+	monster "ordeal_1-1",240,249,"Baú do Tesouro",1324,1,strnpcinfo(0)+"::OnTreasureDead";
+	end;
+
+OnTreasureDead:
+	.mob--;
+	announce "Devil Square : "+ strcharinfo(0) +" abriu um Baú do Tesouro na Devil Square.", bc_all;
+	if ( .mob <= 0 )
+		goto OnStopEvent;
+	end;
+
+OnStopEvent:
+	killmonsterall "ordeal_1-1";
+	enablenpc "ord11-12"; //from npc/warps/pvp.txt
+	enablenpc "Gurdiã da Devil Square#2";
+	.start = .round = .mob = 0;
+	end;
+}
+
+ordeal_1-1,246,245,4	script	Gurdiã da Devil Square#2	4_4JOB_LETICIA,{
+	cutin "4job_leticia_03",255;
+	mes "[Saída]";
+	mes "Muito Bem.";
+	close2;
+	warp "SavePoint",0,0;
+	end;
+}
+
+ordeal_1-1	mapflag	nowarp
+ordeal_1-1	mapflag	nowarpto
+ordeal_1-1	mapflag	noteleport
+ordeal_1-1	mapflag	monster_noteleport
+ordeal_1-1	mapflag	nosave	SavePoint
+ordeal_1-1	mapflag	nomemo
+ordeal_1-1	mapflag	nobranch
+ordeal_1-1	mapflag	nopenalty
+ordeal_1-1	mapflag	noicewall

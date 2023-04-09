@@ -1,0 +1,11 @@
+-	script	stop_die	-1,{
+    OnInit:
+        bindatcmd "die",strnpcinfo(0) +"::OnPCDie";
+        end;
+    OnPCDie:
+        if( getmapflag( strcharinfo(3),mf_pvp ) && getgmlevel() < 10 )
+            message strcharinfo(0),"You can't use @die on pvp maps.";
+        else
+            atcommand "@die";
+        end;
+    }

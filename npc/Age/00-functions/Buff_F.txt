@@ -1,0 +1,24 @@
+//======================Buff Premium===========================================
+
+-	script	Buffer_Free	-1,{
+    OnInit:
+        bindatcmd("buff",strnpcinfo(0)+"::OnBuff",0,5);
+        end;
+
+	OnBuff:
+	if ( getmapflag( strcharinfo(3), mf_pvp ) || getmapflag( strcharinfo(3), mf_gvg ) || getmapflag( strcharinfo(3), mf_battleground ) ) {
+	dispbottom "[ @buff está desabilitado em mapas pvp & gvg ].";
+	end;
+	}
+    if (getgroupid()>=5 ){
+    set .@now, gettimetick(2);
+   //if( .@now < bvipP_delay ) { dispbottom "Aguarde "+(bvipP_delay - .@now)+" segundos para se buffar novamente."; end; }
+		atcommand "@repairall";
+		sc_start 32,300000,10; skilleffect 34,0;
+		skilleffect 29,0; sc_start 32, 600000, 10; // Increase Agi
+		skilleffect 34,0; sc_start 30, 600000, 10; // Blessing
+		skilleffect 75,0;
+        dispbottom "Prontinho, divirta-se";
+        set bvipP_delay, gettimetick(2) + 60;
+}
+}		

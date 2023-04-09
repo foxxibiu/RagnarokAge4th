@@ -1,0 +1,35 @@
+s_room,60,34,3	script	Aventureiro de Anexus	4_EP18_MARAM,{
+	cutin "ep18_maram_02.png",2;
+	mes "^0E20EB[Leo]^000000";
+	mes (gettime(3)>= 6&&gettime(3)<= 12?"Bom-dia":(gettime(3)>=13&&gettime(3)<=18?"Boa-tarde":"Boa-noite"))+", sou o ^0E20EBLeo^000000, posso te transportar para a sala do OURO, ela fica em Anexus!.";
+	next;
+	mes "Aqui voc� pode se teletransportar para Anexus.";
+	mes "Deseja ir para algum dos lugares abaixo?";
+	next;
+	switch(select("^0E20EBAnexus - Sala do Ouro^000000:Cancelar")){
+		case 1:
+			mes "At� mais!";
+			cutin "ep18_maram_02.png",255;
+			close2;
+			warp "anexus",0,0;
+			end;
+		case 2:
+			mes "At� mais!";
+			cutin "ep18_maram_02.png",255;
+			close2;
+			end;
+
+	end;
+	}
+}
+
+//----------------------------MOBS ---------------------
+
+anexus,0,0	monster	Vip Premium	1369,500,5000
+
+anexus	mapflag	noreturn
+anexus	mapflag	nosave
+anexus	mapflag	nowarp
+anexus	mapflag	noicewall
+anexus	mapflag	nowarpto
+

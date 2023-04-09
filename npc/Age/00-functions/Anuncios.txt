@@ -1,0 +1,232 @@
+//======= Thor Script ========================================
+//= Anunciador de Propagandas
+//===== Por: =================================================
+//= Thor
+//===== Vers?o Atual: ========================================
+//= 1.0
+//===== Compat?vel Com: ======================================
+//= Cronus, eAthena, Crystal
+//===== Descri??o: ===========================================
+//= Anuncia propagandas a cada 15 min.
+//===== Coment?rios Adicionais: ==============================
+//= 1.0 - Iniciado o NPC [Thor]
+//============================================================
+prontera.gat,165,195,3	script	Anúncio	-1,{
+
+OnClock0015:
+announce "Obrigado por estar aqui, nossa equipe se empenhou muito parar te trazer uma boa experiência em Ragnarök!",8;
+end;
+OnClock0030:
+announce "Visite nosso servidor do DISCORD e fique por dentro das novidades! [https://discord.gg/C6N3XvASSQ]",8;
+end;
+OnClock0045:
+announce "Ajude o servidor a crescer, traga seus amigos agora mesmo para jogar no Age Ragnarök",8;
+end;
+OnClock0115:
+announce "Nunca se esqueça, você é especial para nós do Age Ragnarök!!",8;
+end;
+OnClock0130:
+announce "Vote diariamente no servidor, e seja recompensado com prêmios na loja de votos!",8;
+end;
+OnClock0145:
+announce "Aproveite a loja PvP pra reabastecer seu arsenal de consumíveis!",8;
+end;
+OnClock0215:
+announce "O Age Ragnarök agradece a todos vocês que estão fazendo parte disso!",8;
+end;
+OnClock0230:
+announce "A STAFF do Age Ragnarök não se responsabiliza por senhas ou contas compartilhadas, ou itens roubados!",8;
+end;
+OnClock0245:
+announce "Visite o nosso SITE e fique por dentro das novidades!",8;
+end;
+OnClock0315:
+announce "PACK FUNDADOR na loja cash, adquira vantagens para sua aventura!",8;
+end;
+OnClock0330:
+announce " O seu VOTO ajuda muito no crescimento do servidor!",8;
+end;
+OnClock0345:
+announce "Visite o DISCORD e fique por dentro das novidades!",8;
+end;
+OnClock0415:
+announce " Nunca se esqueça, você é especial para nós!",8;
+end;
+OnClock0430:
+announce "Eventos que irão ocorrer no servidor serão anunciados no DISCORD então fiquem ligados!",8;
+end;
+OnClock0445:
+announce "A STAFF do Age Ragnarök não se responsabiliza por senhas ou contas compartilhadas, ou itens roubados!",8;
+end;
+OnClock0515:
+announce "Obrigado a todos por participar do nosso projeto",8;
+end;
+OnClock0530:
+announce "Age Ragnarök, a verdadeira essência do Ragnarök!",8;
+end;
+OnClock0545:
+announce "Visitem o nosso DISCORD e fiquem ligados nos eventos que irão ocorrer.",8;
+end;
+OnClock0615:
+announce "Traga seus amigos para o Age Ragnarök!",8;
+end;
+OnClock0630:
+announce "Se possível faça, uma doação para investirmos em sistemas mais divertidos!",8;
+end;
+OnClock0645:
+announce "Age Ragnarök, o servidor com uma STAFF ativa!",8;
+end;
+OnClock0715:
+announce " Visite o DISCORD e iique por dentro das novidades!",8;
+end;
+OnClock0730:
+announce "Aproveite a loja PvP pra reabastecer seu arsenal de consumíveis!",8;
+end;
+OnClock0745:
+announce "Chamem seus amigos agora mesmo para jogar aqui no Age Ragnarök",8;
+end;
+OnClock0815:
+announce "Participe dos eventos e ganhe prêmios incríveis",8;
+end;
+OnClock0830:
+announce "A STAFF do Age Ragnarök, jamais irá solicitar os dados da sua conta, então nós passe para ninguém!",8;
+end;
+OnClock0845:
+announce "Sofreu algum tipo de descriminação? Acesso nosso DISCORD e DENÚNCIE!",8;
+end;
+OnClock0915:
+announce "Visite nosso DISCORD e fique por dentro das novidades! [https://discord.gg/C6N3XvASSQ]",8;
+end;
+OnClock0930:
+announce "Participe dos eventos e ganhe prêmios incríveis",8;
+end;
+OnClock0945:
+announce "Aproveite a loja PvP pra reabastecer seu arsenal de consumíveis!",8;
+end;
+OnClock1015:
+announce "Fique ligado nas promoções em nosso DISCORD!",8;
+end;
+OnClock1030:
+announce "Visite o site e fiquem por dentro das novidades!",8;
+end;
+OnClock1045:
+announce "Encontrou algum BUG no servidor? Reporte à Staff",8;
+end;
+OnClock1115:
+announce "Ajude a reportar os BUGS do servidor!",8;
+end;
+OnClock1130:
+announce "Traga sua GUILD para o Age Ragnarök e participe de nossas guerras!",8;
+end;
+OnClock1145:
+announce " Por questão de segurança nunca passe sua conta para ninguém, a STAFF nós se responsabiliza por itens perdidos!",8;
+end;
+OnClock1215:
+announce "Se alguém tentar se passar por um membro da STAFF, Favor denunciar aos MANAGERS!",8;
+end;
+OnClock1230:
+announce "Doe, Ajude o servidor a ter sistemas mais divertidos!",8;
+end;
+OnClock1245:
+announce "Ajude o servidor, traga novos players para jogar no Age Ragnarök ",8;
+end;
+OnClock1315:
+announce "Confira as novidades e promoções do servidor em nosso DISCORD.",8;
+end;
+OnClock1330:
+announce "Age Ragnarök, o melhor servidor de Ragnarok Online!",8;
+end;
+OnClock1345:
+announce "Vote diariamente no servidor, nós leva nem um minutinho",8;
+end;
+OnClock1415:
+announce "Nunca ofenda ninguém, além de ser ridículo, você pode ser punido!",8;
+end;
+OnClock1430:
+announce "O vencedor do rank PVP, ganhará um visual exclusivo, não fique fora dessa!",8;
+end;
+OnClock1445:
+announce "Ajude o servidor, traga seus amigos para jogar no Age Ragnarök",8;
+end;
+OnClock1515:
+announce "Nosso servidor se possuí um episódio (Customizado com conteúdos + Especiais)!",8;
+end;
+OnClock1530:
+announce "Visite o DISCORD e fique por dentro das novidades!",8;
+end;
+OnClock1545:
+announce "Seja um jogador VIP e receba vários benefícios!",8;
+end;
+OnClock1615:
+announce "Age Ragnarök, onde quem faz nossa história é você!",8;
+end;
+OnClock1630:
+announce "Doe, ajude nosso servidor !!!",8;
+end;
+OnClock1645:
+announce "Ajude nosso servidor, vote diariamente",8;
+end;
+OnClock1715:
+announce "Visite o Site e fique por dentro das novidades!",8;
+end;
+OnClock1730:
+announce "Nós da Staff Age Ragnarök, nunca iremos pedir seu login ou senha, fique atento !",8;
+end;
+OnClock1745:
+announce "Age Ragnarök, aqui iremos ouvir suas sugestões e trata-las da melhor forma!",8;
+end;
+OnClock1815:
+announce "Age Ragnarök, sempre inovando",8;
+end;
+OnClock1830:
+announce "Acesse o Site e fique por dentro das novidades !!!",8;
+end;
+OnClock1845:
+announce "Vote diariamente no servidor!",8;
+end;
+OnClock1915:
+announce "Traga seus amigos agora mesmo para jogar em nosso servidor",8;
+end;
+OnClock1930:
+announce "A GUILD com maior destaque nas primeiras guerras, irão receber um visual exclusivo",8;
+end;
+OnClock1945:
+announce "Denuncie aqueles que nao seguem as regras do jogo e faça do Age Ragnarök um servidor melhor",8;
+end;
+OnClock2015:
+announce "Age Ragnarök, aqui iremos ouvir suas sugestões e trata-lás da melhor forma!",8;
+end;
+OnClock2030:
+announce "Visite o Site e fique por dentro das Novidades!",8;
+end;
+OnClock2045:
+announce "Doe, ajude nosso servidor",8;
+end;
+OnClock2115:
+announce "Denuncie o uso de NDL/RPE/WPE/HACKS, Ajude a STAFF !",8;
+end;
+OnClock2130:
+announce "Participe dos eventos e ganhe prêmios incríveis",8;
+end;
+OnClock2145:
+announce "Encontrou alguém abusando de BUGS? Denúncie!",8;
+end;
+OnClock2215:
+announce "Mantenha o espírito amigável, nós seja tóxico!",8;
+end;
+OnClock2230:
+announce "Age Ragnarök, sempre inovando com novos conteúdos",8;
+end;
+OnClock2245:
+announce "Dúvidas? os Helpers sempre irão estar por perto para resolver",8;
+end;
+OnClock2315:
+announce "Denuncie aqueles que nao seguem as regras do jogo !",8;
+end;
+OnClock2330:
+announce "Age Ragnarök, aqui você é encontra um servidor de qualidade !",8;
+end;
+OnClock2340:
+announce "A Equipe Age Ragnarök, está muito feliz por ter vocês com a gente!",8;
+end;
+}

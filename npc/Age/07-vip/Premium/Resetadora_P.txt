@@ -1,0 +1,66 @@
+s_room,65,56,3	script	Ygnizem	4_F_LEEDSH,{
+
+cutin "ep162_rds01.png",2;
+mes "[Ygnizem]";
+mes "Olá, " + (Sex?"Mr.":"Mrs.") + " " + strcharinfo(0);
+mes "Eu posso resetar seus atributos gratuitamente.";
+mes "O que deseja resetar agora ?";
+next;
+switch(select("- ^EB6105Atributos^000000","-^1A49D6 Habilidades^000000","- ^5A05F7Ambos^000000","- ^000000Limpar Pontos^000000","- ^EB0E12Nada, obrigado^000000")){
+	
+case 1:
+cutin "ep162_rds01.png",2;
+mes "[Ygnizem]";
+mes "Vamos lá, prepare-se !";
+next;
+resetstatus;
+cutin "ep162_rds01.png",255;
+close;
+
+case 2:
+cutin "ep162_rds02.png",2;
+mes "[Ygnizem]";
+mes "Vamos lá, prepare-se !";
+next;
+resetskill;
+cutin "ep162_rds02.png",255;
+close;
+
+case 3:
+cutin "ep162_rds03.png",2;
+mes "[Ygnizem]";
+mes "Vamos lá, prepare-se !";
+next;
+resetskill;
+resetstatus;
+cutin "ep162_rds03.png",255;
+close;
+
+case 4:
+cutin "ep162_rds04.png",2;
+mes "[Ygnizem]";
+mes "Pontos de skill removidos !";
+mes "Vamos lá, prepare-se !";
+next;
+set SkillPoint,0;
+cutin "ep162_rds04.png",255;
+close;
+
+case 5:
+cutin "ep162_rds05.png",2;
+mes "[Ygnizem]";
+cutin "ep162_rds05.png",2;
+mes "Volte quando precisar de mim !";
+next;
+cutin "ep162_rds05.png",255;
+close;
+
+	}
+OnInit:
+	.@UID = getnpcid(0);
+	setunittitle(.@UID, "[Resetadora Premium]");
+	setunitdata .@UID, UNPC_GROUP_ID, 9;
+
+end;
+
+}
