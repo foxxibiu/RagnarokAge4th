@@ -672,6 +672,12 @@ enum e_mapflag : int16 {
 	MF_NOLOOTNORMALMOB,
 	MF_NO_NPC_SELFDESTRUCTION_ON_ALL,	
 	MF_NODYNAMICNPC,
+	// [BattleGround System] [Easycore]
+	MF_NOECALL, 
+	MF_BG_CONSUME, // allows using BG consumables [Easycore]
+	MF_WOE_CONSUME, // allows using WoE consumables [Easycore]
+	MF_BG_TOPSCORE,
+	MF_BG_NOMOBMOVE,	
 	MF_MAX
 };
 

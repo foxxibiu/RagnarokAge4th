@@ -2637,8 +2637,14 @@ void battle_consume_ammo(map_session_data*sd, int skill, int lv)
 			qty += 4;
 	}
 
-	if (sd->equip_index[EQI_AMMO] >= 0) //Qty check should have been done in skill_check_condition
+	if (sd->equip_index[EQI_AMMO] >= 0) { //Qty check should have been done in skill_check_condition
 		pc_delitem(sd,sd->equip_index[EQI_AMMO],qty,0,1,LOG_TYPE_CONSUME);
+		//Extended Features BG [Easycore]
+		if (sd->bg_id && map_getmapflag(sd->bl.m, MF_BATTLEGROUND))
+			add2limit(sd->status.bgstats.ammo_used, qty, UINT_MAX);
+		else if (is_agit_start() && map_flag_gvg2(sd->bl.m))
+			add2limit(sd->status.wstats.ammo_used, qty, UINT_MAX);
+	}		
 
 	sd->state.arrow_atk = 0;
 }
@@ -10401,6 +10407,9 @@ int battle_check_target( struct block_list *src, struct block_list *target,int f
 		{
 			sbg_id = bg_team_get_id(s_bl);
 			tbg_id = bg_team_get_id(t_bl);
+			// Extended Battleground [Easycore]
+			if (flag&(BCT_PARTY) && sbg_id == tbg_id)
+				state |= BCT_PARTY;			
 		}
 		if( flag&(BCT_PARTY|BCT_ENEMY) )
 		{

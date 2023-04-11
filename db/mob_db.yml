@@ -88,3 +88,4 @@ Footer:
   - Path: db/import/mob_db.yml
   # - Path: db/import/ep17/mob_db.yml
   - Path: db/import/ep19/mob_db.yml
+  - Path: db/import/mob_db_bg.yml
