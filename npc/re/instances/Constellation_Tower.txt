@@ -1,0 +1,4363 @@
+//============================================================
+//====== start npc
+//============================================================
+
+
+
+e_tower,75,117,11	script	Oscar#CTE	10307,{
+
+
+	set .@party_id,getcharid(1);
+	set .@md_name$,"Constellation Tower";
+
+	set .@ctower_timer,checkquest(150001,PLAYTIME); // 1 week
+	set .@ctower_timer2,checkquest(150000,PLAYTIME); // 4 hours
+
+	if (!instance_check_party(.@party_id,1)) {
+		mes "Faça ou participe de um grupo com mais de 1 membro e tente novamente.";
+		close;
+	}
+	switch(.@ctower_timer) {
+	case -1:
+		if (is_party_leader() == true) {
+			mes "Confirmado que o grupo foi feita. Gostaria de reservar a entrada para a Constellation Tower?";
+			next;
+			switch(select("Gerar Calabouço "+.@md_name$+":Entre no calabouço:Volte para Alberta:Cancelar")) {
+			case 1:
+				if (instance_create(.@md_name$) < 0) {
+					mes "Nome do Grupo: "+ getpartyname(.@party_id);
+					mes "Líder do Grupo: "+strcharinfo(0);
+					mes "^0000ff"+.@md_name$+" ^000000- Falha na reserva!";
+					close;
+				}
+				mes "^0000ff"+.@md_name$+"^000000 - Tentar reservar";
+				mes "Depois de fazer uma reserva, você deve falar com o NPC atrás e selecionar o menu 'Entre no calabouço' para entrar no calabouço.";
+				close;
+			case 2:
+				callsub L_Enter,0,1;
+			case 3:
+				mes "Eu vou te mnível para Alberta.";
+				close2;
+				warp "alberta",223,36;
+				end;
+			case 4:
+				close;
+			}
+		}
+		switch(select("Entrar na "+.@md_name$+":Voltar para Alberta:Cancelar")) {
+		case 1:
+			callsub L_Enter,1,1;
+		case 2:
+			mes "Eu vou te mnível para Alberta.";
+			close2;
+			warp "alberta",223,36;
+			end;
+		case 3:
+			end;
+		}
+	case 0:
+	case 1:
+		if (.@ctower_timer2 < 2 && getcharid(1) == ctower_partyid) {
+			mes "Se você já tiver o calabouço gerado, você pode entrar nela. ";
+			//set ctower_timer,0;
+			//erasequest 150001;
+			//erasequest 150000;
+			next;
+			switch(select("Entrar na "+.@md_name$+":Voltar para Alberta:Cancelar")) {
+			case 1:
+				callsub L_Enter,0,0;
+			case 2:
+				mes "Eu vou te mnível para Alberta.";
+				close2;
+				warp "alberta",223,36;
+				end;
+			case 3:
+				close;
+			}
+		} else {
+			set .@dun_lim_time,ctower_timer+604800; // 1 week
+			 set .@dun_lim_time2,ctower_timer+14400; // 4 hours
+			set .@dun_cur_time,gettimetick(2);
+			set .@dun_ent_t,(.@dun_lim_time - .@dun_cur_time);
+			set .@dun_h,(.@dun_ent_t / 3600);
+			set .@dun_m,(.@dun_ent_t - (.@dun_h * 3600)) / 60;
+			set .@dun_s,.@dun_ent_t - ((.@dun_h * 3600) + (.@dun_m * 60));
+
+			mes "Devido aos efeitos posteriores da torre, você não pode entrar no calabouço agora, " + .@dun_h + "horas " + .@dun_m + "minutos " + .@dun_s + "segundos restantes para entrar no próximo calabouço.";
+			next;
+			mes "É perigoso aqui. Deixe-me levá-lo para Alberta.";
+			close2;
+			//set ctower_timer,0;
+			//erasequest 150001;
+			//erasequest 150000;
+			warp "alberta",223,36;
+			end;
+		}
+	case 2:
+		set ctower_timer,0;
+		erasequest 150001;
+		erasequest 150000;
+		mes "^0000ffOs registros e efeitos posteriores relacionados à Constellation Tower foram removidos. Você pode gerar e entrar na Constellation Tower novamente.^000000";
+		close;
+	}
+
+L_Enter:
+
+	if(BaseLevel < 240){
+		mes "Nível mínimo para entrar na instância: 240";
+		close;
+	}
+
+	switch(instance_enter("Constellation Tower")) {
+	case IE_OTHER:
+		mes "Um erro desconhecido ocorreu.";
+		close;
+	case IE_NOINSTANCE:
+		mes "O Calabouço memorial Constellation Tower não existe.";
+		mes "O líder do grupo ainda não gerou o calabouço.";
+		close;
+	case IE_NOMEMBER:
+		mes "Você pode entrar no calabouço depois de fazer a festa.";
+		close;
+	case IE_OK:
+		mapannounce "e_tower", strcharinfo(0) +" do grupo, "+ getpartyname( getcharid(1) ) +", está entrando no calabouço, Constellation Tower.",bc_map,"0x00ff99",FW_NORMAL,12;
+		if (getarg(1)) {
+			set ctower_timer,gettimetick(2);
+			set ctower_partyid, getcharid(1);
+			setquest 150001;
+			setquest 150000;
+		}
+		if (getarg(0) == 0) close;
+		else end;
+	}
+}
+
+// devon
+//1@ch_t,44,357,9	script	Oscarrrr#Fee50	10307,{
+//	enablenpc instance_npcname("Oscar#F50");
+//	warp instance_mapname("4@ch_t"),355,51;
+//}
+
+// Core Functions
+//============================================================
+function	script	F_CTower_Monster	{
+
+	set .@level, getarg(0);
+	set .@map$, getarg(1);
+	set .@label$, getarg(2);
+	set .@mob1,rand(20998,21047);
+	set .@mob2,rand(20998,21047);
+	set .@mob3,rand(20998,21047);
+	set .@mob4,rand(20998,21047);
+	set .@mob5,rand(20998,21047);
+	set .@mvp1,rand(21325,21359);
+	set .@CTamnt,8;
+	set .@CTmvp,1;
+	addmonsterdrop .@mob1,1000372,1000;
+	addmonsterdrop .@mob1,rand(1000398,1000403),1000;
+	addmonsterdrop .@mob2,1000372,1000;
+	addmonsterdrop .@mob2,rand(1000398,1000403),1000;
+	addmonsterdrop .@mob3,1000372,1000;
+	addmonsterdrop .@mob3,rand(1000398,1000403),1000;
+	addmonsterdrop .@mob4,1000372,1000;
+	addmonsterdrop .@mob4,rand(1000398,1000403),1000;
+	addmonsterdrop .@mob5,1000372,1000;
+	addmonsterdrop .@mob5,rand(1000398,1000403),1000;
+
+	switch(.@level) {
+	case 1:
+		areamonster .@map$,7,351,17,387,"--ja--",.@mob1,.@CTamnt,.@label$;
+	for (.@a = 0; .@a < .@CTamnt; .@a++) {
+		.mid1 = $@mobid[.@a];
+		setunitdata .mid1,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid1,UMOB_STR,150+(2*.@level);
+		setunitdata .mid1,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid1,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid1,UMOB_INT,150+(2*.@level);
+		setunitdata .mid1,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid1,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid1,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid1,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid1,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid1,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid1,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid1,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid1,UMOB_HIT,1000;
+		setunitdata .mid1,UMOB_HP,4000000*.@level;
+		}
+		areamonster .@map$,7,351,17,387,"--ja--",.@mob2,.@CTamnt,.@label$;
+	for (.@b = 0; .@b < .@CTamnt; .@b++) {
+		.mid2 = $@mobid[.@b];
+		setunitdata .mid2,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid2,UMOB_STR,150+(2*.@level);
+		setunitdata .mid2,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid2,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid2,UMOB_INT,150+(2*.@level);
+		setunitdata .mid2,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid2,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid2,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid2,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid2,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid2,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid2,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid2,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid2,UMOB_HIT,1000;
+		setunitdata .mid2,UMOB_HP,4000000*.@level;
+		}
+		areamonster .@map$,7,351,17,387,"--ja--",.@mob3,.@CTamnt,.@label$;
+	for (.@c = 0; .@c < .@CTamnt; .@c++) {
+		.mid3 = $@mobid[.@c];
+		setunitdata .mid3,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid3,UMOB_STR,150+(2*.@level);
+		setunitdata .mid3,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid3,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid3,UMOB_INT,150+(2*.@level);
+		setunitdata .mid3,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid3,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid3,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid3,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid3,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid3,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid3,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid3,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid3,UMOB_HIT,1000;
+		setunitdata .mid3,UMOB_HP,4000000*.@level;
+		}
+		areamonster .@map$,7,351,17,387,"--ja--",.@mob4,.@CTamnt,.@label$;
+	for (.@d = 0; .@d < .@CTamnt; .@d++) {
+		.mid4 = $@mobid[.@d];
+		setunitdata .mid4,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid4,UMOB_STR,150+(2*.@level);
+		setunitdata .mid4,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid4,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid4,UMOB_INT,150+(2*.@level);
+		setunitdata .mid4,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid4,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid4,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid4,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid4,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid4,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid4,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid4,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid4,UMOB_HIT,1000;
+		setunitdata .mid4,UMOB_HP,4000000*.@level;
+		}
+		areamonster .@map$,7,351,17,387,"--ja--",.@mob5,.@CTamnt,.@label$;
+	for (.@e = 0; .@e < .@CTamnt; .@e++) {
+		.mid5 = $@mobid[.@e];
+		setunitdata .mid5,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid5,UMOB_STR,150+(2*.@level);
+		setunitdata .mid5,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid5,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid5,UMOB_INT,150+(2*.@level);
+		setunitdata .mid5,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid5,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid5,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid5,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid5,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid5,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid5,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid5,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid5,UMOB_HIT,1000;
+		setunitdata .mid5,UMOB_HP,4000000*.@level;
+		}
+		break;
+	case 2:
+	case 27:
+		areamonster .@map$,93,351,103,387,"--ja--",.@mob1,.@CTamnt,.@label$;
+	for (.@a = 0; .@a < .@CTamnt; .@a++) {
+		.mid1 = $@mobid[.@a];
+		setunitdata .mid1,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid1,UMOB_STR,150+(2*.@level);
+		setunitdata .mid1,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid1,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid1,UMOB_INT,150+(2*.@level);
+		setunitdata .mid1,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid1,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid1,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid1,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid1,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid1,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid1,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid1,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid1,UMOB_HIT,1000;
+		setunitdata .mid1,UMOB_HP,4000000*.@level;
+		}
+		areamonster .@map$,93,351,103,387,"--ja--",.@mob2,.@CTamnt,.@label$;
+	for (.@b = 0; .@b < .@CTamnt; .@b++) {
+		.mid2 = $@mobid[.@b];
+		setunitdata .mid2,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid2,UMOB_STR,150+(2*.@level);
+		setunitdata .mid2,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid2,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid2,UMOB_INT,150+(2*.@level);
+		setunitdata .mid2,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid2,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid2,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid2,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid2,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid2,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid2,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid2,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid2,UMOB_HIT,1000;
+		setunitdata .mid2,UMOB_HP,4000000*.@level;
+		}
+		areamonster .@map$,93,351,103,387,"--ja--",.@mob3,.@CTamnt,.@label$;
+	for (.@c = 0; .@c < .@CTamnt; .@c++) {
+		.mid3 = $@mobid[.@c];
+		setunitdata .mid3,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid3,UMOB_STR,150+(2*.@level);
+		setunitdata .mid3,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid3,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid3,UMOB_INT,150+(2*.@level);
+		setunitdata .mid3,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid3,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid3,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid3,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid3,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid3,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid3,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid3,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid3,UMOB_HIT,1000;
+		setunitdata .mid3,UMOB_HP,4000000*.@level;
+		}
+		areamonster .@map$,93,351,103,387,"--ja--",.@mob4,.@CTamnt,.@label$;
+	for (.@d = 0; .@d < .@CTamnt; .@d++) {
+		.mid4 = $@mobid[.@d];
+		setunitdata .mid4,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid4,UMOB_STR,150+(2*.@level);
+		setunitdata .mid4,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid4,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid4,UMOB_INT,150+(2*.@level);
+		setunitdata .mid4,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid4,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid4,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid4,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid4,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid4,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid4,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid4,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid4,UMOB_HIT,1000;
+		setunitdata .mid4,UMOB_HP,4000000*.@level;
+		}
+		areamonster .@map$,93,351,103,387,"--ja--",.@mob5,.@CTamnt,.@label$;
+	for (.@e = 0; .@e < .@CTamnt; .@e++) {
+		.mid5 = $@mobid[.@e];
+		setunitdata .mid5,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid5,UMOB_STR,150+(2*.@level);
+		setunitdata .mid5,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid5,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid5,UMOB_INT,150+(2*.@level);
+		setunitdata .mid5,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid5,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid5,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid5,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid5,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid5,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid5,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid5,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid5,UMOB_HIT,1000;
+		setunitdata .mid5,UMOB_HP,4000000*.@level;
+		}
+		break;
+	case 3:
+	case 28:
+		areamonster .@map$,181,351,191,387,"--ja--",.@mob1,.@CTamnt,.@label$;
+		addmonsterdrop .@mob1,1000372,1000;
+	for (.@a = 0; .@a < .@CTamnt; .@a++) {
+		.mid1 = $@mobid[.@a];
+		setunitdata .mid1,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid1,UMOB_STR,150+(2*.@level);
+		setunitdata .mid1,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid1,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid1,UMOB_INT,150+(2*.@level);
+		setunitdata .mid1,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid1,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid1,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid1,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid1,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid1,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid1,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid1,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid1,UMOB_HIT,1000;
+		setunitdata .mid1,UMOB_HP,4000000*.@level;
+		}
+		areamonster .@map$,181,351,191,387,"--ja--",.@mob2,.@CTamnt,.@label$;
+	for (.@b = 0; .@b < .@CTamnt; .@b++) {
+		.mid2 = $@mobid[.@b];
+		setunitdata .mid2,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid2,UMOB_STR,150+(2*.@level);
+		setunitdata .mid2,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid2,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid2,UMOB_INT,150+(2*.@level);
+		setunitdata .mid2,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid2,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid2,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid2,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid2,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid2,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid2,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid2,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid2,UMOB_HIT,1000;
+		setunitdata .mid2,UMOB_HP,4000000*.@level;
+		}
+		areamonster .@map$,181,351,191,387,"--ja--",.@mob3,.@CTamnt,.@label$;
+	for (.@c = 0; .@c < .@CTamnt; .@c++) {
+		.mid3 = $@mobid[.@c];
+		setunitdata .mid3,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid3,UMOB_STR,150+(2*.@level);
+		setunitdata .mid3,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid3,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid3,UMOB_INT,150+(2*.@level);
+		setunitdata .mid3,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid3,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid3,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid3,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid3,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid3,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid3,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid3,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid3,UMOB_HIT,1000;
+		setunitdata .mid3,UMOB_HP,4000000*.@level;
+		}
+		areamonster .@map$,181,351,191,387,"--ja--",.@mob4,.@CTamnt,.@label$;
+	for (.@d = 0; .@d < .@CTamnt; .@d++) {
+		.mid4 = $@mobid[.@d];
+		setunitdata .mid4,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid4,UMOB_STR,150+(2*.@level);
+		setunitdata .mid4,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid4,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid4,UMOB_INT,150+(2*.@level);
+		setunitdata .mid4,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid4,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid4,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid4,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid4,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid4,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid4,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid4,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid4,UMOB_HIT,1000;
+		setunitdata .mid4,UMOB_HP,4000000*.@level;
+		}
+		areamonster .@map$,181,351,191,387,"--ja--",.@mob5,.@CTamnt,.@label$;
+	for (.@e = 0; .@e < .@CTamnt; .@e++) {
+		.mid5 = $@mobid[.@e];
+		setunitdata .mid5,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid5,UMOB_STR,150+(2*.@level);
+		setunitdata .mid5,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid5,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid5,UMOB_INT,150+(2*.@level);
+		setunitdata .mid5,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid5,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid5,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid5,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid5,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid5,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid5,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid5,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid5,UMOB_HIT,1000;
+		setunitdata .mid5,UMOB_HP,4000000*.@level;
+		}
+		break;
+	case 4:
+	case 29:
+		areamonster .@map$,267,351,277,387,"--ja--",.@mob1,.@CTamnt,.@label$;
+		addmonsterdrop .@mob1,1000372,1000;
+	for (.@a = 0; .@a < .@CTamnt; .@a++) {
+		.mid1 = $@mobid[.@a];
+		setunitdata .mid1,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid1,UMOB_STR,150+(2*.@level);
+		setunitdata .mid1,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid1,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid1,UMOB_INT,150+(2*.@level);
+		setunitdata .mid1,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid1,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid1,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid1,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid1,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid1,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid1,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid1,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid1,UMOB_HIT,1000;
+		setunitdata .mid1,UMOB_HP,4000000*.@level;
+		}
+		areamonster .@map$,267,351,277,387,"--ja--",.@mob2,.@CTamnt,.@label$;
+	for (.@b = 0; .@b < .@CTamnt; .@b++) {
+		.mid2 = $@mobid[.@b];
+		setunitdata .mid2,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid2,UMOB_STR,150+(2*.@level);
+		setunitdata .mid2,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid2,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid2,UMOB_INT,150+(2*.@level);
+		setunitdata .mid2,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid2,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid2,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid2,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid2,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid2,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid2,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid2,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid2,UMOB_HIT,1000;
+		setunitdata .mid2,UMOB_HP,4000000*.@level;
+		}
+		areamonster .@map$,267,351,277,387,"--ja--",.@mob3,.@CTamnt,.@label$;
+	for (.@c = 0; .@c < .@CTamnt; .@c++) {
+		.mid3 = $@mobid[.@c];
+		setunitdata .mid3,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid3,UMOB_STR,150+(2*.@level);
+		setunitdata .mid3,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid3,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid3,UMOB_INT,150+(2*.@level);
+		setunitdata .mid3,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid3,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid3,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid3,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid3,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid3,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid3,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid3,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid3,UMOB_HIT,1000;
+		setunitdata .mid3,UMOB_HP,4000000*.@level;
+		}
+		areamonster .@map$,267,351,277,387,"--ja--",.@mob4,.@CTamnt,.@label$;
+	for (.@d = 0; .@d < .@CTamnt; .@d++) {
+		.mid4 = $@mobid[.@d];
+		setunitdata .mid4,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid4,UMOB_STR,150+(2*.@level);
+		setunitdata .mid4,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid4,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid4,UMOB_INT,150+(2*.@level);
+		setunitdata .mid4,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid4,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid4,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid4,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid4,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid4,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid4,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid4,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid4,UMOB_HIT,1000;
+		setunitdata .mid4,UMOB_HP,4000000*.@level;
+		}
+		areamonster .@map$,267,351,277,387,"--ja--",.@mob5,.@CTamnt,.@label$;
+	for (.@e = 0; .@e < .@CTamnt; .@e++) {
+		.mid5 = $@mobid[.@e];
+		setunitdata .mid5,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid5,UMOB_STR,150+(2*.@level);
+		setunitdata .mid5,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid5,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid5,UMOB_INT,150+(2*.@level);
+		setunitdata .mid5,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid5,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid5,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid5,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid5,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid5,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid5,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid5,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid5,UMOB_HIT,1000;
+		setunitdata .mid5,UMOB_HP,4000000*.@level;
+		}
+		break;
+	case 5:
+	case 30:
+		monster .@map$,352,351,"--ja--",.@mvp1,.@CTmvp,.@label$;
+	for (.@f = 0; .@f < .@CTmvp; .@f++) {
+		.mvpid = $@mobid[.@f];
+		setunitdata .mvpid,UMOB_MAXHP,500000000+(50000000*.@level/5);
+		setunitdata .mvpid,UMOB_STR,200+(10*.@level/5);
+		setunitdata .mvpid,UMOB_AGI,200+(10*.@level/5);
+		setunitdata .mvpid,UMOB_VIT,200+(10*.@level/5);
+		setunitdata .mvpid,UMOB_INT,200+(10*.@level/5);
+		setunitdata .mvpid,UMOB_DEX,200+(10*.@level/5);
+		setunitdata .mvpid,UMOB_LUK,200+(10*.@level/5);
+		setunitdata .mvpid,UMOB_ATKMIN,8000+(200*.@level/5);
+		setunitdata .mvpid,UMOB_ATKMAX,11000+(500*.@level/5);
+		setunitdata .mvpid,UMOB_MATKMIN,5000+(100*.@level/5);
+		setunitdata .mvpid,UMOB_MATKMAX,6500+(250*.@level/5);
+		setunitdata .mvpid,UMOB_DEF,750+(50*.@level/5);
+		setunitdata .mvpid,UMOB_MDEF,350+(50*.@level/5);
+		setunitdata .mvpid,UMOB_HIT,1000;
+		setunitdata .mvpid,UMOB_HP,500000000+(50000000*.@level/5);
+		}	
+		monster .@map$,352,351,"--ja--",.@mob1,.@CTamnt,.@label$;
+		addmonsterdrop .@mob1,1000372,1000;
+	for (.@a = 0; .@a < .@CTamnt; .@a++) {
+		.mid1 = $@mobid[.@a];
+		setunitdata .mid1,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid1,UMOB_STR,150+(2*.@level);
+		setunitdata .mid1,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid1,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid1,UMOB_INT,150+(2*.@level);
+		setunitdata .mid1,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid1,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid1,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid1,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid1,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid1,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid1,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid1,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid1,UMOB_HIT,1000;
+		setunitdata .mid1,UMOB_HP,4000000*.@level;
+		}
+		monster .@map$,352,351,"--ja--",.@mob2,.@CTamnt,.@label$;
+	for (.@b = 0; .@b < .@CTamnt; .@b++) {
+		.mid2 = $@mobid[.@b];
+		setunitdata .mid2,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid2,UMOB_STR,150+(2*.@level);
+		setunitdata .mid2,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid2,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid2,UMOB_INT,150+(2*.@level);
+		setunitdata .mid2,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid2,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid2,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid2,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid2,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid2,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid2,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid2,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid2,UMOB_HIT,1000;
+		setunitdata .mid2,UMOB_HP,4000000*.@level;
+		}
+		monster .@map$,352,351,"--ja--",.@mob3,.@CTamnt,.@label$;
+	for (.@c = 0; .@c < .@CTamnt; .@c++) {
+		.mid3 = $@mobid[.@c];
+		setunitdata .mid3,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid3,UMOB_STR,150+(2*.@level);
+		setunitdata .mid3,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid3,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid3,UMOB_INT,150+(2*.@level);
+		setunitdata .mid3,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid3,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid3,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid3,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid3,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid3,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid3,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid3,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid3,UMOB_HIT,1000;
+		setunitdata .mid3,UMOB_HP,4000000*.@level;
+		}
+		monster .@map$,352,351,"--ja--",.@mob4,.@CTamnt,.@label$;
+	for (.@d = 0; .@d < .@CTamnt; .@d++) {
+		.mid4 = $@mobid[.@d];
+		setunitdata .mid4,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid4,UMOB_STR,150+(2*.@level);
+		setunitdata .mid4,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid4,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid4,UMOB_INT,150+(2*.@level);
+		setunitdata .mid4,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid4,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid4,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid4,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid4,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid4,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid4,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid4,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid4,UMOB_HIT,1000;
+		setunitdata .mid4,UMOB_HP,4000000*.@level;
+		}
+		monster .@map$,352,351,"--ja--",.@mob5,.@CTamnt,.@label$;
+	for (.@e = 0; .@e < .@CTamnt; .@e++) {
+		.mid5 = $@mobid[.@e];
+		setunitdata .mid5,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid5,UMOB_STR,150+(2*.@level);
+		setunitdata .mid5,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid5,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid5,UMOB_INT,150+(2*.@level);
+		setunitdata .mid5,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid5,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid5,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid5,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid5,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid5,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid5,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid5,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid5,UMOB_HIT,1000;
+		setunitdata .mid5,UMOB_HP,4000000*.@level;
+		}
+		break;
+	case 6:
+	case 31:	
+		areamonster .@map$,9,267,19,303,"--ja--",.@mob1,.@CTamnt,.@label$;
+		addmonsterdrop .@mob1,1000372,1000;
+	for (.@a = 0; .@a < .@CTamnt; .@a++) {
+		.mid1 = $@mobid[.@a];
+		setunitdata .mid1,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid1,UMOB_STR,150+(2*.@level);
+		setunitdata .mid1,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid1,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid1,UMOB_INT,150+(2*.@level);
+		setunitdata .mid1,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid1,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid1,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid1,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid1,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid1,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid1,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid1,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid1,UMOB_HIT,1000;
+		setunitdata .mid1,UMOB_HP,4000000*.@level;
+		}
+		areamonster .@map$,9,267,19,303,"--ja--",.@mob2,.@CTamnt,.@label$;
+	for (.@b = 0; .@b < .@CTamnt; .@b++) {
+		.mid2 = $@mobid[.@b];
+		setunitdata .mid2,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid2,UMOB_STR,150+(2*.@level);
+		setunitdata .mid2,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid2,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid2,UMOB_INT,150+(2*.@level);
+		setunitdata .mid2,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid2,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid2,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid2,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid2,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid2,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid2,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid2,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid2,UMOB_HIT,1000;
+		setunitdata .mid2,UMOB_HP,4000000*.@level;
+		}
+		areamonster .@map$,9,267,19,303,"--ja--",.@mob3,.@CTamnt,.@label$;
+	for (.@c = 0; .@c < .@CTamnt; .@c++) {
+		.mid3 = $@mobid[.@c];
+		setunitdata .mid3,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid3,UMOB_STR,150+(2*.@level);
+		setunitdata .mid3,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid3,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid3,UMOB_INT,150+(2*.@level);
+		setunitdata .mid3,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid3,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid3,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid3,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid3,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid3,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid3,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid3,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid3,UMOB_HIT,1000;
+		setunitdata .mid3,UMOB_HP,4000000*.@level;
+		}
+		areamonster .@map$,9,267,19,303,"--ja--",.@mob4,.@CTamnt,.@label$;
+	for (.@d = 0; .@d < .@CTamnt; .@d++) {
+		.mid4 = $@mobid[.@d];
+		setunitdata .mid4,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid4,UMOB_STR,150+(2*.@level);
+		setunitdata .mid4,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid4,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid4,UMOB_INT,150+(2*.@level);
+		setunitdata .mid4,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid4,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid4,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid4,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid4,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid4,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid4,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid4,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid4,UMOB_HIT,1000;
+		setunitdata .mid4,UMOB_HP,4000000*.@level;
+		}
+		areamonster .@map$,9,267,19,303,"--ja--",.@mob5,.@CTamnt,.@label$;
+	for (.@e = 0; .@e < .@CTamnt; .@e++) {
+		.mid5 = $@mobid[.@e];
+		setunitdata .mid5,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid5,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid5,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid5,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid5,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid5,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid5,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid5,UMOB_HIT,1000;
+		setunitdata .mid5,UMOB_HP,4000000*.@level;
+		}
+		break;
+	case 7:
+	case 32:
+		areamonster .@map$,93,267,103,303,"--ja--",.@mob1,.@CTamnt,.@label$;
+		addmonsterdrop .@mob1,1000372,1000;
+	for (.@a = 0; .@a < .@CTamnt; .@a++) {
+		.mid1 = $@mobid[.@a];
+		setunitdata .mid1,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid1,UMOB_STR,150+(2*.@level);
+		setunitdata .mid1,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid1,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid1,UMOB_INT,150+(2*.@level);
+		setunitdata .mid1,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid1,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid1,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid1,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid1,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid1,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid1,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid1,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid1,UMOB_HIT,1000;
+		setunitdata .mid1,UMOB_HP,4000000*.@level;
+		};
+		areamonster .@map$,93,267,103,303,"--ja--",.@mob2,.@CTamnt,.@label$;
+	for (.@b = 0; .@b < .@CTamnt; .@b++) {
+		.mid2 = $@mobid[.@b];
+		setunitdata .mid2,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid2,UMOB_STR,150+(2*.@level);
+		setunitdata .mid2,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid2,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid2,UMOB_INT,150+(2*.@level);
+		setunitdata .mid2,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid2,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid2,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid2,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid2,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid2,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid2,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid2,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid2,UMOB_HIT,1000;
+		setunitdata .mid2,UMOB_HP,4000000*.@level;
+		}
+		areamonster .@map$,93,267,103,303,"--ja--",.@mob3,.@CTamnt,.@label$;
+	for (.@c = 0; .@c < .@CTamnt; .@c++) {
+		.mid3 = $@mobid[.@c];
+		setunitdata .mid3,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid3,UMOB_STR,150+(2*.@level);
+		setunitdata .mid3,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid3,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid3,UMOB_INT,150+(2*.@level);
+		setunitdata .mid3,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid3,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid3,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid3,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid3,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid3,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid3,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid3,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid3,UMOB_HIT,1000;
+		setunitdata .mid3,UMOB_HP,4000000*.@level;
+		}
+		areamonster .@map$,93,267,103,303,"--ja--",.@mob4,.@CTamnt,.@label$;
+	for (.@d = 0; .@d < .@CTamnt; .@d++) {
+		.mid4 = $@mobid[.@d];
+		setunitdata .mid4,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid4,UMOB_STR,150+(2*.@level);
+		setunitdata .mid4,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid4,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid4,UMOB_INT,150+(2*.@level);
+		setunitdata .mid4,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid4,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid4,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid4,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid4,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid4,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid4,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid4,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid4,UMOB_HIT,1000;
+		setunitdata .mid4,UMOB_HP,4000000*.@level;
+		}
+		areamonster .@map$,93,267,103,303,"--ja--",.@mob5,.@CTamnt,.@label$;
+	for (.@e = 0; .@e < .@CTamnt; .@e++) {
+		.mid5 = $@mobid[.@e];
+		setunitdata .mid5,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid5,UMOB_STR,150+(2*.@level);
+		setunitdata .mid5,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid5,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid5,UMOB_INT,150+(2*.@level);
+		setunitdata .mid5,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid5,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid5,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid5,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid5,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid5,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid5,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid5,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid5,UMOB_HIT,1000;
+		setunitdata .mid5,UMOB_HP,4000000*.@level;
+		}
+		break;
+	case 8:
+	case 33:
+		areamonster .@map$,181,267,191,303,"--ja--",.@mob1,.@CTamnt,.@label$;
+		addmonsterdrop .@mob1,1000372,1000;
+	for (.@a = 0; .@a < .@CTamnt; .@a++) {
+		.mid1 = $@mobid[.@a];
+		setunitdata .mid1,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid1,UMOB_STR,150+(2*.@level);
+		setunitdata .mid1,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid1,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid1,UMOB_INT,150+(2*.@level);
+		setunitdata .mid1,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid1,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid1,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid1,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid1,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid1,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid1,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid1,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid1,UMOB_HIT,1000;
+		setunitdata .mid1,UMOB_HP,4000000*.@level;
+		}
+		areamonster .@map$,181,267,191,303,"--ja--",.@mob2,.@CTamnt,.@label$;
+	for (.@b = 0; .@b < .@CTamnt; .@b++) {
+		.mid2 = $@mobid[.@b];
+		setunitdata .mid2,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid2,UMOB_STR,150+(2*.@level);
+		setunitdata .mid2,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid2,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid2,UMOB_INT,150+(2*.@level);
+		setunitdata .mid2,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid2,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid2,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid2,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid2,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid2,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid2,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid2,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid2,UMOB_HIT,1000;
+		setunitdata .mid2,UMOB_HP,4000000*.@level;
+		}
+		areamonster .@map$,181,267,191,303,"--ja--",.@mob3,.@CTamnt,.@label$;
+	for (.@c = 0; .@c < .@CTamnt; .@c++) {
+		.mid3 = $@mobid[.@c];
+		setunitdata .mid3,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid3,UMOB_STR,150+(2*.@level);
+		setunitdata .mid3,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid3,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid3,UMOB_INT,150+(2*.@level);
+		setunitdata .mid3,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid3,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid3,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid3,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid3,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid3,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid3,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid3,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid3,UMOB_HIT,1000;
+		setunitdata .mid3,UMOB_HP,4000000*.@level;
+		}
+		areamonster .@map$,181,267,191,303,"--ja--",.@mob4,.@CTamnt,.@label$;
+	for (.@d = 0; .@d < .@CTamnt; .@d++) {
+		.mid4 = $@mobid[.@d];
+		setunitdata .mid4,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid4,UMOB_STR,150+(2*.@level);
+		setunitdata .mid4,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid4,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid4,UMOB_INT,150+(2*.@level);
+		setunitdata .mid4,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid4,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid4,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid4,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid4,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid4,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid4,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid4,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid4,UMOB_HIT,1000;
+		setunitdata .mid4,UMOB_HP,4000000*.@level;
+		}
+		areamonster .@map$,181,267,191,303,"--ja--",.@mob5,.@CTamnt,.@label$;
+	for (.@e = 0; .@e < .@CTamnt; .@e++) {
+		.mid5 = $@mobid[.@e];
+		setunitdata .mid5,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid5,UMOB_STR,150+(2*.@level);
+		setunitdata .mid5,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid5,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid5,UMOB_INT,150+(2*.@level);
+		setunitdata .mid5,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid5,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid5,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid5,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid5,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid5,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid5,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid5,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid5,UMOB_HIT,1000;
+		setunitdata .mid5,UMOB_HP,4000000*.@level;
+		}
+		break;
+	case 9:
+	case 34:
+		areamonster .@map$,267,267,277,303,"--ja--",.@mob1,.@CTamnt,.@label$;
+	for (.@a = 0; .@a < .@CTamnt; .@a++) {
+		.mid1 = $@mobid[.@a];
+		setunitdata .mid1,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid1,UMOB_STR,150+(2*.@level);
+		setunitdata .mid1,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid1,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid1,UMOB_INT,150+(2*.@level);
+		setunitdata .mid1,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid1,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid1,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid1,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid1,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid1,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid1,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid1,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid1,UMOB_HIT,1000;
+		setunitdata .mid1,UMOB_HP,4000000*.@level;
+		}
+		areamonster .@map$,267,267,277,303,"--ja--",.@mob2,.@CTamnt,.@label$;
+	for (.@b = 0; .@b < .@CTamnt; .@b++) {
+		.mid2 = $@mobid[.@b];
+		setunitdata .mid2,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid2,UMOB_STR,150+(2*.@level);
+		setunitdata .mid2,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid2,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid2,UMOB_INT,150+(2*.@level);
+		setunitdata .mid2,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid2,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid2,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid2,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid2,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid2,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid2,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid2,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid2,UMOB_HIT,1000;
+		setunitdata .mid2,UMOB_HP,4000000*.@level;
+		}
+		areamonster .@map$,267,267,277,303,"--ja--",.@mob3,.@CTamnt,.@label$;
+	for (.@c = 0; .@c < .@CTamnt; .@c++) {
+		.mid3 = $@mobid[.@c];
+		setunitdata .mid3,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid3,UMOB_STR,150+(2*.@level);
+		setunitdata .mid3,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid3,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid3,UMOB_INT,150+(2*.@level);
+		setunitdata .mid3,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid3,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid3,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid3,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid3,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid3,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid3,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid3,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid3,UMOB_HIT,1000;
+		setunitdata .mid3,UMOB_HP,4000000*.@level;
+		}
+		areamonster .@map$,267,267,277,303,"--ja--",.@mob4,.@CTamnt,.@label$;
+	for (.@d = 0; .@d < .@CTamnt; .@d++) {
+		.mid4 = $@mobid[.@d];
+		setunitdata .mid4,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid4,UMOB_STR,150+(2*.@level);
+		setunitdata .mid4,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid4,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid4,UMOB_INT,150+(2*.@level);
+		setunitdata .mid4,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid4,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid4,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid4,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid4,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid4,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid4,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid4,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid4,UMOB_HIT,1000;
+		setunitdata .mid4,UMOB_HP,4000000*.@level;
+		}
+		areamonster .@map$,267,267,277,303,"--ja--",.@mob5,.@CTamnt,.@label$;
+	for (.@e = 0; .@e < .@CTamnt; .@e++) {
+		.mid5 = $@mobid[.@e];
+		setunitdata .mid5,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid5,UMOB_STR,150+(2*.@level);
+		setunitdata .mid5,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid5,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid5,UMOB_INT,150+(2*.@level);
+		setunitdata .mid5,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid5,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid5,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid5,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid5,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid5,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid5,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid5,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid5,UMOB_HIT,1000;
+		setunitdata .mid5,UMOB_HP,4000000*.@level;
+		}
+		break;
+	case 10:
+	case 35:
+		monster .@map$,352,267,"--ja--",.@mvp1,.@CTmvp,.@label$;
+	for (.@f = 0; .@f < .@CTmvp; .@f++) {
+		.mvpid = $@mobid[.@f];
+		setunitdata .mvpid,UMOB_MAXHP,500000000+(50000000*.@level/5);
+		setunitdata .mvpid,UMOB_STR,200+(10*.@level/5);
+		setunitdata .mvpid,UMOB_AGI,200+(10*.@level/5);
+		setunitdata .mvpid,UMOB_VIT,200+(10*.@level/5);
+		setunitdata .mvpid,UMOB_INT,200+(10*.@level/5);
+		setunitdata .mvpid,UMOB_DEX,200+(10*.@level/5);
+		setunitdata .mvpid,UMOB_LUK,200+(10*.@level/5);
+		setunitdata .mvpid,UMOB_ATKMIN,8000+(200*.@level/5);
+		setunitdata .mvpid,UMOB_ATKMAX,11000+(500*.@level/5);
+		setunitdata .mvpid,UMOB_MATKMIN,5000+(100*.@level/5);
+		setunitdata .mvpid,UMOB_MATKMAX,6500+(250*.@level/5);
+		setunitdata .mvpid,UMOB_DEF,750+(50*.@level/5);
+		setunitdata .mvpid,UMOB_MDEF,350+(50*.@level/5);
+		setunitdata .mvpid,UMOB_HIT,1000;
+		setunitdata .mvpid,UMOB_HP,500000000+(50000000*.@level/5);
+		}
+		monster .@map$,352,267,"--ja--",.@mob1,.@CTamnt,.@label$;
+	for (.@a = 0; .@a < .@CTamnt; .@a++) {
+		.mid1 = $@mobid[.@a];
+		setunitdata .mid1,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid1,UMOB_STR,150+(2*.@level);
+		setunitdata .mid1,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid1,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid1,UMOB_INT,150+(2*.@level);
+		setunitdata .mid1,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid1,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid1,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid1,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid1,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid1,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid1,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid1,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid1,UMOB_HIT,1000;
+		setunitdata .mid1,UMOB_HP,4000000*.@level;
+		}
+		monster .@map$,352,267,"--ja--",.@mob2,.@CTamnt,.@label$;
+	for (.@b = 0; .@b < .@CTamnt; .@b++) {
+		.mid2 = $@mobid[.@b];
+		setunitdata .mid2,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid2,UMOB_STR,150+(2*.@level);
+		setunitdata .mid2,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid2,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid2,UMOB_INT,150+(2*.@level);
+		setunitdata .mid2,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid2,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid2,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid2,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid2,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid2,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid2,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid2,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid2,UMOB_HIT,1000;
+		setunitdata .mid2,UMOB_HP,4000000*.@level;
+		}
+		monster .@map$,352,267,"--ja--",.@mob3,.@CTamnt,.@label$;
+	for (.@c = 0; .@c < .@CTamnt; .@c++) {
+		.mid3 = $@mobid[.@c];
+		setunitdata .mid3,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid3,UMOB_STR,150+(2*.@level);
+		setunitdata .mid3,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid3,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid3,UMOB_INT,150+(2*.@level);
+		setunitdata .mid3,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid3,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid3,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid3,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid3,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid3,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid3,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid3,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid3,UMOB_HIT,1000;
+		setunitdata .mid3,UMOB_HP,4000000*.@level;
+		}
+		monster .@map$,352,267,"--ja--",.@mob4,.@CTamnt,.@label$;
+	for (.@d = 0; .@d < .@CTamnt; .@d++) {
+		.mid4 = $@mobid[.@d];
+		setunitdata .mid4,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid4,UMOB_STR,150+(2*.@level);
+		setunitdata .mid4,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid4,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid4,UMOB_INT,150+(2*.@level);
+		setunitdata .mid4,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid4,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid4,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid4,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid4,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid4,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid4,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid4,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid4,UMOB_HIT,1000;
+		setunitdata .mid4,UMOB_HP,4000000*.@level;
+		}
+		monster .@map$,352,267,"--ja--",.@mob5,.@CTamnt,.@label$;
+	for (.@e = 0; .@e < .@CTamnt; .@e++) {
+		.mid5 = $@mobid[.@e];
+		setunitdata .mid5,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid5,UMOB_STR,150+(2*.@level);
+		setunitdata .mid5,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid5,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid5,UMOB_INT,150+(2*.@level);
+		setunitdata .mid5,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid5,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid5,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid5,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid5,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid5,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid5,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid5,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid5,UMOB_HIT,1000;
+		setunitdata .mid5,UMOB_HP,4000000*.@level;
+		}
+		break;
+	case 11:
+	case 36:
+		areamonster .@map$,9,180,19,216,"--ja--",.@mob1,.@CTamnt,.@label$;
+	for (.@a = 0; .@a < .@CTamnt; .@a++) {
+		.mid1 = $@mobid[.@a];
+		setunitdata .mid1,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid1,UMOB_STR,150+(2*.@level);
+		setunitdata .mid1,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid1,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid1,UMOB_INT,150+(2*.@level);
+		setunitdata .mid1,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid1,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid1,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid1,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid1,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid1,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid1,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid1,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid1,UMOB_HIT,1000;
+		setunitdata .mid1,UMOB_HP,4000000*.@level;
+		}
+		areamonster .@map$,9,180,19,216,"--ja--",.@mob2,.@CTamnt,.@label$;
+	for (.@b = 0; .@b < .@CTamnt; .@b++) {
+		.mid2 = $@mobid[.@b];
+		setunitdata .mid2,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid2,UMOB_STR,150+(2*.@level);
+		setunitdata .mid2,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid2,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid2,UMOB_INT,150+(2*.@level);
+		setunitdata .mid2,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid2,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid2,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid2,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid2,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid2,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid2,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid2,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid2,UMOB_HIT,1000;
+		setunitdata .mid2,UMOB_HP,4000000*.@level;
+		}
+		areamonster .@map$,9,180,19,216,"--ja--",.@mob3,.@CTamnt,.@label$;
+	for (.@c = 0; .@c < .@CTamnt; .@c++) {
+		.mid3 = $@mobid[.@c];
+		setunitdata .mid3,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid3,UMOB_STR,150+(2*.@level);
+		setunitdata .mid3,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid3,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid3,UMOB_INT,150+(2*.@level);
+		setunitdata .mid3,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid3,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid3,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid3,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid3,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid3,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid3,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid3,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid3,UMOB_HIT,1000;
+		setunitdata .mid3,UMOB_HP,4000000*.@level;
+		}
+		areamonster .@map$,9,180,19,216,"--ja--",.@mob4,.@CTamnt,.@label$;
+	for (.@d = 0; .@d < .@CTamnt; .@d++) {
+		.mid4 = $@mobid[.@d];
+		setunitdata .mid4,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid4,UMOB_STR,150+(2*.@level);
+		setunitdata .mid4,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid4,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid4,UMOB_INT,150+(2*.@level);
+		setunitdata .mid4,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid4,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid4,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid4,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid4,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid4,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid4,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid4,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid4,UMOB_HIT,1000;
+		setunitdata .mid4,UMOB_HP,4000000*.@level;
+		}
+		areamonster .@map$,9,180,19,216,"--ja--",.@mob5,.@CTamnt,.@label$;
+	for (.@e = 0; .@e < .@CTamnt; .@e++) {
+		.mid5 = $@mobid[.@e];
+		setunitdata .mid5,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid5,UMOB_STR,150+(2*.@level);
+		setunitdata .mid5,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid5,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid5,UMOB_INT,150+(2*.@level);
+		setunitdata .mid5,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid5,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid5,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid5,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid5,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid5,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid5,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid5,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid5,UMOB_HIT,1000;
+		setunitdata .mid5,UMOB_HP,4000000*.@level;
+		}
+		break;
+	case 12:
+	case 37:
+		monster .@map$,93,180,"--ja--",.@mob1,.@CTamnt,.@label$;
+	for (.@a = 0; .@a < .@CTamnt; .@a++) {
+		.mid1 = $@mobid[.@a];
+		setunitdata .mid1,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid1,UMOB_STR,150+(2*.@level);
+		setunitdata .mid1,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid1,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid1,UMOB_INT,150+(2*.@level);
+		setunitdata .mid1,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid1,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid1,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid1,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid1,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid1,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid1,UMOB_HIT,1000;
+		setunitdata .mid1,UMOB_HP,4000000*.@level;
+		}
+		monster .@map$,93,180,"--ja--",.@mob2,.@CTamnt,.@label$;
+	for (.@b = 0; .@b < .@CTamnt; .@b++) {
+		.mid2 = $@mobid[.@b];
+		setunitdata .mid2,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid2,UMOB_STR,150+(2*.@level);
+		setunitdata .mid2,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid2,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid2,UMOB_INT,150+(2*.@level);
+		setunitdata .mid2,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid2,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid2,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid2,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid2,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid2,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid2,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid2,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid2,UMOB_HIT,1000;
+		setunitdata .mid2,UMOB_HP,4000000*.@level;
+		}
+		monster .@map$,93,180,"--ja--",.@mob3,.@CTamnt,.@label$;
+	for (.@c = 0; .@c < .@CTamnt; .@c++) {
+		.mid3 = $@mobid[.@c];
+		setunitdata .mid3,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid3,UMOB_STR,150+(2*.@level);
+		setunitdata .mid3,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid3,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid3,UMOB_INT,150+(2*.@level);
+		setunitdata .mid3,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid3,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid3,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid3,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid3,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid3,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid3,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid3,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid3,UMOB_HIT,1000;
+		setunitdata .mid3,UMOB_HP,4000000*.@level;
+		}
+		monster .@map$,93,180,"--ja--",.@mob4,.@CTamnt,.@label$;
+	for (.@d = 0; .@d < .@CTamnt; .@d++) {
+		.mid4 = $@mobid[.@d];
+		setunitdata .mid4,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid4,UMOB_STR,150+(2*.@level);
+		setunitdata .mid4,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid4,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid4,UMOB_INT,150+(2*.@level);
+		setunitdata .mid4,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid4,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid4,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid4,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid4,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid4,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid4,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid4,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid4,UMOB_HIT,1000;
+		setunitdata .mid4,UMOB_HP,4000000*.@level;
+		}
+		monster .@map$,93,180,"--ja--",.@mob5,.@CTamnt,.@label$;
+	for (.@e = 0; .@e < .@CTamnt; .@e++) {
+		.mid5 = $@mobid[.@e];
+		setunitdata .mid5,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid5,UMOB_STR,150+(2*.@level);
+		setunitdata .mid5,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid5,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid5,UMOB_INT,150+(2*.@level);
+		setunitdata .mid5,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid5,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid5,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid5,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid5,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid5,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid5,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid5,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid5,UMOB_HIT,1000;
+		setunitdata .mid5,UMOB_HP,4000000*.@level;
+		}
+		break;
+	case 13:
+	case 38:
+		areamonster .@map$,181,180,191,216,"--ja--",.@mob1,.@CTamnt,.@label$;
+	for (.@a = 0; .@a < .@CTamnt; .@a++) {
+		.mid1 = $@mobid[.@a];
+		setunitdata .mid1,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid1,UMOB_STR,150+(2*.@level);
+		setunitdata .mid1,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid1,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid1,UMOB_INT,150+(2*.@level);
+		setunitdata .mid1,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid1,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid1,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid1,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid1,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid1,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid1,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid1,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid1,UMOB_HIT,1000;
+		setunitdata .mid1,UMOB_HP,4000000*.@level;
+		}
+		areamonster .@map$,181,180,191,216,"--ja--",.@mob2,.@CTamnt,.@label$;
+	for (.@b = 0; .@b < .@CTamnt; .@b++) {
+		.mid2 = $@mobid[.@b];
+		setunitdata .mid2,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid2,UMOB_STR,150+(2*.@level);
+		setunitdata .mid2,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid2,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid2,UMOB_INT,150+(2*.@level);
+		setunitdata .mid2,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid2,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid2,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid2,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid2,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid2,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid2,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid2,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid2,UMOB_HIT,1000;
+		setunitdata .mid2,UMOB_HP,4000000*.@level;
+		}
+		areamonster .@map$,181,180,191,216,"--ja--",.@mob3,.@CTamnt,.@label$;
+	for (.@c = 0; .@c < .@CTamnt; .@c++) {
+		.mid3 = $@mobid[.@c];
+		setunitdata .mid3,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid3,UMOB_STR,150+(2*.@level);
+		setunitdata .mid3,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid3,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid3,UMOB_INT,150+(2*.@level);
+		setunitdata .mid3,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid3,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid3,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid3,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid3,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid3,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid3,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid3,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid3,UMOB_HIT,1000;
+		setunitdata .mid3,UMOB_HP,4000000*.@level;
+		}
+		areamonster .@map$,181,180,191,216,"--ja--",.@mob4,.@CTamnt,.@label$;
+	for (.@d = 0; .@d < .@CTamnt; .@d++) {
+		.mid4 = $@mobid[.@d];
+		setunitdata .mid4,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid4,UMOB_STR,150+(2*.@level);
+		setunitdata .mid4,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid4,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid4,UMOB_INT,150+(2*.@level);
+		setunitdata .mid4,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid4,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid4,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid4,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid4,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid4,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid4,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid4,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid4,UMOB_HIT,1000;
+		setunitdata .mid4,UMOB_HP,4000000*.@level;
+		}
+		areamonster .@map$,181,180,191,216,"--ja--",.@mob5,.@CTamnt,.@label$;
+	for (.@e = 0; .@e < .@CTamnt; .@e++) {
+		.mid5 = $@mobid[.@e];
+		setunitdata .mid5,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid5,UMOB_STR,150+(2*.@level);
+		setunitdata .mid5,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid5,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid5,UMOB_INT,150+(2*.@level);
+		setunitdata .mid5,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid5,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid5,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid5,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid5,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid5,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid5,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid5,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid5,UMOB_HIT,1000;
+		setunitdata .mid5,UMOB_HP,4000000*.@level;
+		}
+		break;
+	case 14:
+	case 39:
+		areamonster .@map$,267,180,277,216,"--ja--",.@mob1,.@CTamnt,.@label$;
+	for (.@a = 0; .@a < .@CTamnt; .@a++) {
+		.mid1 = $@mobid[.@a];
+		setunitdata .mid1,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid1,UMOB_STR,150+(2*.@level);
+		setunitdata .mid1,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid1,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid1,UMOB_INT,150+(2*.@level);
+		setunitdata .mid1,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid1,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid1,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid1,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid1,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid1,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid1,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid1,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid1,UMOB_HIT,1000;
+		setunitdata .mid1,UMOB_HP,4000000*.@level;
+		}
+		areamonster .@map$,267,180,277,216,"--ja--",.@mob2,.@CTamnt,.@label$;
+	for (.@b = 0; .@b < .@CTamnt; .@b++) {
+		.mid2 = $@mobid[.@b];
+		setunitdata .mid2,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid2,UMOB_STR,150+(2*.@level);
+		setunitdata .mid2,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid2,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid2,UMOB_INT,150+(2*.@level);
+		setunitdata .mid2,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid2,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid2,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid2,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid2,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid2,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid2,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid2,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid2,UMOB_HIT,1000;
+		setunitdata .mid2,UMOB_HP,4000000*.@level;
+		}
+		areamonster .@map$,267,180,277,216,"--ja--",.@mob3,.@CTamnt,.@label$;
+	for (.@c = 0; .@c < .@CTamnt; .@c++) {
+		.mid3 = $@mobid[.@c];
+		setunitdata .mid3,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid3,UMOB_STR,150+(2*.@level);
+		setunitdata .mid3,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid3,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid3,UMOB_INT,150+(2*.@level);
+		setunitdata .mid3,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid3,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid3,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid3,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid3,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid3,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid3,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid3,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid3,UMOB_HIT,1000;
+		setunitdata .mid3,UMOB_HP,4000000*.@level;
+		}
+		areamonster .@map$,267,180,277,216,"--ja--",.@mob4,.@CTamnt,.@label$;
+	for (.@d = 0; .@d < .@CTamnt; .@d++) {
+		.mid4 = $@mobid[.@d];
+		setunitdata .mid4,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid4,UMOB_STR,150+(2*.@level);
+		setunitdata .mid4,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid4,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid4,UMOB_INT,150+(2*.@level);
+		setunitdata .mid4,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid4,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid4,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid4,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid4,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid4,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid4,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid4,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid4,UMOB_HIT,1000;
+		setunitdata .mid4,UMOB_HP,4000000*.@level;
+		}
+		areamonster .@map$,267,180,277,216,"--ja--",.@mob5,.@CTamnt,.@label$;
+	for (.@e = 0; .@e < .@CTamnt; .@e++) {
+		.mid5 = $@mobid[.@e];
+		setunitdata .mid5,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid5,UMOB_STR,150+(2*.@level);
+		setunitdata .mid5,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid5,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid5,UMOB_INT,150+(2*.@level);
+		setunitdata .mid5,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid5,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid5,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid5,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid5,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid5,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid5,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid5,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid5,UMOB_HIT,1000;
+		setunitdata .mid5,UMOB_HP,4000000*.@level;
+		}
+		break;
+	case 15:
+	case 40:
+		areamonster .@map$,352,180,362,216,"--ja--",.@mvp1,.@CTmvp,.@label$;
+	for (.@f = 0; .@f < .@CTmvp; .@f++) {
+		.mvpid = $@mobid[.@f];
+		setunitdata .mvpid,UMOB_MAXHP,500000000+(50000000*.@level/5);
+		setunitdata .mvpid,UMOB_STR,200+(10*.@level/5);
+		setunitdata .mvpid,UMOB_AGI,200+(10*.@level/5);
+		setunitdata .mvpid,UMOB_VIT,200+(10*.@level/5);
+		setunitdata .mvpid,UMOB_INT,200+(10*.@level/5);
+		setunitdata .mvpid,UMOB_DEX,200+(10*.@level/5);
+		setunitdata .mvpid,UMOB_LUK,200+(10*.@level/5);
+		setunitdata .mvpid,UMOB_ATKMIN,8000+(200*.@level/5);
+		setunitdata .mvpid,UMOB_ATKMAX,11000+(500*.@level/5);
+		setunitdata .mvpid,UMOB_MATKMIN,5000+(100*.@level/5);
+		setunitdata .mvpid,UMOB_MATKMAX,6500+(250*.@level/5);
+		setunitdata .mvpid,UMOB_DEF,750+(50*.@level/5);
+		setunitdata .mvpid,UMOB_MDEF,350+(50*.@level/5);
+		setunitdata .mvpid,UMOB_HIT,1000;
+		setunitdata .mvpid,UMOB_HP,500000000+(50000000*.@level/5);
+		}
+		areamonster .@map$,352,180,362,216,"--ja--",.@mob1,.@CTamnt,.@label$;
+	for (.@a = 0; .@a < .@CTamnt; .@a++) {
+		.mid1 = $@mobid[.@a];
+		setunitdata .mid1,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid1,UMOB_STR,150+(2*.@level);
+		setunitdata .mid1,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid1,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid1,UMOB_INT,150+(2*.@level);
+		setunitdata .mid1,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid1,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid1,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid1,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid1,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid1,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid1,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid1,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid1,UMOB_HIT,1000;
+		setunitdata .mid1,UMOB_HP,4000000*.@level;
+		}
+		areamonster .@map$,352,180,362,216,"--ja--",.@mob2,.@CTamnt,.@label$;
+	for (.@b = 0; .@b < .@CTamnt; .@b++) {
+		.mid2 = $@mobid[.@b];
+		setunitdata .mid2,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid2,UMOB_STR,150+(2*.@level);
+		setunitdata .mid2,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid2,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid2,UMOB_INT,150+(2*.@level);
+		setunitdata .mid2,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid2,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid2,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid2,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid2,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid2,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid2,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid2,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid2,UMOB_HIT,1000;
+		setunitdata .mid2,UMOB_HP,4000000*.@level;
+		}
+		areamonster .@map$,352,180,362,216,"--ja--",.@mob3,.@CTamnt,.@label$;
+	for (.@c = 0; .@c < .@CTamnt; .@c++) {
+		.mid3 = $@mobid[.@c];
+		setunitdata .mid3,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid3,UMOB_STR,150+(2*.@level);
+		setunitdata .mid3,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid3,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid3,UMOB_INT,150+(2*.@level);
+		setunitdata .mid3,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid3,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid3,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid3,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid3,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid3,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid3,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid3,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid3,UMOB_HIT,1000;
+		setunitdata .mid3,UMOB_HP,4000000*.@level;
+		}
+		areamonster .@map$,352,180,362,216,"--ja--",.@mob4,.@CTamnt,.@label$;
+	for (.@d = 0; .@d < .@CTamnt; .@d++) {
+		.mid4 = $@mobid[.@d];
+		setunitdata .mid4,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid4,UMOB_STR,150+(2*.@level);
+		setunitdata .mid4,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid4,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid4,UMOB_INT,150+(2*.@level);
+		setunitdata .mid4,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid4,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid4,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid4,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid4,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid4,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid4,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid4,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid4,UMOB_HIT,1000;
+		setunitdata .mid4,UMOB_HP,4000000*.@level;
+		}
+		areamonster .@map$,352,180,362,216,"--ja--",.@mob5,.@CTamnt,.@label$;
+	for (.@e = 0; .@e < .@CTamnt; .@e++) {
+		.mid5 = $@mobid[.@e];
+		setunitdata .mid5,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid5,UMOB_STR,150+(2*.@level);
+		setunitdata .mid5,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid5,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid5,UMOB_INT,150+(2*.@level);
+		setunitdata .mid5,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid5,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid5,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid5,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid5,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid5,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid5,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid5,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid5,UMOB_HIT,1000;
+		setunitdata .mid5,UMOB_HP,4000000*.@level;
+		}
+		break;
+	case 16:
+	case 41:
+		areamonster .@map$,9,96,19,132,"--ja--",.@mob1,.@CTamnt,.@label$;
+	for (.@a = 0; .@a < .@CTamnt; .@a++) {
+		.mid1 = $@mobid[.@a];
+		setunitdata .mid1,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid1,UMOB_STR,150+(2*.@level);
+		setunitdata .mid1,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid1,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid1,UMOB_INT,150+(2*.@level);
+		setunitdata .mid1,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid1,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid1,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid1,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid1,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid1,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid1,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid1,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid1,UMOB_HIT,1000;
+		setunitdata .mid1,UMOB_HP,4000000*.@level;
+		}
+		areamonster .@map$,9,96,19,132,"--ja--",.@mob2,.@CTamnt,.@label$;
+	for (.@b = 0; .@b < .@CTamnt; .@b++) {
+		.mid2 = $@mobid[.@b];
+		setunitdata .mid2,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid2,UMOB_STR,150+(2*.@level);
+		setunitdata .mid2,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid2,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid2,UMOB_INT,150+(2*.@level);
+		setunitdata .mid2,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid2,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid1,UMOB_STR,150+(2*.@level);
+		setunitdata .mid1,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid1,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid1,UMOB_INT,150+(2*.@level);
+		setunitdata .mid1,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid1,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid2,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid2,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid2,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid2,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid2,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid2,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid2,UMOB_HIT,1000;
+		setunitdata .mid2,UMOB_HP,4000000*.@level;
+		}
+		areamonster .@map$,9,96,19,132,"--ja--",.@mob3,.@CTamnt,.@label$;
+	for (.@c = 0; .@c < .@CTamnt; .@c++) {
+		.mid3 = $@mobid[.@c];
+		setunitdata .mid3,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid3,UMOB_STR,150+(2*.@level);
+		setunitdata .mid3,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid3,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid3,UMOB_INT,150+(2*.@level);
+		setunitdata .mid3,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid3,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid3,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid3,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid3,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid3,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid3,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid3,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid3,UMOB_HIT,1000;
+		setunitdata .mid3,UMOB_HP,4000000*.@level;
+		}
+		areamonster .@map$,9,96,19,132,"--ja--",.@mob4,.@CTamnt,.@label$;
+	for (.@d = 0; .@d < .@CTamnt; .@d++) {
+		.mid4 = $@mobid[.@d];
+		setunitdata .mid4,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid4,UMOB_STR,150+(2*.@level);
+		setunitdata .mid4,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid4,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid4,UMOB_INT,150+(2*.@level);
+		setunitdata .mid4,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid4,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid4,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid4,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid4,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid4,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid4,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid4,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid4,UMOB_HIT,1000;
+		setunitdata .mid4,UMOB_HP,4000000*.@level;
+		}
+		areamonster .@map$,9,96,19,132,"--ja--",.@mob5,.@CTamnt,.@label$;
+	for (.@e = 0; .@e < .@CTamnt; .@e++) {
+		.mid5 = $@mobid[.@e];
+		setunitdata .mid5,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid5,UMOB_STR,150+(2*.@level);
+		setunitdata .mid5,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid5,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid5,UMOB_INT,150+(2*.@level);
+		setunitdata .mid5,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid5,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid5,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid5,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid5,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid5,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid5,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid5,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid5,UMOB_HIT,1000;
+		setunitdata .mid5,UMOB_HP,4000000*.@level;
+		}
+		break;
+	case 17:
+	case 42:
+		areamonster .@map$,93,96,103,132,"--ja--",.@mob1,.@CTamnt,.@label$;
+	for (.@a = 0; .@a < .@CTamnt; .@a++) {
+		.mid1 = $@mobid[.@a];
+		setunitdata .mid1,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid1,UMOB_STR,150+(2*.@level);
+		setunitdata .mid1,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid1,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid1,UMOB_INT,150+(2*.@level);
+		setunitdata .mid1,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid1,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid1,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid1,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid1,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid1,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid1,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid1,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid1,UMOB_HIT,1000;
+		setunitdata .mid1,UMOB_HP,4000000*.@level;
+		}
+		areamonster .@map$,93,96,103,132,"--ja--",.@mob2,.@CTamnt,.@label$;
+	for (.@b = 0; .@b < .@CTamnt; .@b++) {
+		.mid2 = $@mobid[.@b];
+		setunitdata .mid2,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid2,UMOB_STR,150+(2*.@level);
+		setunitdata .mid2,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid2,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid2,UMOB_INT,150+(2*.@level);
+		setunitdata .mid2,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid2,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid2,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid2,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid2,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid2,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid2,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid2,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid2,UMOB_HIT,1000;
+		setunitdata .mid2,UMOB_HP,4000000*.@level;
+		}
+		areamonster .@map$,93,96,103,132,"--ja--",.@mob3,.@CTamnt,.@label$;
+	for (.@c = 0; .@c < .@CTamnt; .@c++) {
+		.mid3 = $@mobid[.@c];
+		setunitdata .mid3,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid3,UMOB_STR,150+(2*.@level);
+		setunitdata .mid3,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid3,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid3,UMOB_INT,150+(2*.@level);
+		setunitdata .mid3,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid3,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid3,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid3,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid3,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid3,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid3,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid3,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid3,UMOB_HIT,1000;
+		setunitdata .mid3,UMOB_HP,4000000*.@level;
+		}
+		areamonster .@map$,93,96,103,132,"--ja--",.@mob4,.@CTamnt,.@label$;
+	for (.@d = 0; .@d < .@CTamnt; .@d++) {
+		.mid4 = $@mobid[.@d];
+		setunitdata .mid4,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid4,UMOB_STR,150+(2*.@level);
+		setunitdata .mid4,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid4,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid4,UMOB_INT,150+(2*.@level);
+		setunitdata .mid4,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid4,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid4,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid4,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid4,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid4,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid4,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid4,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid4,UMOB_HIT,1000;
+		setunitdata .mid4,UMOB_HP,4000000*.@level;
+		}
+		areamonster .@map$,93,96,103,132,"--ja--",.@mob5,.@CTamnt,.@label$;
+	for (.@e = 0; .@e < .@CTamnt; .@e++) {
+		.mid5 = $@mobid[.@e];
+		setunitdata .mid5,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid5,UMOB_STR,150+(2*.@level);
+		setunitdata .mid5,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid5,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid5,UMOB_INT,150+(2*.@level);
+		setunitdata .mid5,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid5,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid5,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid5,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid5,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid5,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid5,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid5,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid5,UMOB_HIT,1000;
+		setunitdata .mid5,UMOB_HP,4000000*.@level;
+		}
+		break;
+	case 18:
+	case 43:
+		areamonster .@map$,181,96,191,132,"--ja--",.@mob1,.@CTamnt,.@label$;
+	for (.@a = 0; .@a < .@CTamnt; .@a++) {
+		.mid1 = $@mobid[.@a];
+		setunitdata .mid1,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid1,UMOB_STR,150+(2*.@level);
+		setunitdata .mid1,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid1,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid1,UMOB_INT,150+(2*.@level);
+		setunitdata .mid1,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid1,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid1,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid1,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid1,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid1,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid1,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid1,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid1,UMOB_HIT,1000;
+		setunitdata .mid1,UMOB_HP,4000000*.@level;
+		}
+		areamonster .@map$,181,96,191,132,"--ja--",.@mob2,.@CTamnt,.@label$;
+	for (.@b = 0; .@b < .@CTamnt; .@b++) {
+		.mid2 = $@mobid[.@b];
+		setunitdata .mid2,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid2,UMOB_STR,150+(2*.@level);
+		setunitdata .mid2,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid2,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid2,UMOB_INT,150+(2*.@level);
+		setunitdata .mid2,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid2,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid2,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid2,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid2,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid2,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid2,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid2,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid2,UMOB_HIT,1000;
+		setunitdata .mid2,UMOB_HP,4000000*.@level;
+		}
+		areamonster .@map$,181,96,191,132,"--ja--",.@mob3,.@CTamnt,.@label$;
+	for (.@c = 0; .@c < .@CTamnt; .@c++) {
+		.mid3 = $@mobid[.@c];
+		setunitdata .mid3,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid3,UMOB_STR,150+(2*.@level);
+		setunitdata .mid3,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid3,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid3,UMOB_INT,150+(2*.@level);
+		setunitdata .mid3,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid3,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid3,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid3,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid3,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid3,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid3,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid3,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid3,UMOB_HIT,1000;
+		setunitdata .mid3,UMOB_HP,4000000*.@level;
+		}
+		areamonster .@map$,181,96,191,132,"--ja--",.@mob4,.@CTamnt,.@label$;
+	for (.@d = 0; .@d < .@CTamnt; .@d++) {
+		.mid4 = $@mobid[.@d];
+		setunitdata .mid4,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid4,UMOB_STR,150+(2*.@level);
+		setunitdata .mid4,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid4,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid4,UMOB_INT,150+(2*.@level);
+		setunitdata .mid4,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid4,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid4,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid4,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid4,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid4,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid4,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid4,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid4,UMOB_HIT,1000;
+		setunitdata .mid4,UMOB_HP,4000000*.@level;
+		}
+		areamonster .@map$,181,96,191,132,"--ja--",.@mob5,.@CTamnt,.@label$;
+	for (.@e = 0; .@e < .@CTamnt; .@e++) {
+		.mid5 = $@mobid[.@e];
+		setunitdata .mid5,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid5,UMOB_STR,150+(2*.@level);
+		setunitdata .mid5,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid5,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid5,UMOB_INT,150+(2*.@level);
+		setunitdata .mid5,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid5,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid5,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid5,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid5,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid5,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid5,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid5,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid5,UMOB_HIT,1000;
+		setunitdata .mid5,UMOB_HP,4000000*.@level;
+		}
+		break;
+	case 19:
+	case 44:
+		areamonster .@map$,267,96,277,132,"--ja--",.@mob1,.@CTamnt,.@label$;
+	for (.@a = 0; .@a < .@CTamnt; .@a++) {
+		.mid1 = $@mobid[.@a];
+		setunitdata .mid1,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid1,UMOB_STR,150+(2*.@level);
+		setunitdata .mid1,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid1,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid1,UMOB_INT,150+(2*.@level);
+		setunitdata .mid1,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid1,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid1,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid1,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid1,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid1,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid1,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid1,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid1,UMOB_HIT,1000;
+		setunitdata .mid1,UMOB_HP,4000000*.@level;
+		}
+		areamonster .@map$,267,96,277,132,"--ja--",.@mob2,.@CTamnt,.@label$;
+	for (.@b = 0; .@b < .@CTamnt; .@b++) {
+		.mid2 = $@mobid[.@b];
+		setunitdata .mid2,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid2,UMOB_STR,150+(2*.@level);
+		setunitdata .mid2,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid2,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid2,UMOB_INT,150+(2*.@level);
+		setunitdata .mid2,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid2,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid2,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid2,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid2,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid2,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid2,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid2,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid2,UMOB_HIT,1000;
+		setunitdata .mid2,UMOB_HP,4000000*.@level;
+		}
+		areamonster .@map$,267,96,277,132,"--ja--",.@mob3,.@CTamnt,.@label$;
+	for (.@c = 0; .@c < .@CTamnt; .@c++) {
+		.mid3 = $@mobid[.@c];
+		setunitdata .mid3,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid3,UMOB_STR,150+(2*.@level);
+		setunitdata .mid3,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid3,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid3,UMOB_INT,150+(2*.@level);
+		setunitdata .mid3,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid3,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid3,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid3,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid3,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid3,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid3,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid3,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid3,UMOB_HIT,1000;
+		setunitdata .mid3,UMOB_HP,4000000*.@level;
+		}
+		areamonster .@map$,267,96,277,132,"--ja--",.@mob4,.@CTamnt,.@label$;
+	for (.@d = 0; .@d < .@CTamnt; .@d++) {
+		.mid4 = $@mobid[.@d];
+		setunitdata .mid4,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid4,UMOB_STR,150+(2*.@level);
+		setunitdata .mid4,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid4,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid4,UMOB_INT,150+(2*.@level);
+		setunitdata .mid4,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid4,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid4,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid4,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid4,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid4,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid4,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid4,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid4,UMOB_HIT,1000;
+		setunitdata .mid4,UMOB_HP,4000000*.@level;
+		}
+		areamonster .@map$,267,96,277,132,"--ja--",.@mob5,.@CTamnt,.@label$;
+	for (.@e = 0; .@e < .@CTamnt; .@e++) {
+		.mid5 = $@mobid[.@e];
+		setunitdata .mid5,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid5,UMOB_STR,150+(2*.@level);
+		setunitdata .mid5,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid5,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid5,UMOB_INT,150+(2*.@level);
+		setunitdata .mid5,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid5,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid5,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid5,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid5,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid5,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid5,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid5,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid5,UMOB_HIT,1000;
+		setunitdata .mid5,UMOB_HP,4000000*.@level;
+		}
+		break;
+	case 20:
+	case 45:
+		areamonster .@map$,352,96,362,132,"--ja--",.@mvp1,.@CTmvp,.@label$;
+	for (.@f = 0; .@f < .@CTmvp; .@f++) {
+		.mvpid = $@mobid[.@f];
+		setunitdata .mvpid,UMOB_MAXHP,500000000+(50000000*.@level/5);
+		setunitdata .mvpid,UMOB_STR,200+(10*.@level/5);
+		setunitdata .mvpid,UMOB_AGI,200+(10*.@level/5);
+		setunitdata .mvpid,UMOB_VIT,200+(10*.@level/5);
+		setunitdata .mvpid,UMOB_INT,200+(10*.@level/5);
+		setunitdata .mvpid,UMOB_DEX,200+(10*.@level/5);
+		setunitdata .mvpid,UMOB_LUK,200+(10*.@level/5);
+		setunitdata .mvpid,UMOB_ATKMIN,8000+(200*.@level/5);
+		setunitdata .mvpid,UMOB_ATKMAX,11000+(500*.@level/5);
+		setunitdata .mvpid,UMOB_MATKMIN,5000+(100*.@level/5);
+		setunitdata .mvpid,UMOB_MATKMAX,6500+(250*.@level/5);
+		setunitdata .mvpid,UMOB_DEF,750+(50*.@level/5);
+		setunitdata .mvpid,UMOB_MDEF,350+(50*.@level/5);
+		setunitdata .mvpid,UMOB_HIT,1000;
+		setunitdata .mvpid,UMOB_HP,500000000+(50000000*.@level/5);
+		}
+		areamonster .@map$,352,96,362,132,"--ja--",.@mob1,.@CTamnt,.@label$;
+	for (.@a = 0; .@a < .@CTamnt; .@a++) {
+		.mid1 = $@mobid[.@a];
+		setunitdata .mid1,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid1,UMOB_STR,150+(2*.@level);
+		setunitdata .mid1,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid1,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid1,UMOB_INT,150+(2*.@level);
+		setunitdata .mid1,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid1,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid1,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid1,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid1,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid1,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid1,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid1,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid1,UMOB_HIT,1000;
+		setunitdata .mid1,UMOB_HP,4000000*.@level;
+		}
+		areamonster .@map$,352,96,362,132,"--ja--",.@mob2,.@CTamnt,.@label$;
+	for (.@b = 0; .@b < .@CTamnt; .@b++) {
+		.mid2 = $@mobid[.@b];
+		setunitdata .mid2,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid2,UMOB_STR,150+(2*.@level);
+		setunitdata .mid2,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid2,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid2,UMOB_INT,150+(2*.@level);
+		setunitdata .mid2,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid2,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid2,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid2,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid2,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid2,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid2,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid2,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid2,UMOB_HIT,1000;
+		setunitdata .mid2,UMOB_HP,4000000*.@level;
+		}
+		areamonster .@map$,352,96,362,132,"--ja--",.@mob3,.@CTamnt,.@label$;
+	for (.@c = 0; .@c < .@CTamnt; .@c++) {
+		.mid3 = $@mobid[.@c];
+		setunitdata .mid3,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid3,UMOB_STR,150+(2*.@level);
+		setunitdata .mid3,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid3,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid3,UMOB_INT,150+(2*.@level);
+		setunitdata .mid3,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid3,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid3,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid3,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid3,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid3,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid3,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid3,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid3,UMOB_HIT,1000;
+		setunitdata .mid3,UMOB_HP,4000000*.@level;
+		}
+		areamonster .@map$,352,96,362,132,"--ja--",.@mob4,.@CTamnt,.@label$;
+	for (.@d = 0; .@d < .@CTamnt; .@d++) {
+		.mid4 = $@mobid[.@d];
+		setunitdata .mid4,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid4,UMOB_STR,150+(2*.@level);
+		setunitdata .mid4,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid4,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid4,UMOB_INT,150+(2*.@level);
+		setunitdata .mid4,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid4,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid4,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid4,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid4,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid4,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid4,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid4,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid4,UMOB_HIT,1000;
+		setunitdata .mid4,UMOB_HP,4000000*.@level;
+		}
+		areamonster .@map$,352,96,362,132,"--ja--",.@mob5,.@CTamnt,.@label$;
+	for (.@e = 0; .@e < .@CTamnt; .@e++) {
+		.mid5 = $@mobid[.@e];
+		setunitdata .mid5,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid5,UMOB_STR,150+(2*.@level);
+		setunitdata .mid5,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid5,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid5,UMOB_INT,150+(2*.@level);
+		setunitdata .mid5,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid5,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid5,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid5,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid5,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid5,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid5,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid5,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid5,UMOB_HIT,1000;
+		setunitdata .mid5,UMOB_HP,4000000*.@level;
+		}
+		break;
+	case 21:
+	case 46:
+		areamonster .@map$,9,9,19,45,"--ja--",.@mob1,.@CTamnt,.@label$;
+	for (.@a = 0; .@a < .@CTamnt; .@a++) {
+		.mid1 = $@mobid[.@a];
+		setunitdata .mid1,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid1,UMOB_STR,150+(2*.@level);
+		setunitdata .mid1,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid1,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid1,UMOB_INT,150+(2*.@level);
+		setunitdata .mid1,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid1,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid1,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid1,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid1,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid1,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid1,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid1,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid1,UMOB_HIT,1000;
+		setunitdata .mid1,UMOB_HP,4000000*.@level;
+		}
+		areamonster .@map$,9,9,19,45,"--ja--",.@mob2,.@CTamnt,.@label$;
+	for (.@b = 0; .@b < .@CTamnt; .@b++) {
+		.mid2 = $@mobid[.@b];
+		setunitdata .mid2,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid2,UMOB_STR,150+(2*.@level);
+		setunitdata .mid2,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid2,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid2,UMOB_INT,150+(2*.@level);
+		setunitdata .mid2,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid2,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid2,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid2,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid2,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid2,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid2,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid2,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid2,UMOB_HIT,1000;
+		setunitdata .mid2,UMOB_HP,4000000*.@level;
+		}
+		areamonster .@map$,9,9,19,45,"--ja--",.@mob3,.@CTamnt,.@label$;
+	for (.@c = 0; .@c < .@CTamnt; .@c++) {
+		.mid3 = $@mobid[.@c];
+		setunitdata .mid3,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid3,UMOB_STR,150+(2*.@level);
+		setunitdata .mid3,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid3,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid3,UMOB_INT,150+(2*.@level);
+		setunitdata .mid3,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid3,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid3,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid3,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid3,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid3,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid3,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid3,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid3,UMOB_HIT,1000;
+		setunitdata .mid3,UMOB_HP,4000000*.@level;
+		}
+		areamonster .@map$,9,9,19,45,"--ja--",.@mob4,.@CTamnt,.@label$;
+	for (.@d = 0; .@d < .@CTamnt; .@d++) {
+		.mid4 = $@mobid[.@d];
+		setunitdata .mid4,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid4,UMOB_STR,150+(2*.@level);
+		setunitdata .mid4,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid4,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid4,UMOB_INT,150+(2*.@level);
+		setunitdata .mid4,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid4,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid4,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid4,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid4,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid4,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid4,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid4,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid4,UMOB_HIT,1000;
+		setunitdata .mid4,UMOB_HP,4000000*.@level;
+		}
+		areamonster .@map$,9,9,19,45,"--ja--",.@mob5,.@CTamnt,.@label$;
+	for (.@e = 0; .@e < .@CTamnt; .@e++) {
+		.mid5 = $@mobid[.@e];
+		setunitdata .mid5,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid5,UMOB_STR,150+(2*.@level);
+		setunitdata .mid5,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid5,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid5,UMOB_INT,150+(2*.@level);
+		setunitdata .mid5,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid5,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid5,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid5,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid5,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid5,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid5,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid5,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid5,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid5,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid5,UMOB_HIT,1000;
+		setunitdata .mid5,UMOB_HP,4000000*.@level;
+		}
+		break;
+	case 22:
+	case 47:
+		areamonster .@map$,93,9,103,45,"--ja--",.@mob1,.@CTamnt,.@label$;
+	for (.@a = 0; .@a < .@CTamnt; .@a++) {
+		.mid1 = $@mobid[.@a];
+		setunitdata .mid1,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid1,UMOB_STR,150+(2*.@level);
+		setunitdata .mid1,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid1,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid1,UMOB_INT,150+(2*.@level);
+		setunitdata .mid1,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid1,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid1,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid1,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid1,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid1,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid1,UMOB_HIT,1000;
+		setunitdata .mid1,UMOB_HP,4000000*.@level;
+		}
+		areamonster .@map$,93,9,103,45,"--ja--",.@mob2,.@CTamnt,.@label$;
+	for (.@b = 0; .@b < .@CTamnt; .@b++) {
+		.mid2 = $@mobid[.@b];
+		setunitdata .mid2,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid2,UMOB_STR,150+(2*.@level);
+		setunitdata .mid2,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid2,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid2,UMOB_INT,150+(2*.@level);
+		setunitdata .mid2,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid2,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid2,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid2,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid2,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid2,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid2,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid2,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid2,UMOB_HIT,1000;
+		setunitdata .mid2,UMOB_HP,4000000*.@level;
+		}
+		areamonster .@map$,93,9,103,45,"--ja--",.@mob3,.@CTamnt,.@label$;
+	for (.@c = 0; .@c < .@CTamnt; .@c++) {
+		.mid3 = $@mobid[.@c];
+		setunitdata .mid3,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid3,UMOB_STR,150+(2*.@level);
+		setunitdata .mid3,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid3,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid3,UMOB_INT,150+(2*.@level);
+		setunitdata .mid3,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid3,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid3,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid3,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid3,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid3,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid3,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid3,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid3,UMOB_HIT,1000;
+		setunitdata .mid3,UMOB_HP,4000000*.@level;
+		}
+		areamonster .@map$,93,9,103,45,"--ja--",.@mob4,.@CTamnt,.@label$;
+	for (.@d = 0; .@d < .@CTamnt; .@d++) {
+		.mid4 = $@mobid[.@d];
+		setunitdata .mid4,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid4,UMOB_STR,150+(2*.@level);
+		setunitdata .mid4,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid4,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid4,UMOB_INT,150+(2*.@level);
+		setunitdata .mid4,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid4,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid4,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid4,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid4,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid4,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid4,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid4,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid4,UMOB_HIT,1000;
+		setunitdata .mid4,UMOB_HP,4000000*.@level;
+		}
+		areamonster .@map$,93,9,103,45,"--ja--",.@mob5,.@CTamnt,.@label$;
+	for (.@e = 0; .@e < .@CTamnt; .@e++) {
+		.mid5 = $@mobid[.@e];
+		setunitdata .mid5,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid5,UMOB_STR,150+(2*.@level);
+		setunitdata .mid5,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid5,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid5,UMOB_INT,150+(2*.@level);
+		setunitdata .mid5,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid5,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid5,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid5,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid5,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid5,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid5,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid5,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid5,UMOB_HIT,1000;
+		setunitdata .mid5,UMOB_HP,4000000*.@level;
+		}
+		break;
+	case 23:
+	case 48:
+		areamonster .@map$,181,9,191,45,"--ja--",.@mob1,.@CTamnt,.@label$;
+	for (.@a = 0; .@a < .@CTamnt; .@a++) {
+		.mid1 = $@mobid[.@a];
+		setunitdata .mid1,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid1,UMOB_STR,150+(2*.@level);
+		setunitdata .mid1,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid1,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid1,UMOB_INT,150+(2*.@level);
+		setunitdata .mid1,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid1,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid1,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid1,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid1,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid1,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid1,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid1,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid1,UMOB_HIT,1000;
+		setunitdata .mid1,UMOB_HP,4000000*.@level;
+		}
+		areamonster .@map$,181,9,191,45,"--ja--",.@mob2,.@CTamnt,.@label$;
+	for (.@b = 0; .@b < .@CTamnt; .@b++) {
+		.mid2 = $@mobid[.@b];
+		setunitdata .mid2,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid2,UMOB_STR,150+(2*.@level);
+		setunitdata .mid2,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid2,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid2,UMOB_INT,150+(2*.@level);
+		setunitdata .mid2,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid2,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid2,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid2,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid2,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid2,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid2,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid2,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid2,UMOB_HIT,1000;
+		setunitdata .mid2,UMOB_HP,4000000*.@level;
+		}
+		areamonster .@map$,181,9,191,45,"--ja--",.@mob3,.@CTamnt,.@label$;
+	for (.@c = 0; .@c < .@CTamnt; .@c++) {
+		.mid3 = $@mobid[.@c];
+		setunitdata .mid3,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid3,UMOB_STR,150+(2*.@level);
+		setunitdata .mid3,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid3,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid3,UMOB_INT,150+(2*.@level);
+		setunitdata .mid3,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid3,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid3,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid3,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid3,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid3,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid3,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid3,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid3,UMOB_HIT,1000;
+		setunitdata .mid3,UMOB_HP,4000000*.@level;
+		}
+		areamonster .@map$,181,9,191,45,"--ja--",.@mob4,.@CTamnt,.@label$;
+	for (.@d = 0; .@d < .@CTamnt; .@d++) {
+		.mid4 = $@mobid[.@d];
+		setunitdata .mid4,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid4,UMOB_STR,150+(2*.@level);
+		setunitdata .mid4,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid4,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid4,UMOB_INT,150+(2*.@level);
+		setunitdata .mid4,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid4,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid4,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid4,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid4,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid4,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid4,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid4,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid4,UMOB_HIT,1000;
+		setunitdata .mid4,UMOB_HP,4000000*.@level;
+		}
+		areamonster .@map$,181,9,191,45,"--ja--",.@mob5,.@CTamnt,.@label$;
+	for (.@e = 0; .@e < .@CTamnt; .@e++) {
+		.mid5 = $@mobid[.@e];
+		setunitdata .mid5,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid5,UMOB_STR,150+(2*.@level);
+		setunitdata .mid5,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid5,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid5,UMOB_INT,150+(2*.@level);
+		setunitdata .mid5,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid5,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid5,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid5,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid5,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid5,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid5,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid5,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid5,UMOB_HIT,1000;
+		setunitdata .mid5,UMOB_HP,4000000*.@level;
+		}
+		break;
+	case 24:
+	case 49:
+		areamonster .@map$,267,9,277,45,"--ja--",.@mob1,.@CTamnt,.@label$;
+	for (.@a = 0; .@a < .@CTamnt; .@a++) {
+		.mid1 = $@mobid[.@a];
+		setunitdata .mid1,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid1,UMOB_STR,150+(2*.@level);
+		setunitdata .mid1,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid1,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid1,UMOB_INT,150+(2*.@level);
+		setunitdata .mid1,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid1,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid1,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid1,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid1,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid1,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid1,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid1,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid1,UMOB_HIT,1000;
+		setunitdata .mid1,UMOB_HP,4000000*.@level;
+		}
+		areamonster .@map$,267,9,277,45,"--ja--",.@mob2,.@CTamnt,.@label$;
+	for (.@b = 0; .@b < .@CTamnt; .@b++) {
+		.mid2 = $@mobid[.@b];
+		setunitdata .mid2,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid2,UMOB_STR,150+(2*.@level);
+		setunitdata .mid2,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid2,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid2,UMOB_INT,150+(2*.@level);
+		setunitdata .mid2,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid2,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid2,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid2,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid2,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid2,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid2,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid2,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid2,UMOB_HIT,1000;
+		setunitdata .mid2,UMOB_HP,4000000*.@level;
+		}
+		areamonster .@map$,267,9,277,45,"--ja--",.@mob3,.@CTamnt,.@label$;
+	for (.@c = 0; .@c < .@CTamnt; .@c++) {
+		.mid3 = $@mobid[.@c];
+		setunitdata .mid3,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid3,UMOB_STR,150+(2*.@level);
+		setunitdata .mid3,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid3,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid3,UMOB_INT,150+(2*.@level);
+		setunitdata .mid3,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid3,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid3,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid3,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid3,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid3,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid3,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid3,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid3,UMOB_HIT,1000;
+		setunitdata .mid3,UMOB_HP,4000000*.@level;
+		}		
+		areamonster .@map$,267,9,277,45,"--ja--",.@mob4,.@CTamnt,.@label$;
+	for (.@d = 0; .@d < .@CTamnt; .@d++) {
+		.mid4 = $@mobid[.@d];
+		setunitdata .mid4,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid4,UMOB_STR,150+(2*.@level);
+		setunitdata .mid4,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid4,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid4,UMOB_INT,150+(2*.@level);
+		setunitdata .mid4,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid4,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid4,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid4,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid4,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid4,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid4,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid4,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid4,UMOB_HIT,1000;
+		setunitdata .mid4,UMOB_HP,4000000*.@level;
+		}
+		areamonster .@map$,267,9,277,45,"--ja--",.@mob5,.@CTamnt,.@label$;
+	for (.@e = 0; .@e < .@CTamnt; .@e++) {
+		.mid5 = $@mobid[.@e];
+		setunitdata .mid5,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid5,UMOB_STR,150+(2*.@level);
+		setunitdata .mid5,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid5,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid5,UMOB_INT,150+(2*.@level);
+		setunitdata .mid5,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid5,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid5,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid5,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid5,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid5,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid5,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid5,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid5,UMOB_HIT,1000;
+		setunitdata .mid5,UMOB_HP,4000000*.@level;
+		}
+		break;
+	case 25:
+	case 50:
+		areamonster .@map$,352,9,362,45,"--ja--",.@mvp1,.@CTmvp,.@label$;
+	for (.@f = 0; .@f < .@CTmvp; .@f++) {
+		.mvpid = $@mobid[.@f];
+		setunitdata .mvpid,UMOB_MAXHP,500000000+(50000000*.@level/5);
+		setunitdata .mvpid,UMOB_STR,200+(10*.@level/5);
+		setunitdata .mvpid,UMOB_AGI,200+(10*.@level/5);
+		setunitdata .mvpid,UMOB_VIT,200+(10*.@level/5);
+		setunitdata .mvpid,UMOB_INT,200+(10*.@level/5);
+		setunitdata .mvpid,UMOB_DEX,200+(10*.@level/5);
+		setunitdata .mvpid,UMOB_LUK,200+(10*.@level/5);
+		setunitdata .mvpid,UMOB_ATKMIN,8000+(200*.@level/5);
+		setunitdata .mvpid,UMOB_ATKMAX,11000+(500*.@level/5);
+		setunitdata .mvpid,UMOB_MATKMIN,5000+(100*.@level/5);
+		setunitdata .mvpid,UMOB_MATKMAX,6500+(250*.@level/5);
+		setunitdata .mvpid,UMOB_DEF,750+(50*.@level/5);
+		setunitdata .mvpid,UMOB_MDEF,350+(50*.@level/5);
+		setunitdata .mvpid,UMOB_HIT,1000;
+		setunitdata .mvpid,UMOB_HP,500000000+(50000000*.@level/5);
+		}
+		areamonster .@map$,352,9,362,45,"--ja--",.@mob1,.@CTamnt,.@label$;
+	for (.@a = 0; .@a < .@CTamnt; .@a++) {
+		.mid1 = $@mobid[.@a];
+		setunitdata .mid1,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid1,UMOB_STR,150+(2*.@level);
+		setunitdata .mid1,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid1,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid1,UMOB_INT,150+(2*.@level);
+		setunitdata .mid1,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid1,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid1,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid1,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid1,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid1,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid1,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid1,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid1,UMOB_HIT,1000;
+		setunitdata .mid1,UMOB_HP,4000000*.@level;
+		}
+		areamonster .@map$,352,9,362,45,"--ja--",.@mob2,.@CTamnt,.@label$;
+	for (.@b = 0; .@b < .@CTamnt; .@b++) {
+		.mid2 = $@mobid[.@b];
+		setunitdata .mid2,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid2,UMOB_STR,150+(2*.@level);
+		setunitdata .mid2,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid2,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid2,UMOB_INT,150+(2*.@level);
+		setunitdata .mid2,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid2,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid2,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid2,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid2,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid2,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid2,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid2,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid2,UMOB_HIT,1000;
+		setunitdata .mid2,UMOB_HP,4000000*.@level;
+		}
+	areamonster .@map$,352,9,362,45,"--ja--",.@mob3,.@CTamnt,.@label$;
+	for (.@c = 0; .@c < .@CTamnt; .@c++) {
+		.mid3 = $@mobid[.@c];
+		setunitdata .mid3,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid3,UMOB_STR,150+(2*.@level);
+		setunitdata .mid3,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid3,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid3,UMOB_INT,150+(2*.@level);
+		setunitdata .mid3,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid3,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid3,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid3,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid3,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid3,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid3,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid3,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid3,UMOB_HIT,1000;
+		setunitdata .mid3,UMOB_HP,4000000*.@level;
+		}	
+		areamonster .@map$,352,9,362,45,"--ja--",.@mob4,.@CTamnt,.@label$;
+	for (.@d = 0; .@d < .@CTamnt; .@d++) {
+		.mid4 = $@mobid[.@d];
+		setunitdata .mid4,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid4,UMOB_STR,150+(2*.@level);
+		setunitdata .mid4,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid4,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid4,UMOB_INT,150+(2*.@level);
+		setunitdata .mid4,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid4,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid4,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid4,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid4,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid4,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid4,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid4,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid4,UMOB_HIT,1000;
+		setunitdata .mid4,UMOB_HP,4000000*.@level;
+		}
+		areamonster .@map$,352,9,362,45,"--ja--",.@mob5,.@CTamnt,.@label$;
+	for (.@e = 0; .@e < .@CTamnt; .@e++) {
+		.mid5 = $@mobid[.@e];
+		setunitdata .mid5,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid5,UMOB_STR,150+(2*.@level);
+		setunitdata .mid5,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid5,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid5,UMOB_INT,150+(2*.@level);
+		setunitdata .mid5,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid5,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid5,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid5,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid5,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid5,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid5,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid5,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid5,UMOB_HIT,1000;
+		setunitdata .mid5,UMOB_HP,4000000*.@level;
+		}
+		break;
+	case 26:
+		areamonster .@map$,7,351,17,387,"--ja--",.@mob1,.@CTamnt,.@label$;
+	for (.@a = 0; .@a < .@CTamnt; .@a++) {
+		.mid1 = $@mobid[.@a];
+		setunitdata .mid1,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid1,UMOB_STR,150+(2*.@level);
+		setunitdata .mid1,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid1,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid1,UMOB_INT,150+(2*.@level);
+		setunitdata .mid1,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid1,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid1,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid1,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid1,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid1,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid1,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid1,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid1,UMOB_HIT,1000;
+		setunitdata .mid1,UMOB_HP,4000000*.@level;
+		}
+		areamonster .@map$,7,351,17,387,"--ja--",.@mob2,.@CTamnt,.@label$;
+	for (.@b = 0; .@b < .@CTamnt; .@b++) {
+		.mid2 = $@mobid[.@b];
+		setunitdata .mid2,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid2,UMOB_STR,150+(2*.@level);
+		setunitdata .mid2,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid2,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid2,UMOB_INT,150+(2*.@level);
+		setunitdata .mid2,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid2,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid2,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid2,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid2,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid2,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid2,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid2,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid2,UMOB_HIT,1000;
+		setunitdata .mid2,UMOB_HP,4000000*.@level;
+		}
+		areamonster .@map$,7,351,17,387,"--ja--",.@mob3,.@CTamnt,.@label$;
+	for (.@c = 0; .@c < .@CTamnt; .@c++) {
+		.mid3 = $@mobid[.@c];
+		setunitdata .mid3,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid3,UMOB_STR,150+(2*.@level);
+		setunitdata .mid3,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid3,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid3,UMOB_INT,150+(2*.@level);
+		setunitdata .mid3,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid3,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid3,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid3,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid3,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid3,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid3,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid3,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid3,UMOB_HIT,1000;
+		setunitdata .mid3,UMOB_HP,4000000*.@level;
+		}
+		areamonster .@map$,7,351,17,387,"--ja--",.@mob4,.@CTamnt,.@label$;
+	for (.@d = 0; .@d < .@CTamnt; .@d++) {
+		.mid4 = $@mobid[.@d];
+		setunitdata .mid4,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid4,UMOB_STR,150+(2*.@level);
+		setunitdata .mid4,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid4,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid4,UMOB_INT,150+(2*.@level);
+		setunitdata .mid4,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid4,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid4,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid4,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid4,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid4,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid4,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid4,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid4,UMOB_HIT,1000;
+		setunitdata .mid4,UMOB_HP,4000000*.@level;
+		}
+		areamonster .@map$,7,351,17,387,"--ja--",.@mob5,.@CTamnt,.@label$;
+	for (.@e = 0; .@e < .@CTamnt; .@e++) {
+		.mid5 = $@mobid[.@e];
+		setunitdata .mid5,UMOB_MAXHP,4000000*.@level;
+		setunitdata .mid5,UMOB_STR,150+(2*.@level);
+		setunitdata .mid5,UMOB_AGI,150+(2*.@level);
+		setunitdata .mid5,UMOB_VIT,150+(2*.@level);
+		setunitdata .mid5,UMOB_INT,150+(2*.@level);
+		setunitdata .mid5,UMOB_DEX,150+(2*.@level);
+		setunitdata .mid5,UMOB_LUK,150+(2*.@level);
+		setunitdata .mid5,UMOB_ATKMIN,2000+(50*.@level);
+		setunitdata .mid5,UMOB_ATKMAX,2500+(80*.@level);
+		setunitdata .mid5,UMOB_MATKMIN,1000+(50*.@level);
+		setunitdata .mid5,UMOB_MATKMAX,1300+(80*.@level);
+		setunitdata .mid5,UMOB_DEF,400+(30*.@level);
+		setunitdata .mid5,UMOB_MDEF,100+(20*.@level);
+		setunitdata .mid5,UMOB_HIT,1000;
+		setunitdata .mid5,UMOB_HP,4000000*.@level;
+		}
+		break;
+	}
+	return;
+}
+
+function	script	F_CTower_Warp	{
+
+	set .@level, getarg(0);
+	set .@map$, getarg(1);
+
+	switch(.@level) {
+		case 2: warp .@map$,136,354; break;
+		case 3: warp .@map$,224,354; break;
+		case 4: warp .@map$,310,354; break;
+		case 5: warp .@map$,395,354; break;
+		case 6: warp .@map$,52,270; break;
+		case 7: warp .@map$,136,270; break;
+		case 8: warp .@map$,224,270; break;
+		case 9: warp .@map$,310,270; break;
+		case 10: warp .@map$,395,270; break;
+		case 11: warp .@map$,52,183; break;
+		case 12: warp .@map$,136,183; break;
+		case 13: warp .@map$,224,183; break;
+		case 14: warp .@map$,310,183; break;
+		case 15: warp .@map$,395,183; break;
+		case 16: warp .@map$,52,99; break;
+		case 17: warp .@map$,136,99; break;
+		case 18: warp .@map$,224,99; break;
+		case 19: warp .@map$,310,99; break;
+		case 20: warp .@map$,395,99; break;
+		case 21: warp .@map$,52,12; break;
+		case 22: warp .@map$,136,12; break;
+		case 23: warp .@map$,224,12; break;
+		case 24: warp .@map$,310,12; break;
+		case 25:
+			if(.@easy_md){warp .@map$,309,12; break;}
+			else {	warp .@map$,395,12; break; }
+
+		case 27: warp .@map$,136,354; break;
+		case 28: warp .@map$,224,354; break;
+		case 29: warp .@map$,310,354; break;
+		case 30: warp .@map$,395,354; break;
+		case 31: warp .@map$,52,270; break;
+		case 32: warp .@map$,136,270; break;
+		case 33: warp .@map$,224,270; break;
+		case 34: warp .@map$,310,270; break;
+		case 35: warp .@map$,395,270; break;
+		case 36: warp .@map$,52,183; break;
+		case 37: warp .@map$,136,183; break;
+		case 38: warp .@map$,224,183; break;
+		case 39: warp .@map$,310,183; break;
+		case 40: warp .@map$,395,183; break;
+		case 41: warp .@map$,52,99; break;
+		case 42: warp .@map$,136,99; break;
+		case 43: warp .@map$,224,99; break;
+		case 44: warp .@map$,310,99; break;
+		case 45: warp .@map$,395,99; break;
+		case 46: warp .@map$,52,12; break;
+		case 47: warp .@map$,136,12; break;
+		case 48: warp .@map$,224,12; break;
+		case 49: warp .@map$,310,12; break;
+		case 50: warp .@map$,360,16; break;
+	}
+	return;
+}
+//=====================================================================================================================
+// Levels 1-25
+//=====================================================================================================================
+1@ch_t,50,360,0	script	Oscar#Wpr	-1,{
+	mes "Aquele que espalhar os Meteorite Powders neste local ficará um passo mais perto do Mestre Betelgeuse, o Senhor e Mestre da torre...";
+	next;
+
+	setarray .@level$[1],"4º","9º","14º","19º","24º";
+	setarray .@map$[1],"1@ch_t","1@ch_t","1@ch_t","1@ch_t","1@ch_t";
+	setarray .@mX[1],"310","310","310","310","310";
+	setarray .@mY[1],"354","270","183","99","12";
+	set .@i, select("4º Nível:9º Nível:14º Nível:19º Nível:24º Nível");
+	set .@c, .@i*40;
+
+	if (countitem(1000372) < .@c) {
+		mes "-Aviso-";
+		mes "Para teleportar para o "+.@level$[.@i]+" nível, você precisa "+.@c+" Meteorite Powders.";
+		close;
+	}
+	delitem 1000372,.@c; //Meteorite Powder
+	mapannounce instance_mapname("1@ch_t"), strcharinfo(0)+". Você será teleportado para o "+.@level$[.@i]+" Level.",bc_map,"0x00ff99";
+	warp instance_mapname(.@map$[.@i]),.@mX[@i],.@mY[@i];
+	close;
+
+OnInstanceInit:
+	initnpctimer;
+	end;
+
+OnTimer10000:
+	mapannounce instance_mapname("1@ch_t"), "Aviso: Domar um monstro não conta para derrotá-lo.",bc_map,"0xff0000";
+	stopnpctimer;
+	end;
+}
+
+3@ch_t,8,105,1	script	#TreasureControl	844,{
+	end;
+
+OnInstanceInit:
+	disablenpc instance_npcname("#TreasurePowS1");
+	disablenpc instance_npcname("#TreasurePowS2");
+	disablenpc instance_npcname("#TreasurePowS3");
+	disablenpc instance_npcname("#TreasurePowS4");
+	disablenpc instance_npcname("#TreasurePowS5");
+
+
+	disablenpc instance_npcname("#TreasureStaS1");
+	disablenpc instance_npcname("#TreasureStaS2");
+	disablenpc instance_npcname("#TreasureStaS3");
+	disablenpc instance_npcname("#TreasureStaS4");
+	disablenpc instance_npcname("#TreasureStaS5");
+
+	disablenpc instance_npcname("#TreasureConS1");
+	disablenpc instance_npcname("#TreasureConS2");
+	disablenpc instance_npcname("#TreasureConS3");
+	disablenpc instance_npcname("#TreasureConS4");
+	disablenpc instance_npcname("#TreasureConS5");
+
+
+	disablenpc instance_npcname("#TreasureCrtS1");
+	disablenpc instance_npcname("#TreasureCrtS2");
+	disablenpc instance_npcname("#TreasureCrtS3");
+	disablenpc instance_npcname("#TreasureCrtS4");
+	disablenpc instance_npcname("#TreasureCrtS5");
+
+	disablenpc instance_npcname("#TreasureSplS1");
+	disablenpc instance_npcname("#TreasureSplS2");
+	disablenpc instance_npcname("#TreasureSplS3");
+	disablenpc instance_npcname("#TreasureSplS4");
+	disablenpc instance_npcname("#TreasureSplS5");
+
+	disablenpc instance_npcname("#TreasureWisS1");
+	disablenpc instance_npcname("#TreasureWisS2");
+	disablenpc instance_npcname("#TreasureWisS3");
+	disablenpc instance_npcname("#TreasureWisS4");
+	disablenpc instance_npcname("#TreasureWisS5");
+
+	disablenpc instance_npcname("#TreasurePowM1");
+	disablenpc instance_npcname("#TreasurePowM2");
+	disablenpc instance_npcname("#TreasurePowM3");
+	disablenpc instance_npcname("#TreasurePowM4");
+	disablenpc instance_npcname("#TreasurePowM5");
+
+	disablenpc instance_npcname("#TreasureStaM1");
+	disablenpc instance_npcname("#TreasureStaM2");
+	disablenpc instance_npcname("#TreasureStaM3");
+	disablenpc instance_npcname("#TreasureStaM4");
+	disablenpc instance_npcname("#TreasureStaM5");
+
+	disablenpc instance_npcname("#TreasureConM1");
+	disablenpc instance_npcname("#TreasureConM2");
+	disablenpc instance_npcname("#TreasureConM3");
+	disablenpc instance_npcname("#TreasureConM4");
+	disablenpc instance_npcname("#TreasureConM5");
+
+	disablenpc instance_npcname("#TreasureCrtM1");
+	disablenpc instance_npcname("#TreasureCrtM2");
+	disablenpc instance_npcname("#TreasureCrtM3");
+	disablenpc instance_npcname("#TreasureCrtM4");
+	disablenpc instance_npcname("#TreasureCrtM5");
+
+	disablenpc instance_npcname("#TreasureSplM1");
+	disablenpc instance_npcname("#TreasureSplM2");
+	disablenpc instance_npcname("#TreasureSplM3");
+	disablenpc instance_npcname("#TreasureSplM4");
+	disablenpc instance_npcname("#TreasureSplM5");
+
+
+	disablenpc instance_npcname("#TreasureWisM1");
+	disablenpc instance_npcname("#TreasureWisM2");
+	disablenpc instance_npcname("#TreasureWisM3");
+	disablenpc instance_npcname("#TreasureWisM4");
+	disablenpc instance_npcname("#TreasureWisM5");
+	disablenpc instance_npcname("#TreasureWeapH1");
+	disablenpc instance_npcname("#TreasureHP1");
+
+	end;
+}
+
+1@ch_t,29,365,1	script	#1CTF Controller	844,{
+	end;
+
+OnInstanceInit:
+	callfunc "F_CTower_Monster",
+		1,
+		instance_mapname("1@ch_t"),
+		instance_npcname("#1CTF Controller")+"::OnMyMobDead";
+	end;
+
+OnMyMobDead:
+	if('unreal && !'active){
+		setmapflag instance_mapname("1@ch_t"),mf_constunreal;
+		setmapflag instance_mapname("2@ch_t"),mf_constunreal;
+		setmapflag instance_mapname("3@ch_t"),mf_constunreal;
+		setmapflag instance_mapname("4@ch_t"),mf_constunreal;
+		set 'active,1;
+	}
+	set .@map$, instance_mapname("1@ch_t");
+	set .@mob_dead_num,mobcount(.@map$,instance_npcname("#1CTF Controller")+"::OnMyMobDead");
+	if (.@mob_dead_num < 1) {
+		initnpctimer;
+	} else
+		mapannounce .@map$, "Monstros restantes no 1º Nível - "+.@mob_dead_num,bc_map,"0x00ff99";
+	end;
+
+OnTimer5000:
+	mapannounce instance_mapname("1@ch_t"), "Todos os Monstros do 1º Nível foram derrotados.",bc_map,"0xffff00";
+	donpcevent instance_npcname("1FGate202tower")+"::OnEnable";
+	stopnpctimer;
+	end;
+}
+
+1@ch_t,12,393,0	script	1FGate202tower	45,2,2,{
+	end;
+
+OnInstanceInit:
+	disablenpc instance_npcname(strnpcinfo(0));
+	end;
+
+OnEnable:
+	enablenpc instance_npcname(strnpcinfo(0));
+	callfunc "F_CTower_Monster",
+		atoi(replacestr(strnpcinfo(0),"FGate202tower","")) + 1,
+		strnpcinfo(4),
+		instance_npcname(strnpcinfo(0))+"::OnMyMobDead";
+		setnpcdisplay("strnpcinfo(1)", "#Warp");
+	end;
+
+OnTouch_:
+	callfunc "F_CTower_Warp",
+		atoi(replacestr(strnpcinfo(0),"FGate202tower","")) + 1,
+		strnpcinfo(4);
+	end;
+
+OnMyMobDead:
+	set .@map$, strnpcinfo(4);
+	set .@level, atoi(replacestr(strnpcinfo(0),"FGate202tower","")) + 1;
+	set .@mob_dead_num,mobcount(.@map$,instance_npcname(strnpcinfo(0))+"::OnMyMobDead");
+	if (.@mob_dead_num < 1) {
+		initnpctimer;
+	} else
+		mapannounce .@map$, "Monstros restantes no "+callfunc("F_GetNumSuffix",.@level)+" Nível - "+.@mob_dead_num,bc_map,"0x00ff99";
+	end;
+
+OnTimer5000:
+	set .@level, atoi(replacestr(strnpcinfo(0),"FGate202tower","")) + 1;
+	mapannounce strnpcinfo(4), "Todos os monstros do "+callfunc("F_GetNumSuffix",.@level)+" Nível foram derrotados.",bc_map,"0xffff00";
+	donpcevent instance_npcname(.@level+"FGate202tower")+"::OnEnable";
+	stopnpctimer;
+	end;
+}
+1@ch_t,96,393,0	duplicate(1FGate202tower)	2FGate202tower	45,2,2
+1@ch_t,184,393,0	duplicate(1FGate202tower)	3FGate202tower	45,2,2
+1@ch_t,270,393,0	duplicate(1FGate202tower)	4FGate202tower	45,2,2
+1@ch_t,355,393,0	duplicate(1FGate202tower)	5FGate202tower	45,2,2
+1@ch_t,12,309,0	duplicate(1FGate202tower)	6FGate202tower	45,2,2
+1@ch_t,96,309,0	duplicate(1FGate202tower)	7FGate202tower	45,2,2
+1@ch_t,184,309,0	duplicate(1FGate202tower)	8FGate202tower	45,2,2
+1@ch_t,270,309,0	duplicate(1FGate202tower)	9FGate202tower	45,2,2
+1@ch_t,355,309,0	duplicate(1FGate202tower)	10FGate202tower	45,2,2
+1@ch_t,12,222,0	duplicate(1FGate202tower)	11FGate202tower	45,2,2
+1@ch_t,96,222,0	duplicate(1FGate202tower)	12FGate202tower	45,2,2
+1@ch_t,184,222,0	duplicate(1FGate202tower)	13FGate202tower	45,2,2
+1@ch_t,270,222,0	duplicate(1FGate202tower)	14FGate202tower	45,2,2
+1@ch_t,355,222,0	duplicate(1FGate202tower)	15FGate202tower	45,2,2
+1@ch_t,12,138,0	duplicate(1FGate202tower)	16FGate202tower	45,2,2
+1@ch_t,96,138,0	duplicate(1FGate202tower)	17FGate202tower	45,2,2
+1@ch_t,184,138,0	duplicate(1FGate202tower)	18FGate202tower	45,2,2
+1@ch_t,270,138,0	duplicate(1FGate202tower)	19FGate202tower	45,2,2
+1@ch_t,355,138,0	duplicate(1FGate202tower)	20FGate202tower	45,2,2
+1@ch_t,12,51,0	duplicate(1FGate202tower)	21FGate202tower	45,2,2
+1@ch_t,96,51,0	duplicate(1FGate202tower)	22FGate202tower	45,2,2
+1@ch_t,184,51,0	duplicate(1FGate202tower)	23FGate202tower	45,2,2
+1@ch_t,270,51,0	duplicate(1FGate202tower)	24FGate202tower	45,2,2
+
+1@ch_t,0,0,0	script	25FGate202tower	111,{
+	end;
+
+OnInstanceInit:
+	disablenpc instance_npcname("25FGate202tower");
+	end;
+
+OnEnable:
+	enablenpc instance_npcname("Oscar#F25");
+	disablenpc instance_npcname("25FGate202tower");
+	end;
+}
+
+1@ch_t,355,51,9	script	Oscar#F25	10307,{
+mes "[Oscar]";
+if (is_party_leader() == true) {
+mes "Você chegou até aqui, quer continuar?";
+switch(select("Sim:Não")){
+case 1:
+mes "[Oscar]";
+mes "Vá para a próximo mapa";
+mes "Boa sorte";
+enablenpc instance_npcname("#25FGate202towerC");
+donpcevent instance_npcname("#202FShadowDust")+"::OnEnable";
+disablenpc instance_npcname("Oscar#F25");
+end;
+
+case 2:
+mes "Oscar";
+mes "Vá para a próximo mapa";
+mes "Boa sorte";
+enablenpc instance_npcname("#25FGate202tower");
+disablenpc instance_npcname("Oscar#F25");
+end;
+	}
+}
+
+mes "Você chegou tão longe";
+close;
+
+OnInstanceInit:
+	disablenpc instance_npcname("Oscar#F25");
+	end;
+}
+
+1@ch_t,355,51,0	script	#25FGate202tower	10007,2,2,{
+
+OnTouch_:
+	warp instance_mapname("2@ch_t"),104,108;
+	end;
+
+OnInstanceInit:
+	disablenpc instance_npcname("#25FGate202tower");
+	end;
+
+}
+
+1@ch_t,355,51,0	script	#25FGate202towerC	10007,2,2,{
+
+OnTouch_:
+	warp instance_mapname("4@ch_t"),50,355;
+	end;
+
+OnInstanceInit:
+	disablenpc instance_npcname("#25FGate202towerC");
+	end;
+}
+
+1@ch_t,71,4,0	script	#CTBroadcast Mode1	844,{
+	end;
+
+OnInstanceInit:
+	initnpctimer;
+	end;
+
+OnTimer15000:
+OnTimer60000:
+	mapannounce instance_mapname("1@ch_t"), "Aviso: Em qualquer situação anormal em que você derrote um monstro, você não poderá avançar para o próximo nível!",bc_map,"0xff0000";
+	end;
+OnTimer120000:
+	mapannounce instance_mapname("1@ch_t"), "Aviso: Em qualquer situação anormal em que você derrote um monstro, você não poderá avançar para o próximo nível!",bc_map,"0xff0000";
+	stopnpctimer;
+	end;
+}
+
+1@ch_t,71,1,0	script	#CTManager Mode1	844,{
+end;
+	callfunc "F_GM_NPC";
+	mes "Por favor insira a senha.";
+	set .@i, callfunc("F_GM_NPC","refactsw22221",1);
+	next;
+	if (.@i == 1) {
+		mes "Este NPC gerencia a torre do 1º ao 25º Nível.";
+		mes "Por favor, insira o número do Nível para abrir.";
+		mes "(i.g.: 1F->1, 25F->25)";
+		input .@input,1,25;
+		next;
+		if (.@input < 1 || .@input > 25)
+			mes "Você só pode inserir um número de 1 a 25.";
+		else {
+			donpcevent instance_npcname(.@input+"FGate202tower")+"::OnEnable";
+			mes "*** Nível "+ .@input + " agora está sendo aberto. ***";
+		}
+	}
+	close;
+}
+
+
+// Level 26
+//============================================================
+2@ch_t,106,109,2	script	Lucid Crystal#202	844,{
+		mes "^0000ffUma voz misteriosa ecoa pela sala enquanto você toca o cristal lúcido irradiando uma luz forte.^000000";
+		next;
+		mes "[Mysterious Voice]";
+		mes "Bem-vindos ao meu lugar, intrusos. Eu me diverti vendo você suportar todas as dificuldades que coloquei diante de você.";
+		next;
+		mes "[Mysterious Voice]";
+		mes "Infelizmente, chegou a hora de terminar o show.";
+		next;
+		mes "[Mysterious Voice]";
+		mes "Ainda é muito cedo para comemorar sua vitória contra meu braço direito Knothen porque ele não está completamente destruído!";
+		next;
+		mes "[Mysterious Voice]";
+		mes "Vou ressuscitá-lo para o seu próximo show. Derrote-o novamente, e então aceitarei seu desafio com prazer.";
+		next;
+		mes "[Mysterious Voice]";
+		mes "Até logo.";
+		mes "Mais uma vez, eu me diverti muito, humanos. Estou ansioso para vê-lo novamente.";
+		next;
+		mes "^0000ffAssim que a voz parou de falar, uma força irresistível levantou e o levou para outro lugar.";
+		close2;
+		warp "alberta",223,36;
+	end;
+
+OnInstanceInit:
+OnDisable:
+	disablenpc instance_npcname("Lucid Crystal#202");
+	end;
+
+OnEnable:
+	enablenpc instance_npcname("Lucid Crystal#202");
+	donpcevent instance_npcname("#202Effect1")+"::OnEnable";
+	end;
+}
+
+
+2@ch_t,106,109,2	script	#202Effect1	844,{
+	end;
+
+OnInstanceInit:
+	disablenpc instance_npcname("#202Effect1");
+	end;
+
+OnDisable:
+	disablenpc instance_npcname("#202Effect1");
+	end;
+
+OnEnable:
+	enablenpc instance_npcname("#202Effect1");
+	initnpctimer;
+	end;
+
+OnTimer500:
+	specialeffect EF_ENHANCE;
+	stopnpctimer;
+	donpcevent instance_npcname("#202Effect2")+"::OnEnable";
+	end;
+}
+
+2@ch_t,106,109,2	script	#202Effect2	844,{
+	end;
+
+OnInstanceInit:
+	disablenpc instance_npcname("#202Effect2");
+	end;
+
+OnDisable:
+	disablenpc instance_npcname("#202Effect2");
+	end;
+
+OnEnable:
+	enablenpc instance_npcname("#202Effect2");
+	initnpctimer;
+	end;
+
+OnTimer500:
+	specialeffect EF_ENHANCE;
+	stopnpctimer;
+	donpcevent instance_npcname("#202Effect1")+"::OnEnable";
+	end;
+}
+
+2@ch_t,82,112,2	script	#202FShadowDust1	844,{
+	end;
+
+OnInstanceInit:
+	disablenpc instance_npcname("#202FShadowDust1");
+	end;
+	
+OnEnable:
+	monster instance_mapname("2@ch_t"),67,85,"Naght Sieger",20996,1,instance_npcname("#202FShadowDust1")+"::OnMyMobDead";
+	set .@level,60;
+		setunitdata 20996,UMOB_MAXHP,500000000+(50000000*.@level/5);
+		setunitdata 20996,UMOB_STR,200+(10*.@level/5);
+		setunitdata 20996,UMOB_AGI,200+(10*.@level/5);
+		setunitdata 20996,UMOB_VIT,200+(10*.@level/5);
+		setunitdata 20996,UMOB_INT,200+(10*.@level/5);
+		setunitdata 20996,UMOB_DEX,200+(10*.@level/5);
+		setunitdata 20996,UMOB_LUK,200+(10*.@level/5);
+		setunitdata 20996,UMOB_ATKMIN,8000+(200*.@level/5);
+		setunitdata 20996,UMOB_ATKMAX,11000+(500*.@level/5);
+		setunitdata 20996,UMOB_MATKMIN,5000+(100*.@level/5);
+		setunitdata 20996,UMOB_MATKMAX,6500+(250*.@level/5);
+		setunitdata 20996,UMOB_DEF,750+(50*.@level/5);
+		setunitdata 20996,UMOB_MDEF,350+(50*.@level/5);
+		setunitdata 20996,UMOB_HIT,1000;
+		setunitdata 20996,UMOB_HP,500000000+(50000000*.@level/5);
+	end;
+
+OnMyMobDead:
+	set .@map$, instance_mapname("2@ch_t");
+	set .@mob_dead_num,mobcount(.@map$,instance_npcname("#202FShadowDust1")+"::OnMyMobDead");
+	if (.@mob_dead_num < 1) {
+		mapannounce .@map$, "Mysterious Voice:Quem é você para ousar invadir meu santuário?!",bc_map,"0xffff00";
+		donpcevent instance_npcname("#202FShadowDust")+"::OnDisable";
+		donpcevent instance_npcname("Lucid Crystal#202")+"::OnEnable";
+		//SetItemPartyInMap in_102floor 100
+	}
+	end;
+}
+
+2@ch_t,82,113,2	script	#202FShadowDust	844,{
+	end;
+
+OnInstanceInit:
+	disablenpc instance_npcname("#202FShadowDust");
+	end;
+
+OnDisable:
+	killmonsterall instance_mapname("2@ch_t");
+	end;
+
+OnEnable:
+	set .@map$, instance_mapname("2@ch_t");
+	monster .@map$,72,93,"Thorny Skeleton",1958,1;
+	monster .@map$,70,87,"Thorn of Magic",1960,1;
+	monster .@map$,68,83,"Thorn of Pureness",1961,1;
+	monster .@map$,70,80,"Thorny Skeleton",1958,1;
+	monster .@map$,74,81,"Thorn of Magic",1960,1;
+	monster .@map$,78,72,"Thorn of Magic",1960,1;
+	monster .@map$,81,70,"Thorny Skeleton",1958,1;
+	monster .@map$,78,84,"Thorn of Recovery",1959,1;
+	monster .@map$,85,72,"Thorn of Magic",1960,1;
+	monster .@map$,91,74,"Thorny Skeleton",1958,1;
+	monster .@map$,79,77,"Thorn of Pureness",1961,1;
+	monster .@map$,82,80,"Thorn of Recovery",1959,1;
+	monster .@map$,87,83,"Thorn of Recovery",1959,1;
+	monster .@map$,80,92,"Thorn of Pureness",1961,1;
+	monster .@map$,81,89,"Thorny Skeleton",1958,1;
+	monster .@map$,85,93,"Thorn of Magic",1960,1;
+	monster .@map$,86,90,"Thorn of Recovery",1959,1;
+	monster .@map$,88,88,"Thorny Skeleton",1958,1;
+	monster .@map$,91,87,"Thorn of Magic",1960,1;
+	monster .@map$,95,94,"Thorn of Magic",1960,1;
+	monster .@map$,91,96,"Thorny Skeleton",1958,1;
+	monster .@map$,90,82,"Thorn of Pureness",1961,1;
+	monster .@map$,96,98,"Thorn of Magic",1960,1;
+	monster .@map$,83,76,"Thorny Skeleton",1958,1;
+	monster .@map$,74,85,"Thorny Skeleton",1958,1;
+	switch(rand(1,3)) {
+		case 1: monster .@map$,82,85,"Thorny Skeleton",1958,1; break;
+		case 2: monster .@map$,82,85,"Thorn of Magic",1960,1; break;
+		case 3: monster .@map$,82,85,"Thorn of Pureness",1961,1; break;
+	}
+	switch(rand(1,3)) {
+		case 1: monster .@map$,84,85,"Thorny Skeleton",1958,1; break;
+		case 2: monster .@map$,84,85,"Thorn of Magic",1960,1; break;
+		case 3: monster .@map$,84,85,"Thorn of Pureness",1961,1; break;
+	}
+	end;
+}
+
+2@ch_t,71,1,0	script	#Manager ModeCT5	844,{
+end;
+	callfunc "F_GM_NPC";
+	mes "Este NPC gerencia o cristal no 100º Nível. Por favor insira a senha.";
+	set .@i, callfunc("F_GM_NPC","refactsw22221",1);
+	next;
+	if (.@i == 1) {
+		donpcevent instance_npcname("Lucid Crystal#102")+"::OnEnable";
+		mes "O cristal do 50º Nível foi ativado.";
+	} else
+		mes "Por favor, digite a senha correta.";
+	close;
+}
+
+//======================================================================================================================
+// Levels 26-50
+//======================================================================================================================
+4@ch_t,71,4,0	script	#CTBroadcast Mode11	844,{
+	end;
+
+OnInstanceInit:
+	initnpctimer;
+	end;
+
+OnTimer15000:
+OnTimer60000:
+	mapannounce instance_mapname("4@ch_t"), "Aviso: Em qualquer situação anormal em que você derrote um monstro, você não poderá avançar para o próximo nível!",bc_map,"0xff0000";
+	end;
+OnTimer120000:
+	mapannounce instance_mapname("4@ch_t"), "Aviso: Em qualquer situação anormal em que você derrote um monstro, você não poderá avançar para o próximo nível!",bc_map,"0xff0000";
+	stopnpctimer;
+	end;
+}
+
+4@ch_t,50,360,0	script	Oscar#Wpr2	-1,{
+	mes "Aquele que espalhar os Meteorite Powders neste local ficará um passo mais perto do Mestre Betelgeuse, o Senhor e Mestre da torre...";
+	next;
+
+	setarray .@level$[1],"4º","9º","14º","19º","24º";
+	setarray .@map$[1],"4@ch_t","4@ch_t","4@ch_t","4@ch_t","4@ch_t";
+	setarray .@mX[1],"310","310","310","310","310";
+	setarray .@mY[1],"354","270","183","99","12";
+	set .@i, select("29º Nível:34º Nível:39º Nível:44º Nível:49º Nível");
+	set .@c, .@i*40;
+
+	if (countitem(1000372) < .@c) {
+		mes "-Aviso-";
+		mes "Para teleportar para o "+.@level$[.@i]+" Nível, você precisa de "+.@c+" Meteorite Powders.";
+		close;
+	}
+	delitem 1000372,.@c; //Meteorite Powder
+	mapannounce instance_mapname("4@ch_t"), strcharinfo(0)+". Você será teleportado para o "+.@level$[.@i]+" Level.",bc_map,"0x00ff99";
+	warp instance_mapname(.@map$[.@i]),.@mX[@i],.@mY[@i];
+	close;
+
+OnInstanceInit:
+	initnpctimer;
+	end;
+
+OnTimer10000:
+	mapannounce instance_mapname("4@ch_t"), "Aviso: Domar um monstro não conta para derrotá-lo.",bc_map,"0xff0000";
+	stopnpctimer;
+	end;
+}
+
+4@ch_t,29,365,1	script	#2CTF Controller	844,{
+	end;
+
+OnInstanceInit:
+	callfunc "F_CTower_Monster",
+		1,
+		instance_mapname("4@ch_t"),
+		instance_npcname("#2CTF Controller")+"::OnMyMobDead";
+	end;
+
+OnMyMobDead:
+	set .@map$, instance_mapname("4@ch_t");
+	set .@mob_dead_num,mobcount(.@map$,instance_npcname("#2CTF Controller")+"::OnMyMobDead");
+	if (.@mob_dead_num < 1) {
+		initnpctimer;
+	} else
+		mapannounce .@map$, "Monstros restantes no 1º nível - "+.@mob_dead_num,bc_map,"0x00ff99";
+	end;
+
+OnTimer5000:
+	mapannounce instance_mapname("4@ch_t"), "Todos os Monstros no 1º Nível foram derrotados.",bc_map,"0xffff00";
+	donpcevent instance_npcname("26FGate202tower")+"::OnEnable";
+	stopnpctimer;
+	end;
+}
+
+4@ch_t,12,393,0	script	26FGate202tower	10007,2,2,{
+	end;
+
+OnInstanceInit:
+	disablenpc instance_npcname(strnpcinfo(0));
+	end;
+
+OnEnable:
+	enablenpc instance_npcname(strnpcinfo(0));
+	callfunc "F_CTower_Monster",
+		atoi(replacestr(strnpcinfo(0),"FGate202tower","")) + 1,
+		strnpcinfo(4),
+		instance_npcname(strnpcinfo(0))+"::OnMyMobDead";
+		setnpcdisplay("strnpcinfo(1)", "#Warp");
+	end;
+
+OnTouch_:
+	callfunc "F_CTower_Warp",
+		atoi(replacestr(strnpcinfo(0),"FGate202tower","")) + 1,
+		strnpcinfo(4);
+	end;
+
+OnMyMobDead:
+	set .@map$, strnpcinfo(4);
+	set .@level, atoi(replacestr(strnpcinfo(0),"FGate202tower","")) + 1;
+	set .@mob_dead_num,mobcount(.@map$,instance_npcname(strnpcinfo(0))+"::OnMyMobDead");
+	if (.@mob_dead_num < 1) {
+		initnpctimer;
+	} else
+		mapannounce .@map$, "Monstros restantes no "+callfunc("F_GetNumSuffix",.@level)+" Nível - "+.@mob_dead_num,bc_map,"0x00ff99";
+	end;
+
+OnTimer5000:
+	set .@level, atoi(replacestr(strnpcinfo(0),"FGate202tower","")) + 1;
+	mapannounce strnpcinfo(4), "Todos os monstros do "+callfunc("F_GetNumSuffix",.@level)+" Nível foram derrotados.",bc_map,"0xffff00";
+	donpcevent instance_npcname(.@level+"FGate202tower")+"::OnEnable";
+	stopnpctimer;
+	end;
+}
+
+4@ch_t,96,393,0	duplicate(26FGate202tower)	27FGate202tower	45,2,2
+4@ch_t,184,393,0	duplicate(26FGate202tower)	28FGate202tower	45,2,2
+4@ch_t,270,393,0	duplicate(26FGate202tower)	29FGate202tower	45,2,2
+4@ch_t,355,393,0	duplicate(26FGate202tower)	30FGate202tower	45,2,2
+4@ch_t,12,309,0	duplicate(26FGate202tower)	31FGate202tower	45,2,2
+4@ch_t,96,309,0	duplicate(26FGate202tower)	32FGate202tower	45,2,2
+4@ch_t,184,309,0	duplicate(26FGate202tower)	33FGate202tower	45,2,2
+4@ch_t,270,309,0	duplicate(26FGate202tower)	34FGate202tower	45,2,2
+4@ch_t,355,309,0	duplicate(26FGate202tower)	35FGate202tower	45,2,2
+4@ch_t,12,222,0	duplicate(26FGate202tower)	36FGate202tower	45,2,2
+4@ch_t,96,222,0	duplicate(26FGate202tower)	37FGate202tower	45,2,2
+4@ch_t,184,222,0	duplicate(26FGate202tower)	38FGate202tower	45,2,2
+4@ch_t,270,222,0	duplicate(26FGate202tower)	39FGate202tower	45,2,2
+4@ch_t,355,222,0	duplicate(26FGate202tower)	40FGate202tower	45,2,2
+4@ch_t,12,138,0	duplicate(26FGate202tower)	41FGate202tower	45,2,2
+4@ch_t,96,138,0	duplicate(26FGate202tower)	42FGate202tower	45,2,2
+4@ch_t,184,138,0	duplicate(26FGate202tower)	43FGate202tower	45,2,2
+4@ch_t,270,138,0	duplicate(26FGate202tower)	44FGate202tower	45,2,2
+4@ch_t,355,138,0	duplicate(26FGate202tower)	45FGate202tower	45,2,2
+4@ch_t,12,51,0	duplicate(26FGate202tower)	46FGate202tower	45,2,2
+4@ch_t,96,51,0	duplicate(26FGate202tower)	47FGate202tower	45,2,2
+4@ch_t,184,51,0	duplicate(26FGate202tower)	48FGate202tower	45,2,2
+4@ch_t,270,51,0	duplicate(26FGate202tower)	49FGate202tower	45,2,2
+
+
+// ============== Floor 50 ========================= 
+
+4@ch_t,0,0,0	script	50FGate202tower	111,{
+	end;
+
+OnInstanceInit:
+	disablenpc instance_npcname("50FGate202tower");
+	end;
+
+OnEnable:
+	enablenpc instance_npcname("Oscar#F50");
+	disablenpc instance_npcname("50FGate202tower");
+	end;
+}
+
+4@ch_t,355,51,9	script	Oscar#F50	10307,{
+mes "[Oscar]";
+if (is_party_leader() == true) {
+mes "Você chegou tão longe";
+mes "Já que você chegou até aqui é hora de você enfrentar o senhor desta torre";
+next;
+mes "[Oscar]";
+mes "Ele está chateado, mas eu posso fazê-lo se segurar um pouco";
+mes "Quão poderoso você acha que pode enfrentá-lo?";
+next;
+L_BetRand:
+switch(rand(1,5)){
+case 1:
+mes "[Oscar]";
+L_Bete1:
+mes "É o seu poder mais baixo.";
+set 'Betel,1;
+next;
+switch(select("Está tudo bem, vamos: Não, espere")){
+case 1:
+mes "[Oscar]";
+mes "Boa sorte";
+enablenpc instance_npcname("#50FGate202tower");
+donpcevent instance_npcname("#202RShadowDust")+"::OnEnable";
+disablenpc instance_npcname("Oscar#F50");
+end;
+case 2:
+goto L_change;
+}
+case 2:
+mes "[Oscar]";
+L_Bete12:
+mes "É fraco, você certamente pode vencê-lo.";
+mes "Boa sorte";
+set 'Betel,2;
+next;
+switch(select("Está tudo bem, vamos: Não, espere")){
+case 1:
+mes "[Oscar]";
+mes "Boa Sorte";
+enablenpc instance_npcname("#50FGate202tower");
+donpcevent instance_npcname("#202RShadowDust")+"::OnEnable";
+disablenpc instance_npcname("Oscar#F50");
+end;
+case 2:
+goto L_change;
+}
+
+case 3:
+mes "[Oscar]";
+L_Bete3:
+mes "É um poder intermediário.";
+mes "Boa Sorte";
+set 'Betel,3;
+next;
+switch(select("Está tudo bem, vamos: Não, espere")){
+case 1:
+mes "[Oscar]";
+mes "Boa Sorte";
+enablenpc instance_npcname("#50FGate202tower");
+donpcevent instance_npcname("#202RShadowDust")+"::OnEnable";
+disablenpc instance_npcname("Oscar#F50");
+end;
+case 2:
+goto L_change;
+}
+
+case 4:
+mes "[Oscar]";
+L_Bete4:
+mes "Seu poder já é incrível.";
+mes "Boa Sorte";
+set 'Betel,4;
+next;
+switch(select("Está tudo bem, vamos: Não, espere")){
+case 1:
+mes "[Oscar]";
+mes "Boa Sorte";
+enablenpc instance_npcname("#50FGate202tower");
+donpcevent instance_npcname("#202RShadowDust")+"::OnEnable";
+disablenpc instance_npcname("Oscar#F50");
+end;
+case 2:
+goto L_change;
+}
+
+case 5:
+mes "[Oscar]";
+L_Bete5:
+mes "Você vai enfrentá-lo com seu maior poder.";
+mes "Boa Sorte";
+set 'Betel,5;
+next;
+switch(select("Está tudo bem, vamos: Não, espere")){
+case 1:
+mes "[Oscar]";
+mes "Boa Sorte";
+enablenpc instance_npcname("#50FGate202tower");
+donpcevent instance_npcname("#202RShadowDust")+"::OnEnable";
+disablenpc instance_npcname("Oscar#F50");
+end;
+case 2:
+goto L_change;
+}
+
+case 6:
+mes "[Oscar]";
+mes "Tudo bem, eu espero por você";
+close;
+	}
+}
+
+mes "Você chegou tão longe";
+close;
+
+
+L_change:
+mes "[Oscar]";
+mes "Você não concorda com a sua sorte?";
+mes "Se você me pagar 50 Meteorite Powders, posso fazer sua sorte mudar";
+switch(select("Faça: Melhor não")){
+case 1:
+mes "[Oscar]";
+if (countitem(1000372) < 50) {
+mes "Você não tem os itens necessários";
+if ('Betel == 1){goto L_Bete1;}
+if ('Betel == 2){goto L_Bete2;}
+if ('Betel == 3){goto L_Bete3;}
+if ('Betel == 4){goto L_Bete4;}
+if ('Betel == 5){goto L_Bete5;}
+}
+
+goto L_BetRand;
+case 2: 
+if ('Betel == 1){goto L_Bete1;}
+if ('Betel == 2){goto L_Bete2;}
+if ('Betel == 3){goto L_Bete3;}
+if ('Betel == 4){goto L_Bete4;}
+if ('Betel == 5){goto L_Bete5;}
+	}
+
+OnInstanceInit:
+	disablenpc instance_npcname("Oscar#F50");
+	end;
+}
+
+
+4@ch_t,355,51,0	script	#50FGate202tower	10007,2,2,{
+
+OnTouch_:
+	warp instance_mapname("3@ch_t"),155,70;
+	end;
+
+OnInstanceInit:
+	disablenpc instance_npcname("#50FGate202tower");
+	end;
+}
+
+3@ch_t,155,146,2	script	Betelgeuse#CT1	20994,{
+mes "[Betelgeuse]";
+mes "Inacreditável!!!";
+mes "Foi a melhor batalha da minha vida";
+next;
+mes "[Betelgeuse]";
+mes "Se eu pudesse repetir de novo, seria ótimo";
+next;
+mes "[Betelgeuse]";
+mes "Acho que agora você quer se retirar certo?";
+next;
+switch(select("Sim, deixe-me ir: Não, deixe-me ficar um pouco mais")){
+case 1:
+warp "e_tower",72,112;
+end;
+case 2:
+mes "[Betelgeuse]";
+mes "Fale comigo novamente quando quiser sair";
+close;
+	}
+OnInstanceInit:
+	disablenpc instance_npcname("Betelgeuse#CT1");
+	end;
+
+}
+
+3@ch_t,155,145,2	script	Betelgeuse#CT2	20994,{
+mes "[Betelgeuse]";
+mes "Inacreditável!!!";
+mes "Foi a melhor batalha da minha vida";
+next;
+mes "[Betelgeuse]";
+mes "Se eu pudesse repetir de novo, seria ótimo";
+next;
+mes "[Betelgeuse]";
+mes "Acho que agora você quer se retirar certo?";
+next;
+switch(select("Sim, deixe-me ir: Não, deixe-me ficar um pouco mais")){
+case 1:
+warp "e_tower",72,112;
+end;
+case 2:
+mes "[Betelgeuse]";
+mes "Fale comigo novamente quando quiser sair";
+close;
+	}
+OnInstanceInit:
+	disablenpc instance_npcname("Betelgeuse#CT2");
+	end;
+}
+
+
+3@ch_t,82,113,2	script	#202RShadowDust	844,{
+	end;
+
+OnInstanceInit:
+	disablenpc instance_npcname("#202RShadowDust");
+	end;
+
+OnDisable:
+	killmonsterall instance_mapname("3@ch_t");
+	end;
+
+OnEnable:
+	//"Deadsoul",20995,1
+	monster instance_mapname("3@ch_t"),147,88,"Deadsoul",20995,1,instance_npcname("#testecont")+"::OnMyMobDead";
+	monster instance_mapname("3@ch_t"),169,72,"Deadsoul",20995,1,instance_npcname("#testecont")+"::OnMyMobDead";
+	monster instance_mapname("3@ch_t"),164,105,"Deadsoul",20995,1,instance_npcname("#testecont")+"::OnMyMobDead";
+	monster instance_mapname("3@ch_t"),151,114,"Deadsoul",20995,1,instance_npcname("#testecont")+"::OnMyMobDead";
+	end;
+}
+
+3@ch_t,82,113,2	script	#testecont	844,{
+OnMyMobDead:
+	set .@map$, instance_mapname("3@ch_t");
+	set .@mob_dead_num,mobcount(.@map$,instance_npcname("#testecont")+"::OnMyMobDead");
+	if (.@mob_dead_num < 1) {
+		mapannounce .@map$, "Mysterious Voice: Quem é você para ousar invadir meu santuário?!",bc_map,"0xffff00";
+		donpcevent instance_npcname("#202RShadowDust")+"::OnDisable";
+	monster instance_mapname("3@ch_t"),156,146,"Betelgeuse",20994,1,instance_npcname("#testebetel")+"::OnMyMobDead";
+	if ('Betel == 1){set .@level,2;}
+	if ('Betel == 2){set .@level,4;}
+	if ('Betel == 3){set .@level,6;}
+	if ('Betel == 4){set .@level,8;}
+	if ('Betel == 5){set .@level,10;}
+		setunitdata 20994,UMOB_MAXHP,700000000+(200000000*.@level);
+		setunitdata 20994,UMOB_STR,290+(10*.@level);
+		setunitdata 20994,UMOB_AGI,290+(10*.@level);
+		setunitdata 20994,UMOB_VIT,290+(10*.@level);
+		setunitdata 20994,UMOB_INT,290+(10*.@level);
+		setunitdata 20994,UMOB_DEX,290+(10*.@level);
+		setunitdata 20994,UMOB_LUK,290+(10*.@level);
+		setunitdata 20994,UMOB_ATKMIN,9000+(200*.@level);
+		setunitdata 20994,UMOB_ATKMAX,11000+(500*.@level);
+		setunitdata 20994,UMOB_MATKMIN,6000+(100*.@level);
+		setunitdata 20994,UMOB_MATKMAX,7500+(250*.@level);
+		setunitdata 20994,UMOB_DEF,750+(50*.@level);
+		setunitdata 20994,UMOB_MDEF,350+(50*.@level);
+		setunitdata 20994,UMOB_HIT,2000;
+		setunitdata 20994,UMOB_MAXHP,700000000+(200000000*.@level);
+		donpcevent instance_npcname("#testecont")+"::OnDisable";
+	}
+	end;
+}
+
+3@ch_t,82,113,2	script	#testebetel	844,{
+OnMyMobDead:
+	set .@map$, instance_mapname("3@ch_t");
+	set .@mob_dead_num,mobcount(.@map$,instance_npcname("#testebetel")+"::OnMyMobDead");
+	if (.@mob_dead_num < 1) {
+		mapannounce .@map$, "Como é possível, fui derrotado?!",bc_map,"0xffff00";
+		enablenpc instance_npcname ("Betelgeuse#CT1");
+
+	if('pontos < 1){
+		// pontos Instancia
+		set 'pontos,1;
+		.@pontos = 20;
+		getpartymember getcharid(1),2;
+		getmapxy .@map$,.@x,.@y;
+		for( set .@i, 0; .@i < $@partymembercount; set .@i, .@i+1 ){
+			if( attachrid( $@partymemberaid[.@i] )){
+				getmapxy .@mapPt$,.@xPt,.@yPt;
+				if(.@map$ == .@mapPt$ && instance_id()){
+
+					getitem 30010,.@pontos;
+					droparItemEspecial(490174,1,1,"Memorável Anel Rústico",3,"Constellation","0.01%",1);
+					droparItemEspecial(19446,1,3,"Curativo YSF01",3,"Constellation","0.03%",1);
+					droparItemEspecial(19495,1,3,"Asinhas Discretas",3,"Constellation","0.03%",1);
+					droparItemEspecial(400051,1,3,"Golden_Violet",3,"Constellation","0.03%",1);
+					//if('unreal){
+						//droparItemEspecial(480174,1,1,"pirate captains",3,"Constellation Unreal","0.01%",1);
+						//droparItemEspecial(450217,1,1,"phreeoni wings",3,"Constellation Unreal","0.01%",1);
+						//droparItemEspecial(470122,1,1,"beasts leather",3,"Constellation Unreal","0.01%",1);
+						//droparItemEspecial(490174,1,1,"Memorável Anel Rústico",3,"Constellation Unreal","0.01%",1);
+					//}
+				}	
+			}
+		}
+
+	}
+
+		
+	switch(rand(1,12)){
+		case 1:
+			enablenpc instance_npcname("#TreasurePowS1");
+			enablenpc instance_npcname("#TreasurePowS2");
+			enablenpc instance_npcname("#TreasurePowS3");
+			enablenpc instance_npcname("#TreasurePowS4");
+			enablenpc instance_npcname("#TreasurePowS5");
+		break;
+		case 2:
+			enablenpc instance_npcname("#TreasureStaS1");
+			enablenpc instance_npcname("#TreasureStaS2");
+			enablenpc instance_npcname("#TreasureStaS3");
+			enablenpc instance_npcname("#TreasureStaS4");
+			enablenpc instance_npcname("#TreasureStaS5");
+		break;
+		case 3:
+			enablenpc instance_npcname("#TreasureConS1");
+			enablenpc instance_npcname("#TreasureConS2");
+			enablenpc instance_npcname("#TreasureConS3");
+			enablenpc instance_npcname("#TreasureConS4");
+			enablenpc instance_npcname("#TreasureConS5");
+		break;
+		case 4:
+			enablenpc instance_npcname("#TreasureCrtS1");
+			enablenpc instance_npcname("#TreasureCrtS2");
+			enablenpc instance_npcname("#TreasureCrtS3");
+			enablenpc instance_npcname("#TreasureCrtS4");
+			enablenpc instance_npcname("#TreasureCrtS5");
+		break;
+		case 5:
+			enablenpc instance_npcname("#TreasureSplS1");
+			enablenpc instance_npcname("#TreasureSplS2");
+			enablenpc instance_npcname("#TreasureSplS3");
+			enablenpc instance_npcname("#TreasureSplS4");
+			enablenpc instance_npcname("#TreasureSplS5");
+		break;
+		case 6:
+			enablenpc instance_npcname("#TreasureWisS1");
+			enablenpc instance_npcname("#TreasureWisS2");
+			enablenpc instance_npcname("#TreasureWisS3");
+			enablenpc instance_npcname("#TreasureWisS4");
+			enablenpc instance_npcname("#TreasureWisS5");
+		break;
+		case 7:
+			enablenpc instance_npcname("#TreasurePowM1");
+			enablenpc instance_npcname("#TreasurePowM2");
+			enablenpc instance_npcname("#TreasurePowM3");
+			enablenpc instance_npcname("#TreasurePowM4");
+			enablenpc instance_npcname("#TreasurePowM5");
+		break;
+		case 8:
+			enablenpc instance_npcname("#TreasureStaM1");
+			enablenpc instance_npcname("#TreasureStaM2");
+			enablenpc instance_npcname("#TreasureStaM3");
+			enablenpc instance_npcname("#TreasureStaM4");
+			enablenpc instance_npcname("#TreasureStaM5");
+		break;
+		case 9:
+			enablenpc instance_npcname("#TreasureConM1");
+			enablenpc instance_npcname("#TreasureConM2");
+			enablenpc instance_npcname("#TreasureConM3");
+			enablenpc instance_npcname("#TreasureConM4");
+			enablenpc instance_npcname("#TreasureConM5");
+		break;
+		case 10:
+			enablenpc instance_npcname("#TreasureCrtM1");
+			enablenpc instance_npcname("#TreasureCrtM2");
+			enablenpc instance_npcname("#TreasureCrtM3");
+			enablenpc instance_npcname("#TreasureCrtM4");
+			enablenpc instance_npcname("#TreasureCrtM5");
+		break;
+		case 11:
+			enablenpc instance_npcname("#TreasureSplM1");
+			enablenpc instance_npcname("#TreasureSplM2");
+			enablenpc instance_npcname("#TreasureSplM3");
+			enablenpc instance_npcname("#TreasureSplM4");
+			enablenpc instance_npcname("#TreasureSplM5");
+		break;
+		case 12:
+			enablenpc instance_npcname("#TreasureWisM1");
+			enablenpc instance_npcname("#TreasureWisM2");
+			enablenpc instance_npcname("#TreasureWisM3");
+			enablenpc instance_npcname("#TreasureWisM4");
+			enablenpc instance_npcname("#TreasureWisM5");
+		break;
+	}
+	
+	if ('Betel == 5){
+		enablenpc instance_npcname("#TreasureHP1");
+	}
+	}
+	end;
+}
+
+
+3@ch_t,147,132,0	script	#TreasurePowS1	10404,{
+//if ('TW1 == 1){ end;}
+set .@map$, instance_mapname("3@ch_t");
+getmapxy(.@mapa$,.@x,.@y,BL_NPC,strnpcinfo(0));
+set .@item,1000398;
+	setarray .@max[1],
+		5,4,6,3,7,4,3,5,5,4,6,3,7,4,3,
+		5,5,4,6,3,7,4,3,5,5,4,6;
+	.@idnum = rand(1,.@max[.@val]);
+	for ( .@i = 0; .@i < .@idnum; ++.@i ) {
+		.@idx = rand(.@x,.@x+4);
+		.@idy = rand(.@y,.@y+4);
+		makeitem .@item,1,.@map$,.@idx,.@idy;
+	}
+	makeitem .@item,1,.@map$,.@x+2,.@y+3;
+	makeitem .@item,1,.@map$,.@x+1,.@y+2;
+	makeitem .@item,1,.@map$,.@x+2,.@y+2;
+	makeitem .@item,1,.@map$,.@x+3,.@y+2;
+	set 'TW1,1;
+	disablenpc instance_npcname(strnpcinfo(0));
+	end;
+}
+
+3@ch_t,151,132,0	duplicate(#TreasurePowS1)	#TreasurePowS2	10404
+3@ch_t,155,132,0	duplicate(#TreasurePowS1)	#TreasurePowS3	10404
+3@ch_t,159,132,0	duplicate(#TreasurePowS1)	#TreasurePowS4	10404
+3@ch_t,163,132,0	duplicate(#TreasurePowS1)	#TreasurePowS5	10404
+
+3@ch_t,147,132,0	script	#TreasureStaS1	10406,{
+//if ('TAr1 == 1){ end;}
+set .@map$, instance_mapname("3@ch_t");
+getmapxy(.@mapa$,.@x,.@y,BL_NPC,strnpcinfo(0));
+set .@item,1000399;
+setarray .@max[1],
+		5,4,6,3,7,4,3,5,5,4,6,3,7,4,3,
+		5,5,4,6,3,7,4,3,5,5,4,6;
+	.@idnum = rand(1,.@max[.@val]);
+	for ( .@i = 0; .@i < .@idnum; ++.@i ) {
+		.@idx = rand(.@x,.@x+4);
+		.@idy = rand(.@y,.@y+4);
+		makeitem .@item,1,.@map$,.@idx,.@idy;
+	}
+	makeitem .@item,1,.@map$,.@x+2,.@y+3;
+	makeitem .@item,1,.@map$,.@x+1,.@y+2;
+	makeitem .@item,1,.@map$,.@x+2,.@y+2;
+	makeitem .@item,1,.@map$,.@x+3,.@y+2;
+	set 'TAr1,1;
+	disablenpc instance_npcname(strnpcinfo(0));
+	end;
+}
+
+3@ch_t,151,132,0	duplicate(#TreasureStaS1)	#TreasureStaS2	10406
+3@ch_t,155,132,0	duplicate(#TreasureStaS1)	#TreasureStaS3	10406
+3@ch_t,159,132,0	duplicate(#TreasureStaS1)	#TreasureStaS4	10406
+3@ch_t,163,132,0	duplicate(#TreasureStaS1)	#TreasureStaS5	10406
+
+3@ch_t,147,132,0	script	#TreasureConS1	10410,{
+//if ('TAc1 == 1){ end;}
+set .@map$, instance_mapname("3@ch_t");
+getmapxy(.@mapa$,.@x,.@y,BL_NPC,strnpcinfo(0));
+set .@item,1000400;
+setarray .@max[1],
+		5,4,6,3,7,4,3,5,5,4,6,3,7,4,3,
+		5,5,4,6,3,7,4,3,5,5,4,6;
+	.@idnum = rand(1,.@max[.@val]);
+	for ( .@i = 0; .@i < .@idnum; ++.@i ) {
+		.@idx = rand(.@x,.@x+4);
+		.@idy = rand(.@y,.@y+4);
+		makeitem .@item,1,.@map$,.@idx,.@idy;
+	}
+	makeitem .@item,1,.@map$,.@x+2,.@y+3;
+	makeitem .@item,1,.@map$,.@x+1,.@y+2;
+	makeitem .@item,1,.@map$,.@x+2,.@y+2;
+	makeitem .@item,1,.@map$,.@x+3,.@y+2;
+	set 'TAc1,1;
+	disablenpc instance_npcname(strnpcinfo(0));
+	end;
+}
+
+3@ch_t,151,132,0	duplicate(#TreasureConS1)	#TreasureConS2	10410
+3@ch_t,155,132,0	duplicate(#TreasureConS1)	#TreasureConS3	10410
+3@ch_t,159,132,0	duplicate(#TreasureConS1)	#TreasureConS4	10410
+3@ch_t,163,132,0	duplicate(#TreasureConS1)	#TreasureConS5	10410
+
+3@ch_t,147,132,0	script	#TreasureCrtS1	10414,{
+//if ('TACt1 == 1){ end;}
+set .@map$, instance_mapname("3@ch_t");
+getmapxy(.@mapa$,.@x,.@y,BL_NPC,strnpcinfo(0));
+set .@item,1000401;
+setarray .@max[1],
+		5,4,6,3,7,4,3,5,5,4,6,3,7,4,3,
+		5,5,4,6,3,7,4,3,5,5,4,6;
+	.@idnum = rand(1,.@max[.@val]);
+	for ( .@i = 0; .@i < .@idnum; ++.@i ) {
+		.@idx = rand(.@x,.@x+4);
+		.@idy = rand(.@y,.@y+4);
+		makeitem .@item,1,.@map$,.@idx,.@idy;
+	}
+	makeitem .@item,1,.@map$,.@x+2,.@y+3;
+	makeitem .@item,1,.@map$,.@x+1,.@y+2;
+	makeitem .@item,1,.@map$,.@x+2,.@y+2;
+	makeitem .@item,1,.@map$,.@x+3,.@y+2;
+	set 'TACt1,1;
+	disablenpc instance_npcname(strnpcinfo(0));
+	end;
+}
+
+3@ch_t,151,132,0	duplicate(#TreasureCrtS1)	#TreasureCrtS2	10414
+3@ch_t,155,132,0	duplicate(#TreasureCrtS1)	#TreasureCrtS3	10414
+3@ch_t,159,132,0	duplicate(#TreasureCrtS1)	#TreasureCrtS4	10414
+3@ch_t,163,132,0	duplicate(#TreasureCrtS1)	#TreasureCrtS5	10414
+
+3@ch_t,147,132,0	script	#TreasureSplS1	10408,{
+//if ('TASp1 == 1){ end;}
+set .@map$, instance_mapname("3@ch_t");
+getmapxy(.@mapa$,.@x,.@y,BL_NPC,strnpcinfo(0));
+set .@item,1000402;
+setarray .@max[1],
+		5,4,6,3,7,4,3,5,5,4,6,3,7,4,3,
+		5,5,4,6,3,7,4,3,5,5,4,6;
+	.@idnum = rand(1,.@max[.@val]);
+	for ( .@i = 0; .@i < .@idnum; ++.@i ) {
+		.@idx = rand(.@x,.@x+4);
+		.@idy = rand(.@y,.@y+4);
+		makeitem .@item,1,.@map$,.@idx,.@idy;
+	}
+	makeitem .@item,1,.@map$,.@x+2,.@y+3;
+	makeitem .@item,1,.@map$,.@x+1,.@y+2;
+	makeitem .@item,1,.@map$,.@x+2,.@y+2;
+	makeitem .@item,1,.@map$,.@x+3,.@y+2;
+	set 'TASp1,1;
+	disablenpc instance_npcname(strnpcinfo(0));
+	end;
+}
+
+3@ch_t,151,132,0	duplicate(#TreasureSplS1)	#TreasureSplS2	10408
+3@ch_t,155,132,0	duplicate(#TreasureSplS1)	#TreasureSplS3	10408
+3@ch_t,159,132,0	duplicate(#TreasureSplS1)	#TreasureSplS4	10408
+3@ch_t,163,132,0	duplicate(#TreasureSplS1)	#TreasureSplS5	10408
+
+3@ch_t,147,132,0	script	#TreasureWisS1	10412,{
+//if ('TAWs1 == 1){ end;}
+set .@map$, instance_mapname("3@ch_t");
+getmapxy(.@mapa$,.@x,.@y,BL_NPC,strnpcinfo(0));
+set .@item,1000403;
+setarray .@max[1],
+		5,4,6,3,7,4,3,5,5,4,6,3,7,4,3,
+		5,5,4,6,3,7,4,3,5,5,4,6;
+	.@idnum = rand(1,.@max[.@val]);
+	for ( .@i = 0; .@i < .@idnum; ++.@i ) {
+		.@idx = rand(.@x,.@x+4);
+		.@idy = rand(.@y,.@y+4);
+		makeitem .@item,1,.@map$,.@idx,.@idy;
+	}
+	makeitem .@item,1,.@map$,.@x+2,.@y+3;
+	makeitem .@item,1,.@map$,.@x+1,.@y+2;
+	makeitem .@item,1,.@map$,.@x+2,.@y+2;
+	makeitem .@item,1,.@map$,.@x+3,.@y+2;
+	set 'TAWs1,1;
+	disablenpc instance_npcname(strnpcinfo(0));
+	end;
+}
+
+3@ch_t,151,132,0	duplicate(#TreasureWisS1)	#TreasureWisS2	10412
+3@ch_t,155,132,0	duplicate(#TreasureWisS1)	#TreasureWisS3	10412
+3@ch_t,159,132,0	duplicate(#TreasureWisS1)	#TreasureWisS4	10412
+3@ch_t,163,132,0	duplicate(#TreasureWisS1)	#TreasureWisS5	10412
+
+3@ch_t,147,126,0	script	#TreasurePowM1	10405,{
+//if ('TW2 == 1){ end;}
+set .@map$, instance_mapname("3@ch_t");
+getmapxy(.@mapa$,.@x,.@y,BL_NPC,strnpcinfo(0));
+set .@item,1000442;
+setarray .@max[1],
+		5,4,6,3,7,4,3,5,5,4,6,3,7,4,3,
+		5,5,4,6,3,7,4,3,5,5,4,6;
+	.@idnum = rand(1,.@max[.@val]);
+	for ( .@i = 0; .@i < .@idnum; ++.@i ) {
+		.@idx = rand(.@x,.@x+4);
+		.@idy = rand(.@y,.@y+4);
+		makeitem .@item,1,.@map$,.@idx,.@idy;
+	}
+	makeitem .@item,1,.@map$,.@x+2,.@y+3;
+	makeitem .@item,1,.@map$,.@x+1,.@y+2;
+	makeitem .@item,1,.@map$,.@x+2,.@y+2;
+	makeitem .@item,1,.@map$,.@x+3,.@y+2;
+	set 'TW2,1;
+	disablenpc instance_npcname(strnpcinfo(0));
+	end;
+}
+
+3@ch_t,151,126,0	duplicate(#TreasurePowM1)	#TreasurePowM2	10405
+3@ch_t,155,126,0	duplicate(#TreasurePowM1)	#TreasurePowM3	10405
+3@ch_t,159,126,0	duplicate(#TreasurePowM1)	#TreasurePowM4	10405
+3@ch_t,163,126,0	duplicate(#TreasurePowM1)	#TreasurePowM5	10405
+
+3@ch_t,147,126,0	script	#TreasureStaM1	10407,{
+//if ('TAr2 == 1){ end;}
+set .@map$, instance_mapname("3@ch_t");
+getmapxy(.@mapa$,.@x,.@y,BL_NPC,strnpcinfo(0));
+set .@item,1000443;
+setarray .@max[1],
+		5,4,6,3,7,4,3,5,5,4,6,3,7,4,3,
+		5,5,4,6,3,7,4,3,5,5,4,6;
+	.@idnum = rand(1,.@max[.@val]);
+	for ( .@i = 0; .@i < .@idnum; ++.@i ) {
+		.@idx = rand(.@x,.@x+4);
+		.@idy = rand(.@y,.@y+4);
+		makeitem .@item,1,.@map$,.@idx,.@idy;
+	}
+	makeitem .@item,1,.@map$,.@x+2,.@y+3;
+	makeitem .@item,1,.@map$,.@x+1,.@y+2;
+	makeitem .@item,1,.@map$,.@x+2,.@y+2;
+	makeitem .@item,1,.@map$,.@x+3,.@y+2;
+	set 'TAr2,1;
+	disablenpc instance_npcname(strnpcinfo(0));
+	end;
+}
+
+3@ch_t,151,126,0	duplicate(#TreasureStaM1)	#TreasureStaM2	10407
+3@ch_t,155,126,0	duplicate(#TreasureStaM1)	#TreasureStaM3	10407
+3@ch_t,159,126,0	duplicate(#TreasureStaM1)	#TreasureStaM4	10407
+3@ch_t,163,126,0	duplicate(#TreasureStaM1)	#TreasureStaM5	10407
+
+3@ch_t,147,126,0	script	#TreasureConM1	10409,{
+//if ('TAc2 == 1){ end;}
+set .@map$, instance_mapname("3@ch_t");
+getmapxy(.@mapa$,.@x,.@y,BL_NPC,strnpcinfo(0));
+set .@item,1000444;
+setarray .@max[1],
+		5,4,6,3,7,4,3,5,5,4,6,3,7,4,3,
+		5,5,4,6,3,7,4,3,5,5,4,6;
+	.@idnum = rand(1,.@max[.@val]);
+	for ( .@i = 0; .@i < .@idnum; ++.@i ) {
+		.@idx = rand(.@x,.@x+4);
+		.@idy = rand(.@y,.@y+4);
+		makeitem .@item,1,.@map$,.@idx,.@idy;
+	}
+	makeitem .@item,1,.@map$,.@x+2,.@y+3;
+	makeitem .@item,1,.@map$,.@x+1,.@y+2;
+	makeitem .@item,1,.@map$,.@x+2,.@y+2;
+	makeitem .@item,1,.@map$,.@x+3,.@y+2;
+	set 'TAc2,1;
+	disablenpc instance_npcname(strnpcinfo(0));
+	end;
+}
+
+3@ch_t,151,126,0	duplicate(#TreasureConM1)	#TreasureConM2	10409
+3@ch_t,155,126,0	duplicate(#TreasureConM1)	#TreasureConM3	10409
+3@ch_t,159,126,0	duplicate(#TreasureConM1)	#TreasureConM4	10409
+3@ch_t,163,126,0	duplicate(#TreasureConM1)	#TreasureConM5	10409
+
+3@ch_t,147,126,0	script	#TreasureCrtM1	10415,{
+//if ('TACr2 == 1){ end;}
+set .@map$, instance_mapname("3@ch_t");
+getmapxy(.@mapa$,.@x,.@y,BL_NPC,strnpcinfo(0));
+set .@item,1000445;
+setarray .@max[1],
+		5,4,6,3,7,4,3,5,5,4,6,3,7,4,3,
+		5,5,4,6,3,7,4,3,5,5,4,6;
+	.@idnum = rand(1,.@max[.@val]);
+	for ( .@i = 0; .@i < .@idnum; ++.@i ) {
+		.@idx = rand(.@x,.@x+4);
+		.@idy = rand(.@y,.@y+4);
+		makeitem .@item,1,.@map$,.@idx,.@idy;
+	}
+	makeitem .@item,1,.@map$,.@x+2,.@y+3;
+	makeitem .@item,1,.@map$,.@x+1,.@y+2;
+	makeitem .@item,1,.@map$,.@x+2,.@y+2;
+	makeitem .@item,1,.@map$,.@x+3,.@y+2;
+	set 'TACr2,1;
+	disablenpc instance_npcname(strnpcinfo(0));
+	end;
+}
+
+3@ch_t,151,126,0	duplicate(#TreasureCrtM1)	#TreasureCrtM2	10415
+3@ch_t,155,126,0	duplicate(#TreasureCrtM1)	#TreasureCrtM3	10415
+3@ch_t,159,126,0	duplicate(#TreasureCrtM1)	#TreasureCrtM4	10415
+3@ch_t,163,126,0	duplicate(#TreasureCrtM1)	#TreasureCrtM5	10415
+
+3@ch_t,147,126,0	script	#TreasureSplM1	10409,{
+//if ('TASp2 == 1){ end;}
+set .@map$, instance_mapname("3@ch_t");
+getmapxy(.@mapa$,.@x,.@y,BL_NPC,strnpcinfo(0));
+set .@item,1000446;
+setarray .@max[1],
+		5,4,6,3,7,4,3,5,5,4,6,3,7,4,3,
+		5,5,4,6,3,7,4,3,5,5,4,6;
+	.@idnum = rand(1,.@max[.@val]);
+	for ( .@i = 0; .@i < .@idnum; ++.@i ) {
+		.@idx = rand(.@x,.@x+4);
+		.@idy = rand(.@y,.@y+4);
+		makeitem .@item,1,.@map$,.@idx,.@idy;
+	}
+	makeitem .@item,1,.@map$,.@x+2,.@y+3;
+	makeitem .@item,1,.@map$,.@x+1,.@y+2;
+	makeitem .@item,1,.@map$,.@x+2,.@y+2;
+	makeitem .@item,1,.@map$,.@x+3,.@y+2;
+	set 'TASp2,1;
+	disablenpc instance_npcname(strnpcinfo(0));
+	end;
+}
+
+3@ch_t,151,126,0	duplicate(#TreasureSplM1)	#TreasureSplM2	10409
+3@ch_t,155,126,0	duplicate(#TreasureSplM1)	#TreasureSplM3	10409
+3@ch_t,159,126,0	duplicate(#TreasureSplM1)	#TreasureSplM4	10409
+3@ch_t,163,126,0	duplicate(#TreasureSplM1)	#TreasureSplM5	10409
+
+3@ch_t,147,126,0	script	#TreasureWisM1	10413,{
+//if ('TAWs2 == 1){ end;}
+set .@map$, instance_mapname("3@ch_t");
+getmapxy(.@mapa$,.@x,.@y,BL_NPC,strnpcinfo(0));
+set .@item,1000447;
+setarray .@max[1],
+		5,4,6,3,7,4,3,5,5,4,6,3,7,4,3,
+		5,5,4,6,3,7,4,3,5,5,4,6;
+	.@idnum = rand(1,.@max[.@val]);
+	for ( .@i = 0; .@i < .@idnum; ++.@i ) {
+		.@idx = rand(.@x,.@x+4);
+		.@idy = rand(.@y,.@y+4);
+		makeitem .@item,1,.@map$,.@idx,.@idy;
+	}
+	makeitem .@item,1,.@map$,.@x+2,.@y+3;
+	makeitem .@item,1,.@map$,.@x+1,.@y+2;
+	makeitem .@item,1,.@map$,.@x+2,.@y+2;
+	makeitem .@item,1,.@map$,.@x+3,.@y+2;
+	set 'TAWs2,1;
+	disablenpc instance_npcname(strnpcinfo(0));
+	end;
+}
+
+3@ch_t,151,126,0	duplicate(#TreasureWisM1)	#TreasureWisM2	10413
+3@ch_t,155,126,0	duplicate(#TreasureWisM1)	#TreasureWisM3	10413
+3@ch_t,159,126,0	duplicate(#TreasureWisM1)	#TreasureWisM4	10413
+3@ch_t,163,126,0	duplicate(#TreasureWisM1)	#TreasureWisM5	10413
+
+3@ch_t,155,137,0	script	#TreasureWeapH1	10403,{
+//if ('TW3 == 1){ end;}
+set .@map$, instance_mapname("3@ch_t");
+getmapxy(.@mapa$,.@x,.@y,BL_NPC,strnpcinfo(0));
+set .@item,1000432;
+setarray .@max[1],
+		5,4,6,3,7,4,3,5,5,4,6,3,7,4,3,
+		5,5,4,6,3,7,4,3,5,5,4,6;
+	.@idnum = rand(1,.@max[.@val]);
+	for ( .@i = 0; .@i < .@idnum; ++.@i ) {
+		.@idx = rand(.@x,.@x+4);
+		.@idy = rand(.@y,.@y+4);
+		makeitem .@item,1,.@map$,.@idx,.@idy;
+	}
+	makeitem .@item,1,.@map$,.@x+2,.@y+3;
+	makeitem .@item,1,.@map$,.@x+1,.@y+2;
+	makeitem .@item,1,.@map$,.@x+2,.@y+2;
+	makeitem .@item,1,.@map$,.@x+3,.@y+2;
+	set 'TW3,1;
+	disablenpc instance_npcname(strnpcinfo(0));
+	end;
+}
+
+3@ch_t,155,137,0	script	#TreasureHP1	10403,{
+//if ('TAHP1 == 1){ end;}
+set .@map$, instance_mapname("3@ch_t");
+getmapxy(.@mapa$,.@x,.@y,BL_NPC,strnpcinfo(0));
+set .@item,rand(1000442,1000447);
+setarray .@max[1],
+		5,4,6,3,7,4,3,5,5,4,6,3,7,4,3,
+		5,5,4,6,3,7,4,3,5,5,4,6;
+	.@idnum = rand(1,.@max[.@val]);
+	for ( .@i = 0; .@i < .@idnum; ++.@i ) {
+		.@idx = rand(.@x,.@x+4);
+		.@idy = rand(.@y,.@y+4);
+		makeitem 1000397,2,.@map$,.@idx,.@idy;
+	}
+	makeitem .@item,1,.@map$,.@x+2,.@y+3;
+	makeitem .@item,1,.@map$,.@x+1,.@y+2;
+	makeitem .@item,1,.@map$,.@x+2,.@y+2;
+	makeitem .@item,1,.@map$,.@x+3,.@y+2;
+	set 'TAHP1,1;
+	disablenpc instance_npcname(strnpcinfo(0));
+	end;
+}
+
+// ============== Map Flags =========================
+
+1@ch_t	mapflag	monster_noteleport
+2@ch_t	mapflag	monster_noteleport
+3@ch_t	mapflag	monster_noteleport
+4@ch_t	mapflag	monster_noteleport
+
+1@ch_t	mapflag	nobranch
+1@ch_t	mapflag	nomemo
+1@ch_t	mapflag	noreturn
+1@ch_t	mapflag	nosave	SavePoint
+1@ch_t	mapflag	noteleport
+1@ch_t	mapflag	nowarp
+1@ch_t	mapflag	nowarpto
+1@ch_t	mapflag	nowarpto
+1@ch_t	mapflag	partylock
+2@ch_t	mapflag	nobranch
+2@ch_t	mapflag	nomemo
+2@ch_t	mapflag	noreturn
+2@ch_t	mapflag	nosave	SavePoint
+2@ch_t	mapflag	noteleport
+2@ch_t	mapflag	nowarp
+2@ch_t	mapflag	nowarpto
+2@ch_t	mapflag	nowarpto
+2@ch_t	mapflag	partylock
+3@ch_t	mapflag	nobranch
+3@ch_t	mapflag	nomemo
+3@ch_t	mapflag	noreturn
+3@ch_t	mapflag	nosave	SavePoint
+3@ch_t	mapflag	noteleport
+3@ch_t	mapflag	nowarp
+3@ch_t	mapflag	nowarpto
+3@ch_t	mapflag	nowarpto
+3@ch_t	mapflag	partylock
+4@ch_t	mapflag	nobranch
+4@ch_t	mapflag	nomemo
+4@ch_t	mapflag	noreturn
+4@ch_t	mapflag	nosave	SavePoint
+4@ch_t	mapflag	noteleport
+4@ch_t	mapflag	nowarp
+4@ch_t	mapflag	nowarpto
+4@ch_t	mapflag	nowarpto
+4@ch_t	mapflag	partylock
