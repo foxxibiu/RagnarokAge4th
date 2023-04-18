@@ -168,7 +168,7 @@ Body:
     Weight: 10
     Script: |
        if (getgroupid() == 5 ){ dispbottom "Você já � usuario VIP PREMIUM espere acabar para usar novamente."; end;} vip_time(60*24); dispbottom "Parabéns, Você adquiriu 1 dia VIP PREMIUM, faça logoff para ativar."; delitem 41005,1;
-  - Id: 41007
+  - Id: 41011
     AegisName: 1000CP_TIX
     Name: 1000 Cash Points Coin
     Type: Healing
@@ -176,7 +176,7 @@ Body:
     Weight: 1
     Script: |
       set #CASHPOINTS,#CASHPOINTS+1000; dispbottom "Voce acaba de adquirir [1000 Cash Points]!";
-  - Id: 41008
+  - Id: 41012
     AegisName: 5000CP_TIX
     Name: 5000 Cash Points Coin
     Type: Healing
@@ -184,7 +184,7 @@ Body:
     Weight: 1
     Script: |
       set #CASHPOINTS,#CASHPOINTS+5000; dispbottom "Voce acaba de adquirir [5000 Cash Points]!";
-  - Id: 41009
+  - Id: 41013
     AegisName: 10000CP_TIX
     Name: 10000 Cash Points Coin
     Type: Healing
@@ -192,7 +192,7 @@ Body:
     Weight: 1
     Script: |
       set #CASHPOINTS,#CASHPOINTS+10000; dispbottom "Voce acaba de adquirir [10000 Cash Points]!";
-  - Id: 41010
+  - Id: 41014
     AegisName: 50000CP_TIX
     Name: 50000 Cash Points Coin
     Type: Healing
