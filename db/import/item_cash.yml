@@ -33,7 +33,43 @@ Header:
   Version: 1
 
 Body:
-  - Tab: New
+  - Tab: Hot
     Items:
+      - Item: Ticket_Vip_Master7
+        Price: 6000
+      - Item: Ticket_Vip_Master15
+        Price: 14000
+      - Item: Ticket_Vip_Master30
+        Price: 30000
+      - Item: 1000CP_TIX
+        Price: 1000
+      - Item: 5000CP_TIX
+        Price: 5000
+      - Item: 10000CP_TIX
+        Price: 10000
+      - Item: 50000CP_TIX
+        Price: 50000
+  - Tab: Consumables
+    Items:
+      - Item: Bubble_Gum
+        Price: 500
+      - Item: HE_Bubble_Gum
+        Price: 1000
+      - Item: Big_Bun_Box500
+        Price: 5000
+      - Item: Pill__Box500
+        Price: 5000
+      - Item: Savage_BBQ
+        Price: 300
+      - Item: Drocera_Herb_Stew
+        Price: 300
+      - Item: Minor_Brisket
+        Price: 300
+      - Item: Wug_Blood_Cocktail
+        Price: 300
+      - Item: Siroma_Icetea
+        Price: 300
+      - Item: Petti_Tail_Noodle
+        Price: 300
       - Item: Max_Weight_Up_Box
-        Price: 8000
+        Price: 9000        
