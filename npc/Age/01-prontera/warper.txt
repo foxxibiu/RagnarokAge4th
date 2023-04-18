@@ -22,7 +22,7 @@ function Go; function Disp; function Pick; function Restrict;
 // --------------------------------------------------
 //	Main Menu:
 // --------------------------------------------------
-	cutin "4job_maura_02",2;
+	cutin "ep14_nyd04",2;
 	OnTalk:
 	mes .npc$;
 	mes (gettime(3)>= 6&&gettime(3)<= 12?"Bom-dia":(gettime(3)>=13&&gettime(3)<=18?"Boa-tarde":"Boa-noite"))+", ^008aff"+strcharinfo(0)+"^000000 !";
