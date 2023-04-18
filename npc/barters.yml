@@ -51,3 +51,15 @@ Footer:
     Mode: Renewal
   - Path: npc/custom/barters.yml
   - Path: npc/re/merchants/barters/quests_18_1_misc.yml
+  - Path: npc/custom/barters.yml
+  - Path: npc/Age/11-Barter/topo.yml
+  - Path: npc/Age/11-Barter/meio.yml
+  - Path: npc/Age/11-Barter/baixo.yml
+  - Path: npc/Age/11-Barter/campal.yml
+  - Path: npc/Age/11-Barter/campaleqp.yml
+  - Path: npc/Age/11-Barter/campalbrav.yml
+  - Path: npc/Age/11-Barter/campalval.yml
+  - Path: npc/Age/11-Barter/campalstuff.yml
+  - Path: npc/Age/11-Barter/QuestRotativa.yml
+  - Path: npc/Age/11-Barter/miticos.yml
+  - Path: npc/Age/11-Barter/lendarios.yml  
