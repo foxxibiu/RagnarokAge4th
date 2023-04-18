@@ -35,6 +35,22 @@ Header:
 Body:
   - Tab: New
     Items:
+      - Item: Ticket_Vip_Master7
+        Price: 7000
+      - Item: Ticket_Vip_Master15
+        Price: 15000
+      - Item: Ticket_Vip_Master30
+        Price: 20000
+      - Item: 1000CP_TIX
+        Price: 1000
+      - Item: 5000CP_TIX
+        Price: 5000
+      - Item: 10000CP_TIX
+        Price: 10000
+      - Item: 50000CP_TIX
+        Price: 50000
+  - Tab: Consumables
+    Items:
       - Item: Bubble_Gum
         Price: 500
       - Item: HE_Bubble_Gum

@@ -178,7 +178,7 @@ Body:
       set #CASHPOINTS,#CASHPOINTS+1000; dispbottom "Voce acaba de adquirir [1000 Cash Points]!";
   - Id: 41008
     AegisName: 5000CP_TIX
-    Name: 1000 Cash Points Coin
+    Name: 5000 Cash Points Coin
     Type: Healing
     Buy: 50
     Weight: 1
@@ -186,7 +186,7 @@ Body:
       set #CASHPOINTS,#CASHPOINTS+5000; dispbottom "Voce acaba de adquirir [5000 Cash Points]!";
   - Id: 41009
     AegisName: 10000CP_TIX
-    Name: 1000 Cash Points Coin
+    Name: 10000 Cash Points Coin
     Type: Healing
     Buy: 50
     Weight: 1
@@ -194,7 +194,7 @@ Body:
       set #CASHPOINTS,#CASHPOINTS+10000; dispbottom "Voce acaba de adquirir [10000 Cash Points]!";
   - Id: 41010
     AegisName: 50000CP_TIX
-    Name: 1000 Cash Points Coin
+    Name: 50000 Cash Points Coin
     Type: Healing
     Buy: 50
     Weight: 1
