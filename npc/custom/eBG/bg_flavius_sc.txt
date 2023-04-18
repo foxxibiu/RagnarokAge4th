@@ -50,11 +50,11 @@ OnTeam2Die:
 
 
 OnTeam1Active:
-	warp "bat_b04",228,39;
+	warp "bat_b04",311,224;
 	donpcevent "BG_Core::OnJoinActive";
 	end;
 OnTeam2Active:
-	warp "bat_b04",30,38;
+	warp "bat_b04",87,75;
 	donpcevent "BG_Core::OnJoinActive";
 	end;
 
@@ -900,6 +900,43 @@ OnBGStop:
 	end;
 }
 
+// Battleground Therapist
+// *********************************************************************
+
+bat_b04,390,13,5	script	Therapist in battle#sc1	4_F_SISTER,{
+	mes "[Therapist in battle]";
+	mes "Just close your eyes, and take a deep breathe.";
+	mes "You can be free from pain.";
+	specialeffect2 312;
+	percentheal 100,100;
+	repairall;
+	close2;
+	openstorage;
+	end;
+
+OnInit:
+	setunittitle(getnpcid(0), "[Blue Team]");
+	setunitdata(getnpcid(0), UNPC_GROUP_ID, 100);
+	end;
+}
+
+bat_b04,10,293,5	script	Therapist in battle#sc2	4_F_SISTER,{
+	mes "[Therapist in battle]";
+	mes "Just close your eyes, and take a deep breathe.";
+	mes "You can be free from pain.";
+	specialeffect2 312;
+	percentheal 100,100;
+	repairall;
+	close2;
+	openstorage;
+	end;
+
+OnInit:
+	setunittitle(getnpcid(0), "[Red Team]");
+	setunitdata(getnpcid(0), UNPC_GROUP_ID, 101);
+	end;
+}
+
 // Battleground Respawn
 // *********************************************************************
 
@@ -907,6 +944,7 @@ bat_b04,390,10,0	script	#guisc_respawn	HIDDEN_WARP_NPC,{
 	end;
 
 OnBGStart:
+	.tick = 0;
 	initnpctimer;
 	end;
 
@@ -914,13 +952,15 @@ OnBGStop:
 	stopnpctimer;
 	end;
 
-OnTimer24000:
-	specialeffect(EF_SANCTUARY);
-	end;
-
-OnTimer25000:
-	areapercentheal "bat_b04",382,2,397,17,100,100;
-	areawarp "bat_b04",382,2,397,17,"bat_b04",311,224;
+OnTimer1000:
+	if ((.tick++) > 25) .tick = 0;
+	showscript("Respawn in : "+(25-.tick)+" seconds",getnpcid(0,"Therapist in battle#sc1"));
+	if (.tick == 24)
+		specialeffect 83;
+	else if (.tick == 25) {
+		areapercentheal "bat_b04",382,2,397,17,100,100;
+		areawarp "bat_b04",382,2,397,17,"bat_b04",311,224;
+	}
 	initnpctimer;
 	end;
 }
@@ -929,6 +969,7 @@ bat_b04,10,290,0	script	#crosc_respawn	HIDDEN_WARP_NPC,{
 	end;
 
 OnBGStart:
+	.tick = 0;
 	initnpctimer;
 	end;
 
@@ -936,13 +977,15 @@ OnBGStop:
 	stopnpctimer;
 	end;
 
-OnTimer24000:
-	specialeffect(EF_SANCTUARY);
-	end;
-
-OnTimer25000:
-	areapercentheal "bat_b04",2,282,17,297,100,100;
-	areawarp "bat_b04",2,282,17,297,"bat_b04",87,75;
+OnTimer1000:
+	if ((.tick++) > 25) .tick = 0;
+	showscript("Respawn in : "+(25-.tick)+" seconds",getnpcid(0,"Therapist in battle#sc2"));
+	if (.tick == 24)
+		specialeffect 83;
+	else if (.tick == 25) {
+		areapercentheal "bat_b04",2,282,17,297,100,100;
+		areawarp "bat_b04",2,282,17,297,"bat_b04",87,75;
+	}
 	initnpctimer;
 	end;
 }

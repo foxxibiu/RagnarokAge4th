@@ -2,7 +2,7 @@
 //    Extended Battleground
 //= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
 // Date:
-//  13-02-2023
+//  30-01-2023
 // By:
 //  Easycore         (Zephyrus, original author)
 //
@@ -152,6 +152,7 @@ OnValidateScore:
 
 OnTimer900000:
 OnMatchEnd:
+	stopnpctimer;
 	stopnpctimer "Dom_N_Base";
 	stopnpctimer "Dom_S_Base";
 	stopnpctimer "Dom_C_Base";

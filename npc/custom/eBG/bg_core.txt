@@ -33,9 +33,10 @@ OnInit:
 				"Tierra_Boss","10",
 				"Rush",       "11",
 				"Tierra_DOM", "12",
-				"Tierra_TI",  "13";
+				"Tierra_TI",  "13",
+				"KVM_TVT",    "14";
 	//Battleground Message Colors
-	setarray $@BG_Color$[0],"0xA0522D","0x808000","0xFFA500","0xDDA0DD","0x9ACD32","0x4169E1","0x3399FF","0xDC143C","0x9ACD32";
+	setarray $@BG_Color$[0],"0xA0522D","0x808000","0xFFA500","0xDDA0DD","0x9ACD32","0x4169E1","0x3399FF","0xDC143C","0x2E8B57";
 	///**********************************
 	// Battleground Rank Points - Fame
 	///**********************************
@@ -148,7 +149,10 @@ OnDoJoinSolo:
 		end;
 	}
 	if (getcharqueue() != -1) {
-		bg_queue_show(); //Already in Queue
+		if (!getbattleflag("bg_queue_interface"))
+			message(strcharinfo(0),"You are already enlisted to Battlegrounds queue.");
+		else
+			bg_queue_show(); //Already in Queue
 		end;
 	}
 	switch(.@x) {
@@ -157,8 +161,9 @@ OnDoJoinSolo:
 		case 1: bg_queue_join($@BG_C_Name$,1); break;
 		case 2: bg_queue_join($@BG_C_Name$,2); break;
 	}
-	if (getcharqueue() != -1)
-		donpcevent "BG_Core::OnJoinQueue";
+	donpcevent "BG_Core::OnJoinQueue";
+	if (!getbattleflag("bg_queue_interface"))
+		message(strcharinfo(0),"You have enlisted to Battlegrounds queue.");
 	end;
 
 /// @bgsize <1-10> <min>

@@ -57,11 +57,11 @@ OnOmegaFlash:
 	end;
 
 OnTeam1Active:
-	warp "bat_b02",228,39;
+	warp "bat_b02",311,224;
 	donpcevent "BG_Core::OnJoinActive";
 	end;
 OnTeam2Active:
-	warp "bat_b02",30,38;
+	warp "bat_b02",87,75;
 	donpcevent "BG_Core::OnJoinActive";
 	end;
 
@@ -196,7 +196,6 @@ OnTimer420000:
 	end;
 
 OnTimer480000:
-	announce "bat_b0248",bc_all;
 	disablenpc "Team1_Flag";
 	disablenpc "Team2_Flag";
 
@@ -219,8 +218,6 @@ OnMatchEnd:
 	donpcevent "#guictf_respawn::OnBGStop";
 	donpcevent "#croctf_respawn::OnBGStop";
 	set $@BG_Status, 2;
-	bg_showdigit($@BG_Team1,0);
-	bg_showdigit($@BG_Team2,0);
 	// =======================================================
 	// Team Rewards
 	// =======================================================

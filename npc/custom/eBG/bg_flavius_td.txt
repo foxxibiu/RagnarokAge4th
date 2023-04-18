@@ -185,6 +185,7 @@ bat_cc,88,143,5	script	Therapist in battle#td1	4_F_SISTER,{
 	openstorage;
 	end;
 OnInit:
+	setcell("bat_cc",86,134,91,146,cell_basilica,1);
 	setunittitle(getnpcid(0), "[Blue Team]");
 	setunitdata(getnpcid(0), UNPC_GROUP_ID, 100);
 	end;
@@ -204,6 +205,7 @@ bat_cc,97,143,3	script	Therapist in battle#td2	4_F_SISTER,{
 	openstorage;
 	end;
 OnInit:
+	setcell("bat_cc",94,134,99,146,cell_basilica,1);
 	setunittitle(getnpcid(0), "[Red Team]");
 	setunitdata(getnpcid(0), UNPC_GROUP_ID, 101);
 	end;
