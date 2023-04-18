@@ -625,57 +625,57 @@ OnInit:
 // --------------------------------------------------
 //	Duplicates:
 // --------------------------------------------------
-alb2trea,57,70,6	duplicate(Warper)	Teletransportadora#tre	4_4job_maura
-alberta,28,240,4	duplicate(Warper)	Teletransportadora#alb	4_4job_maura
-aldebaran,145,118,4	duplicate(Warper)	Teletransportadora#alde	4_4job_maura
-amatsu,203,87,4	duplicate(Warper)	Teletransportadora#ama	4_4job_maura
-ayothaya,209,169,6	duplicate(Warper)	Teletransportadora#ayo	4_4job_maura
-comodo,194,158,4	duplicate(Warper)	Teletransportadora#com	4_4job_maura
-einbech,59,38,6	duplicate(Warper)	Teletransportadora#einbe	4_4job_maura
-einbroch,69,202,4	duplicate(Warper)	Teletransportadora#einbr	4_4job_maura
-gef_fild10,71,339,4	duplicate(Warper)	Teletransportadora#orc	4_4job_maura
-geffen,124,72,4	duplicate(Warper)	Teletransportadora#gef	4_4job_maura
-glast_01,372,308,4	duplicate(Warper)	Teletransportadora#glh	4_4job_maura
-gonryun,162,122,4	duplicate(Warper)	Teletransportadora#gon	4_4job_maura
-hugel,101,151,4	duplicate(Warper)	Teletransportadora#hug	4_4job_maura
-izlu2dun,110,92,4	duplicate(Warper)	Teletransportadora#izd	4_4job_maura
-izlude,134,150,4	duplicate(Warper)	Teletransportadora#izl	4_4job_maura	//Pre-RE: (132,120)
-jawaii,253,138,4	duplicate(Warper)	Teletransportadora#jaw	4_4job_maura
-lighthalzen,162,102,4	duplicate(Warper)	Teletransportadora#lhz	4_4job_maura
-louyang,208,103,6	duplicate(Warper)	Teletransportadora#lou	4_4job_maura
-manuk,274,146,6	duplicate(Warper)	Teletransportadora#man	4_4job_maura
-mid_camp,216,288,4	duplicate(Warper)	Teletransportadora#mid	4_4job_maura
-mjolnir_02,85,364,4	duplicate(Warper)	Teletransportadora#mjo	4_4job_maura
-moc_ruins,64,164,4	duplicate(Warper)	Teletransportadora#moc	4_4job_maura
-morocc,163,95,4	duplicate(Warper)	Teletransportadora#mor	4_4job_maura
-moscovia,229,191,4	duplicate(Warper)	Teletransportadora#mos	4_4job_maura
-nameless_n,259,213,4	duplicate(Warper)	Teletransportadora#nam	4_4job_maura
-niflheim,205,179,4	duplicate(Warper)	Teletransportadora#nif	4_4job_maura
-pay_arche,42,134,4	duplicate(Warper)	Teletransportadora#arc	4_4job_maura
-payon,182,108,4	duplicate(Warper)	Teletransportadora#pay	4_4job_maura
-prontera,159,190,4	duplicate(Warper)	Teletransportadora#prt	4_4job_maura
-prt_fild05,279,223,6	duplicate(Warper)	Teletransportadora#cul	4_4job_maura
-rachel,135,116,4	duplicate(Warper)	Teletransportadora#rac	4_4job_maura
-splendide,205,153,4	duplicate(Warper)	Teletransportadora#spl	4_4job_maura
-thor_camp,249,76,4	duplicate(Warper)	Teletransportadora#thor	4_4job_maura
-umbala,106,150,3	duplicate(Warper)	Teletransportadora#umb	4_4job_maura
-veins,214,123,4	duplicate(Warper)	Teletransportadora#ve	4_4job_maura
-xmas,150,136,6	duplicate(Warper)	Teletransportadora#xmas	4_4job_maura
-yuno,162,47,4	duplicate(Warper)	Teletransportadora#yuno	4_4job_maura
+alb2trea,57,70,6	duplicate(Warper)	Teletransportadora#tre	4_F_NYDHOG
+alberta,28,240,4	duplicate(Warper)	Teletransportadora#alb	4_F_NYDHOG
+aldebaran,145,118,4	duplicate(Warper)	Teletransportadora#alde	4_F_NYDHOG
+amatsu,203,87,4	duplicate(Warper)	Teletransportadora#ama	4_F_NYDHOG
+ayothaya,209,169,6	duplicate(Warper)	Teletransportadora#ayo	4_F_NYDHOG
+comodo,194,158,4	duplicate(Warper)	Teletransportadora#com	4_F_NYDHOG
+einbech,59,38,6	duplicate(Warper)	Teletransportadora#einbe	4_F_NYDHOG
+einbroch,69,202,4	duplicate(Warper)	Teletransportadora#einbr	4_F_NYDHOG
+gef_fild10,71,339,4	duplicate(Warper)	Teletransportadora#orc	4_F_NYDHOG
+geffen,124,72,4	duplicate(Warper)	Teletransportadora#gef	4_F_NYDHOG
+glast_01,372,308,4	duplicate(Warper)	Teletransportadora#glh	4_F_NYDHOG
+gonryun,162,122,4	duplicate(Warper)	Teletransportadora#gon	4_F_NYDHOG
+hugel,101,151,4	duplicate(Warper)	Teletransportadora#hug	4_F_NYDHOG
+izlu2dun,110,92,4	duplicate(Warper)	Teletransportadora#izd	4_F_NYDHOG
+izlude,134,150,4	duplicate(Warper)	Teletransportadora#izl	4_F_NYDHOG	//Pre-RE: (132,120)
+jawaii,253,138,4	duplicate(Warper)	Teletransportadora#jaw	4_F_NYDHOG
+lighthalzen,162,102,4	duplicate(Warper)	Teletransportadora#lhz	4_F_NYDHOG
+louyang,208,103,6	duplicate(Warper)	Teletransportadora#lou	4_F_NYDHOG
+manuk,274,146,6	duplicate(Warper)	Teletransportadora#man	4_F_NYDHOG
+mid_camp,216,288,4	duplicate(Warper)	Teletransportadora#mid	4_F_NYDHOG
+mjolnir_02,85,364,4	duplicate(Warper)	Teletransportadora#mjo	4_F_NYDHOG
+moc_ruins,64,164,4	duplicate(Warper)	Teletransportadora#moc	4_F_NYDHOG
+morocc,163,95,4	duplicate(Warper)	Teletransportadora#mor	4_F_NYDHOG
+moscovia,229,191,4	duplicate(Warper)	Teletransportadora#mos	4_F_NYDHOG
+nameless_n,259,213,4	duplicate(Warper)	Teletransportadora#nam	4_F_NYDHOG
+niflheim,205,179,4	duplicate(Warper)	Teletransportadora#nif	4_F_NYDHOG
+pay_arche,42,134,4	duplicate(Warper)	Teletransportadora#arc	4_F_NYDHOG
+payon,182,108,4	duplicate(Warper)	Teletransportadora#pay	4_F_NYDHOG
+prontera,160,185,4	duplicate(Warper)	Teletransportadora#prt	4_F_NYDHOG
+prt_fild05,279,223,6	duplicate(Warper)	Teletransportadora#cul	4_F_NYDHOG
+rachel,135,116,4	duplicate(Warper)	Teletransportadora#rac	4_F_NYDHOG
+splendide,205,153,4	duplicate(Warper)	Teletransportadora#spl	4_F_NYDHOG
+thor_camp,249,76,4	duplicate(Warper)	Teletransportadora#thor	4_F_NYDHOG
+umbala,106,150,3	duplicate(Warper)	Teletransportadora#umb	4_F_NYDHOG
+veins,214,123,4	duplicate(Warper)	Teletransportadora#ve	4_F_NYDHOG
+xmas,150,136,6	duplicate(Warper)	Teletransportadora#xmas	4_F_NYDHOG
+yuno,162,47,4	duplicate(Warper)	Teletransportadora#yuno	4_F_NYDHOG
 
 // --------------------------------------------------
 //	Duplicates (Renewal):
 // --------------------------------------------------
-brasilis,201,222,4	duplicate(Warper)	Teletransportadora#bra	4_4job_maura
-dewata,204,186,6	duplicate(Warper)	Teletransportadora#dew	4_4job_maura
-dicastes01,194,194,6	duplicate(Warper)	Teletransportadora#dic	4_4job_maura
-ecl_in01,51,60,4	duplicate(Warper)	Teletransportadora#ecl	4_4job_maura
-lasagna,196,187,4	duplicate(Warper)	Teletransportadora#las	4_4job_maura
-malangdo,134,117,6	duplicate(Warper)	Teletransportadora#mal	4_4job_maura
-malaya,231,204,4	duplicate(Warper)	Teletransportadora#ma	4_4job_maura
-mora,57,152,4	duplicate(Warper)	Teletransportadora#mora	4_4job_maura
+brasilis,201,222,4	duplicate(Warper)	Teletransportadora#bra	4_F_NYDHOG
+dewata,204,186,6	duplicate(Warper)	Teletransportadora#dew	4_F_NYDHOG
+dicastes01,194,194,6	duplicate(Warper)	Teletransportadora#dic	4_F_NYDHOG
+ecl_in01,51,60,4	duplicate(Warper)	Teletransportadora#ecl	4_F_NYDHOG
+lasagna,196,187,4	duplicate(Warper)	Teletransportadora#las	4_F_NYDHOG
+malangdo,134,117,6	duplicate(Warper)	Teletransportadora#mal	4_F_NYDHOG
+malaya,231,204,4	duplicate(Warper)	Teletransportadora#ma	4_F_NYDHOG
+mora,57,152,4	duplicate(Warper)	Teletransportadora#mora	4_F_NYDHOG
 
 // --------------------------------------------------
 //	Duplicates (VIP Room):
 // --------------------------------------------------
-//mall_aretno,103,113,4	duplicate(Warper)	Teletransportadora#vipr	4_4job_maura
+//mall_aretno,103,113,4	duplicate(Warper)	Teletransportadora#vipr	4_F_NYDHOG

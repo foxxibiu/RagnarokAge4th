@@ -16,7 +16,7 @@
 //= 2.0 Added 4th class [Lemongrass]
 //============================================================
 
-prontera,153,193,6	script	Job Master	123,{
+prontera,160,194,6	script	Job Master	4_M_NINJA_RED,{
 function Get_Job_Equip;
 // Checks if the Player has the required level.
 // closes if not, returns if yes
