@@ -1113,3 +1113,195 @@ Body:
         Price: 15000
       - Item: C_Volume_Low_Twin_CB
         Price: 15000
+      - Item: C_Cat_Ear_Short
+        Price: 15000
+      - Item: C_Halloween_Cat_Short
+        Price: 15000
+      - Item: C_Cat_Ear_Long
+        Price: 15000
+      - Item: C_Piamette_Roll_Hair
+        Price: 15000
+      - Item: C_Fluffy_Semi_Long_SV
+        Price: 15000
+      - Item: C_Fluffy_Semi_Long_LB
+        Price: 15000
+      - Item: C_Fluffy_Semi_Long_CB
+        Price: 15000
+      - Item: C_Fluffy_Semi_Long_YL
+        Price: 15000
+      - Item: C_Fluffy_Semi_Long_BG
+        Price: 15000
+      - Item: C_Fluffy_Semi_Long_JBL
+        Price: 15000
+      - Item: C_Fluffy_Semi_Long_WH
+        Price: 15000
+      - Item: C_Hair_Bun_Wave
+        Price: 15000
+      - Item: C_RK_Hair_BU
+        Price: 15000
+      - Item: C_RK_Hair_GN
+        Price: 15000
+      - Item: C_RK_Hair_OM
+        Price: 15000
+      - Item: C_RK_Hair_PK
+        Price: 15000
+      - Item: C_RK_Hair_PP
+        Price: 15000
+      - Item: C_RK_Hair_RD
+        Price: 15000
+      - Item: C_RK_Hair_WH
+        Price: 15000
+      - Item: C_RK_Hair_YL
+        Price: 15000
+      - Item: C_AB_Hair_BL
+        Price: 15000
+      - Item: C_AB_Hair_WH
+        Price: 15000
+      - Item: C_AB_Hair_LPP
+        Price: 15000
+      - Item: C_AB_Hair_RD
+        Price: 15000
+      - Item: C_AB_Hair_YL
+        Price: 15000
+      - Item: C_AB_Hair_BU
+        Price: 15000
+      - Item: C_AB_Hair_GN
+        Price: 15000
+      - Item: C_AB_Hair_PK
+        Price: 15000
+      - Item: C_AB_Hair_PP
+        Price: 15000
+  - Tab: Other
+    Items:
+      - Item: C_Poring_Bag
+        Price: 25000
+      - Item: C_Cupid_Wing_Pink
+        Price: 25000
+      - Item: C_Amistr_Bag
+        Price: 25000
+      - Item: C_Bravery_Bag
+        Price: 25000
+      - Item: C_Devil_Wing
+        Price: 25000
+      - Item: C_Archangel_Wing
+        Price: 25000
+      - Item: C_Fallen_Angel_Wing
+        Price: 25000
+      - Item: Brilliant_Golden_Wings
+        Price: 25000
+      - Item: C_Bloody_Wing
+        Price: 25000
+      - Item: C_Wing_Of_Happiness
+        Price: 25000
+      - Item: C_BlueAngeling_Wing
+        Price: 25000
+      - Item: C_Wing_Of_Angel_Move
+        Price: 45000
+      - Item: C_Wing_Of_Angel_Move_BK
+        Price: 45000
+      - Item: C_Wing_Of_Angel_Move_GD
+        Price: 45000
+      - Item: C_Wing_Of_Angel_Move_RD
+        Price: 45000
+      - Item: C_Valkyrie_Wing
+        Price: 45000
+      - Item: C_Seraphim_Wing_TW
+        Price: 45000
+      - Item: C_Leaf_Umbrella
+        Price: 45000
+      - Item: C_Wings_of_Michael
+        Price: 45000
+      - Item: C_Wings_of_Uriel
+        Price: 45000
+      - Item: C_Wings_of_Gabriel
+        Price: 45000
+      - Item: C_Wings_Of_Raphael
+        Price: 45000
+      - Item: C_Wings_Of_Lucifer
+        Price: 45000
+      - Item: C_Sandalphon_Wing_TW
+        Price: 45000
+      - Item: C_Wings_Of_Raguel
+        Price: 45000
+      - Item: C_GoldButterfly_Wing
+        Price: 45000
+      - Item: C_PinkButterfly_Wing_T
+        Price: 45000
+      - Item: C_Blue_Fairy_Wing
+        Price: 45000
+      - Item: C_P_Ulysses_Feather
+        Price: 45000
+      - Item: C_GiantCatBag_TW
+        Price: 45000
+      - Item: C_GiantCatBag_JP_BL
+        Price: 45000
+      - Item: C_Sakura_Wing
+        Price: 45000
+      - Item: C_Flower_Wing
+        Price: 45000
+      - Item: C_Ice_Wing
+        Price: 45000
+      - Item: C_SwordWing
+        Price: 45000
+      - Item: C_Big_Ribbon_Cloak
+        Price: 45000
+      - Item: C_WingOfHeart
+        Price: 45000
+      - Item: C_Balloon_Wing
+        Price: 45000
+      - Item: C_HeartChocoBag
+        Price: 45000
+      - Item: C_AngelRibbonWing_TW
+        Price: 45000
+      - Item: C_Put_On_Coat
+        Price: 45000
+      - Item: Calabash
+        Price: 45000
+      - Item: C_Ghost_Effect
+        Price: 45000
+      - Item: C_Kirin_Wing
+        Price: 45000
+      - Item: C_GreatDevilWing
+        Price: 45000
+      - Item: C_Kings_Twin_Sword
+        Price: 45000
+      - Item: C_Evil_Scythe
+        Price: 45000
+      - Item: C_Thanatos_Sword
+        Price: 45000
+      - Item: C_Evil_Druid_Cross
+        Price: 45000
+      - Item: C_Loli_Ruri_Moon
+        Price: 45000
+      - Item: C_Gimmick_One_Feather
+        Price: 45000
+      - Item: C_Nifl_Bloom
+        Price: 45000
+      - Item: C_Big_Foxtail
+        Price: 45000
+      - Item: C_Cat_Fork
+        Price: 45000
+      - Item: C_Leaf_Umbrella
+        Price: 45000
+      - Item: C_Santa_Backpack
+        Price: 45000
+      - Item: C_T_Bear_Bag
+        Price: 45000
+      - Item: C_School_Bag_RD_E
+        Price: 45000
+      - Item: C_School_Bag_BL
+        Price: 45000
+      - Item: C_Blessed_Veil
+        Price: 45000
+      - Item: C_Digital_Space
+        Price: 45000
+      - Item: C_Magic_Circle_Rainbow
+        Price: 45000
+      - Item: C_Magic_Circle
+        Price: 45000
+      - Item: C_Full_BloomCherry_Tree
+        Price: 45000
+      - Item: C_Invisible_Manteau
+        Price: 45000
+      - Item: C_20th_Anniversary_Wing
+        Price: 45000
