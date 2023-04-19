@@ -229,6 +229,8 @@ Body:
         Price: 5000
       - Item: C_Evil_Druid_Hat
         Price: 5000
+      - Item: C_Evil_Druid_Hat_Black
+        Price: 5000
       - Item: C_Vicious_Stop_Bandage
         Price: 5000
       - Item: C_Amistr_Cap
@@ -601,7 +603,245 @@ Body:
         Price: 5000
       - Item: C_Slurp_Slurp_Hat
         Price: 5000
-      - Item: C_Airy_Two_Side_Up_WH
-        Price: 5000
       - Item: C_Sepia_Cap
+        Price: 5000
+      - Item: C_Heaven_Cage
+        Price: 5000
+      - Item: C_Gold_Magestic_Goat
+        Price: 5000
+      - Item: C_White_Rabbit_Ear
+        Price: 5000
+      - Item: C_Rabbit_Hopping
+        Price: 5000
+      - Item: C_Autumn_Headband
+        Price: 5000
+      - Item: C_Halloween_Hat_Orange
+        Price: 5000
+      - Item: C_Black_Witch_Hat
+        Price: 5000
+      - Item: C_Diabolic_Headphone
+        Price: 5000
+      - Item: C_Princess_Ribbon_Crown
+        Price: 5000
+      - Item: C_Drooping_Schmidt
+        Price: 5000
+      - Item: C_Drooping_Oscar
+        Price: 5000
+      - Item: C_Drooping_Heinrich
+        Price: 5000
+      - Item: C_Piamette_Hood_Red
+        Price: 5000
+      - Item: C_Angel_Veil
+        Price: 5000
+      - Item: C_Snow_Rabbit_Knit_Hat
+        Price: 5000
+      - Item: C_Snow_Bear_Food
+        Price: 5000
+      - Item: C_Lovely_Heart_Cap
+        Price: 5000
+      - Item: C_Cat_Ears_Punkish
+        Price: 5000
+      - Item: C_CatCoffeeCup_TW
+        Price: 5000
+      - Item: C_HeartOfCat_TW
+        Price: 5000
+      - Item: C_Classical_Fhat
+        Price: 5000
+      - Item: C_General_Helmet
+        Price: 5000
+      - Item: C_Amistr_Beret
+        Price: 5000
+      - Item: C_Spell_Circuit
+        Price: 5000
+      - Item: C_Dog_Officer
+        Price: 5000
+      - Item: C_Ear_Of_Puppy
+        Price: 5000
+      - Item: C_Sea_Otter_Cap
+        Price: 5000
+      - Item: C_Puppy_Love
+        Price: 5000
+      - Item: C_Black_Rabbit_Bonnet
+        Price: 5000
+      - Item: C_Ayam
+        Price: 5000
+      - Item: C_Satto_Hat
+        Price: 5000
+      - Item: C_Two_Tone_Beret
+        Price: 5000
+      - Item: C_Garden_Of_Eden
+        Price: 5000
+      - Item: C_Cherry_Blossom_Hat_YL
+        Price: 5000
+      - Item: C_Variant_Veil
+        Price: 5000
+      - Item: C_Nine_Tail_Fox_Hair
+        Price: 5000
+      - Item: C_Gothic_Skull_Ribbon
+        Price: 5000
+      - Item: C_Golden_Violet
+        Price: 5000
+      - Item: C_VesperHeadGear
+        Price: 5000
+      - Item: C_PoringBeret_TW
+        Price: 5000
+      - Item: C_Melon_Cap
+        Price: 5000
+      - Item: C_Mecha_Cat_Ears
+        Price: 5000
+      - Item: C_Popcorn_Hair
+        Price: 5000
+      - Item: C_Garnet_Tiara
+        Price: 5000
+      - Item: C_Peony_Hair_Ornament
+        Price: 5000
+      - Item: C_Small_ocean
+        Price: 5000
+      - Item: C_Pretty_Bear
+        Price: 5000
+      - Item: C_Pretty_Bear_WH
+        Price: 5000
+      - Item: C_Over_Protector
+        Price: 5000
+      - Item: C_BeachBall
+        Price: 5000
+      - Item: C_Turkey_Hat
+        Price: 5000
+      - Item: C_BJ_HeadsetA
+        Price: 5000
+      - Item: C_Bicolor_Cat_Witch_Hat
+        Price: 5000
+      - Item: C_Pierced_Apple_
+        Price: 5000
+      - Item: C_Greater_Dracul_Horn
+        Price: 5000
+      - Item: C_Jitterbug_Cap
+        Price: 5000
+      - Item: C_Fawn_Ear
+        Price: 5000
+      - Item: C_Monochrome_Cap
+        Price: 5000
+      - Item: C_Sky_Of_Memory
+        Price: 5000
+      - Item: C_Bubble_A_Angel_H
+        Price: 5000
+      - Item: C_Nobility_Hat
+        Price: 5000
+      - Item: C_PGstone_Knit_Hat_PK
+        Price: 5000
+      - Item: C_Gift_of_Panagia
+        Price: 5000
+      - Item: C_Drooping_Nine_Tail
+        Price: 5000
+      - Item: C_Looking
+        Price: 5000
+      - Item: C_Wolf_Masquerade
+        Price: 5000
+      - Item: C_Nydhog_Wig_WH
+        Price: 5000
+      - Item: C_Disapear_Time_TW
+        Price: 5000
+      - Item: C_Angola_Intention
+        Price: 5000
+      - Item: C_Rag_Origin_Hat
+        Price: 5000
+      - Item: C_Palace_Guard_Cap
+        Price: 5000
+      - Item: C_PGstone_Knit_Hat_BW
+        Price: 5000
+      - Item: C_Magestic_Goat2
+        Price: 5000
+      - Item: C_Krathong_Crown_TH
+        Price: 5000
+      - Item: C_Unicorn_Ornament
+        Price: 5000
+      - Item: C_Frog_Hood
+        Price: 5000
+      - Item: C_Halloween_Hat
+        Price: 5000
+      - Item: C_Lude_Hood
+        Price: 5000
+      - Item: C_Hunters_Dinner
+        Price: 5000
+      - Item: C_Sunglasses_Bball_Hat
+        Price: 5000
+      - Item: C_Choco_Banana
+        Price: 5000
+      - Item: C_Pink_Fur_Hat
+        Price: 5000
+      - Item: C_Ep18_Mini_Elly
+        Price: 5000
+      - Item: C_Black_Shiba_Inu_Hat
+        Price: 5000
+      - Item: C_Rose_Crispinette
+        Price: 5000
+      - Item: C_Blue_Pajamas_Hat
+        Price: 5000
+      - Item: C_Mech_Feather_Hairband
+        Price: 5000
+      - Item: C_Isabella_Brown_Ear
+        Price: 5000
+      - Item: C_Sakura_Coronet
+        Price: 5000
+      - Item: C_Full_Bloom_Hairpin
+        Price: 5000
+      - Item: C_Love_Daddy
+        Price: 5000
+      - Item: C_Melon_Headphone
+        Price: 5000
+      - Item: C_Boitata_Hat_J
+        Price: 5000
+      - Item: C_Brabery_Hat
+        Price: 5000
+      - Item: C_Sting_Silk_Ribbon
+        Price: 5000
+      - Item: C_Forest_Guide
+        Price: 5000
+      - Item: C_Flower_Summer_Hat
+        Price: 5000
+      - Item: C_Wrapping_Ribbon
+        Price: 5000
+      - Item: C_Ladys_Feather_Hat
+        Price: 5000
+      - Item: C_Gothic_Pumpkin_Head
+        Price: 5000
+      - Item: C_Leopard_Ear_Hat
+        Price: 5000
+      - Item: C_Misty_Ears
+        Price: 5000
+      - Item: C_B_EarWitchHat
+        Price: 5000
+      - Item: C_Focus_Beret
+        Price: 5000
+      - Item: C_Rabbit_Hopping_BL
+        Price: 5000
+      - Item: C_Debril_Doll_Hat
+        Price: 5000
+      - Item: C_Sheep_Hat 
+        Price: 5000
+      - Item: C_Full_Bloom_Hp_Blue
+        Price: 5000
+      - Item: C_Pink_Pajamas_Hat
+        Price: 5000
+      - Item: C_Black_Cat_Ears_Beret
+        Price: 5000
+      - Item: C_Choco_Mint_Bonnet
+        Price: 5000
+      - Item: C_Heart_Ribbon_Band
+        Price: 5000
+      - Item: C_Rhythm_Hairband
+        Price: 5000
+      - Item: C_Blue_Frill_Ribbon
+        Price: 5000
+      - Item: C_Watermelon_Hat
+        Price: 5000
+      - Item: C_Many_Flowers_Prayer
+        Price: 5000
+      - Item: C_Flame_Bird
+        Price: 5000
+      - Item: C_Rainbow_Poring_Hat
+        Price: 5000
+      - Item: C_Aura_Quartz_Crown
+        Price: 5000
+      - Item: C_White_Rose_Princess
         Price: 5000
