@@ -411,8 +411,6 @@ Body:
         Price: 5000
       - Item: C_Woodie_Hat
         Price: 5000
-      - Item: aegis_420172
-        Price: 5000
       - Item: C_Niflheim_Bunny_Hat
         Price: 5000
       - Item: C_White_Lily
@@ -845,3 +843,101 @@ Body:
         Price: 5000
       - Item: C_White_Rose_Princess
         Price: 5000
+  - Tab: Permanent
+    Items:
+      - Item: C_MoonStar_Accessory
+        Price: 15000
+      - Item: C_World_Star
+        Price: 15000
+      - Item: C_Music_Decoration
+        Price: 15000
+      - Item: C_Time_Accessory
+        Price: 15000
+      - Item: C_Little_Aquarium
+        Price: 15000
+      - Item: C_Maple_Which_Falls
+        Price: 15000
+      - Item: C_Blessing_Of_Angels
+        Price: 15000
+      - Item: C_Morocc_Kid_Servant
+        Price: 15000
+      - Item: C_Vampire_Familiar
+        Price: 15000
+      - Item: C_Glow_Of_New_Year
+        Price: 15000
+      - Item: C_Love_Feeling_J
+        Price: 15000
+      - Item: C_Floating_Ball_TW
+        Price: 15000
+      - Item: C_Phalanx
+        Price: 15000
+      - Item: C_DancingButterfly_TW
+        Price: 15000
+      - Item: C_Katashiro_Flying
+        Price: 15000
+      - Item: C_Romance_Rose_TW
+        Price: 15000
+      - Item: C_White_Cat_On_Shoulder
+        Price: 15000
+      - Item: C_Black_Cat
+        Price: 15000
+      - Item: C_White_Cat
+        Price: 15000
+      - Item: C_Kishu_Inu
+        Price: 15000
+      - Item: C_Baby_Penguin
+        Price: 15000
+      - Item: C_White_Rabbit
+        Price: 15000
+      - Item: C_Panda_Rabbit
+        Price: 15000
+      - Item: C_Orange_Rabbit
+        Price: 15000
+      - Item: C_Fox
+        Price: 15000
+      - Item: C_Snow_Fox_TW
+        Price: 15000
+      - Item: C_Baby_Polar_Bear
+        Price: 15000
+      - Item: C_Baby_Panda
+        Price: 15000
+      - Item: C_Gossip_Raven
+        Price: 15000
+      - Item: C_Poring_On_Shoulder
+        Price: 15000
+      - Item: C_Lady_Tanee_TW
+        Price: 15000
+      - Item: C_Blinking_Eyes
+        Price: 15000
+      - Item: C_Blinking_Thin_Eyes
+        Price: 15000
+      - Item: C_Gemini_RedEyes
+        Price: 15000
+      - Item: C_Gemini_Eyes
+        Price: 15000
+      - Item: C_Smiling_Eyes
+        Price: 15000
+      - Item: C_Blinking_Eyes_RD
+        Price: 15000
+      - Item: C_Blink_Eyes_Sakura
+        Price: 15000
+      - Item: C_Blink_Eyes_Cocktai_BU
+        Price: 15000
+      - Item: C_False_Ears
+        Price: 15000
+      - Item: C12th_ElvenEars
+        Price: 15000
+      - Item: C_Tomboy_Fairy
+        Price: 15000
+      - Item: C_Fairy_Feathers
+        Price: 15000
+      - Item: C_FallenAngelWingEar
+        Price: 15000
+      - Item: C_Ear_Of_Angel's_Wing
+        Price: 15000
+      - Item: C_Love_Cheek
+        Price: 15000
+      - Item: C_Under_Rim_Glasses_Red
+        Price: 15000
+      - Item: C_Under_Rim_Glasses_Bu
+        Price: 15000
