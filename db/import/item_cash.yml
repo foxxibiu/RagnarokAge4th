@@ -73,3 +73,49 @@ Body:
         Price: 50
       - Item: Max_Weight_Up_Box
         Price: 9000
+  - Tab: Rental
+    Items:
+      - Item: Clear_Sun
+        Price: 5000
+      - Item: Rainbow
+        Price: 5000
+      - Item: Lightning_Cloud
+        Price: 5000
+      - Item: Rain_Cloud
+        Price: 5000
+      - Item: C_Wild_Rose
+        Price: 5000
+      - Item: C_Let_It_Snow
+        Price: 5000
+      - Item: 20062
+        Price: 5000
+      - Item: C_Rose_Corsage
+        Price: 5000
+      - Item: C_Valkyrie_Helm
+        Price: 5000
+      - Item: C_Magestic_Goat
+        Price: 5000
+      - Item: C_Raven_Cap
+        Price: 5000
+      - Item: C_Ayothaya_Hat
+        Price: 5000
+      - Item: C_B_Dragon_Hat
+        Price: 5000
+      - Item: C_Horn_Of_Ancient
+        Price: 5000
+      - Item: C_Chung_Hairband
+        Price: 5000
+      - Item: C_Mercury_Helm
+        Price: 5000
+      - Item: C_White_Musang_Hat
+        Price: 5000
+      - Item: C_Black_Musang_Hat
+        Price: 5000
+      - Item: C_Heart_Wing_Hairband
+        Price: 5000
+      - Item: C_Red_Wing_Hat
+        Price: 5000
+      - Item: C_Feather_Beret
+        Price: 5000
+      - Item: C_Pink_Bunny_Band_J
+        Price: 5000
