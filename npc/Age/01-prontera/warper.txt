@@ -634,7 +634,7 @@ comodo,194,158,4	duplicate(Warper)	Teletransportadora#com	4_F_NYDHOG
 einbech,59,38,6	duplicate(Warper)	Teletransportadora#einbe	4_F_NYDHOG
 einbroch,69,202,4	duplicate(Warper)	Teletransportadora#einbr	4_F_NYDHOG
 gef_fild10,71,339,4	duplicate(Warper)	Teletransportadora#orc	4_F_NYDHOG
-geffen,124,72,4	duplicate(Warper)	Teletransportadora#gef	4_F_NYDHOG
+geffen,127,64,4	duplicate(Warper)	Teletransportadora#gef	4_F_NYDHOG
 glast_01,372,308,4	duplicate(Warper)	Teletransportadora#glh	4_F_NYDHOG
 gonryun,162,122,4	duplicate(Warper)	Teletransportadora#gon	4_F_NYDHOG
 hugel,101,151,4	duplicate(Warper)	Teletransportadora#hug	4_F_NYDHOG
@@ -647,12 +647,12 @@ manuk,274,146,6	duplicate(Warper)	Teletransportadora#man	4_F_NYDHOG
 mid_camp,216,288,4	duplicate(Warper)	Teletransportadora#mid	4_F_NYDHOG
 mjolnir_02,85,364,4	duplicate(Warper)	Teletransportadora#mjo	4_F_NYDHOG
 moc_ruins,64,164,4	duplicate(Warper)	Teletransportadora#moc	4_F_NYDHOG
-morocc,163,95,4	duplicate(Warper)	Teletransportadora#mor	4_F_NYDHOG
+morocc,165,97,4	duplicate(Warper)	Teletransportadora#mor	4_F_NYDHOG
 moscovia,229,191,4	duplicate(Warper)	Teletransportadora#mos	4_F_NYDHOG
 nameless_n,259,213,4	duplicate(Warper)	Teletransportadora#nam	4_F_NYDHOG
 niflheim,205,179,4	duplicate(Warper)	Teletransportadora#nif	4_F_NYDHOG
 pay_arche,42,134,4	duplicate(Warper)	Teletransportadora#arc	4_F_NYDHOG
-payon,182,108,4	duplicate(Warper)	Teletransportadora#pay	4_F_NYDHOG
+payon,147,232,4	duplicate(Warper)	Teletransportadora#pay	4_F_NYDHOG
 prontera,160,185,4	duplicate(Warper)	Teletransportadora#prt	4_F_NYDHOG
 prt_fild05,279,223,6	duplicate(Warper)	Teletransportadora#cul	4_F_NYDHOG
 rachel,135,116,4	duplicate(Warper)	Teletransportadora#rac	4_F_NYDHOG
