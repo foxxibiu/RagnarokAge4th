@@ -37,7 +37,7 @@
 
 // Information NPC
 //============================================================
-prontera,138,183,4	script	Guerra do Emperium	S_EMPEL_1,{
+prontera,175,184,4	script	Guerra do Emperium	S_EMPEL_1,{
 	doevent "WOE_CONTROL::OnMenu";
 	end;
 OnAgitStart:
