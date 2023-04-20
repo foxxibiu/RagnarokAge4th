@@ -47,7 +47,7 @@
 #define HP_SP_TABLES
 
 /// Uncomment to enable VIP system.
-#define VIP_ENABLE
+//#define VIP_ENABLE
 
 /// Enable VIP script changes? (requires VIP_ENABLE)
 /// The primary effects of this are restrictions on non-VIP players, such as requiring
@@ -60,14 +60,14 @@
 		#define MIN_STORAGE 300 // Default number of storage slots.
 	#endif
 	#ifndef MAX_CHAR_VIP
-		#define MAX_CHAR_VIP 9 // This must be less than MAX_CHARS
+		#define MAX_CHAR_VIP 6 // This must be less than MAX_CHARS
 	#endif
 #else
 	#ifndef MIN_STORAGE
 		#define MIN_STORAGE MAX_STORAGE // If the VIP system is disabled the min = max.
 	#endif
 	#ifndef MAX_CHAR_VIP
-		#define MAX_CHAR_VIP 6
+		#define MAX_CHAR_VIP 0
 	#endif
 #endif
 
