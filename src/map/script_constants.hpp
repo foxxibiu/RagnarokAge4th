@@ -6750,6 +6750,11 @@
 	export_constant(IG_COSTUMEMILEAGE_PACKAGE3);
 	export_constant(IG_COMP_TRANS_SCROLL);
 	export_constant(IG_MINUS_STATUS_BOX);
+	export_constant(IG_AEGIS_101920);
+	export_constant(IG_AEGIS_101921);
+	export_constant(IG_AEGIS_101923);
+	export_constant(IG_AEGIS_101924);
+	export_constant(IG_AEGIS_101925);	
 	export_constant(IG_S_W_BREATH_CUBE);
 	export_constant(IG_S_F_BREATH_CUBE);
 	export_constant(IG_S_SONIC_CUBE);
