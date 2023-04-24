@@ -18,7 +18,7 @@ prontera,0,0,0	script	Goldpoint Manager::GOLDPCCAFE	4_M_SE_STAR,{
 		"23919:11:100",// K_Secret_Key 11
 		"23919:33:300";// K_Secret_Key 33
 
-	cutin "ex_se_star01",2;
+	cutin "ex_se_star01.png.png",2;
 	mes "[Goldpoint Manager]";
 	mes "You currently have ^0000ff"+Goldpc_Points+"^000000 points.";
 	mes "What reward do you want?";
@@ -40,7 +40,7 @@ prontera,0,0,0	script	Goldpoint Manager::GOLDPCCAFE	4_M_SE_STAR,{
 	if(.@s == 0) {
 		mes "[Goldpoint Manager]";
 		mes "You currently have ^0000ff"+Goldpc_Points+"^000000 points.";
-		cutin "ex_se_star01",255;
+		cutin "ex_se_star01.png",255;
 		close;
 	}
 
@@ -53,7 +53,7 @@ prontera,0,0,0	script	Goldpoint Manager::GOLDPCCAFE	4_M_SE_STAR,{
 		mes "[Goldpoint Manager]";
 		mes "You have ^0000ff"+Goldpc_Points+"^000000 points remaining.";
 		mes "You cannot get the prize with this amount of points.";
-		cutin "ex_se_star01",255;
+		cutin "ex_se_star01.png",255;
 		close;
 	}
 
@@ -62,7 +62,7 @@ prontera,0,0,0	script	Goldpoint Manager::GOLDPCCAFE	4_M_SE_STAR,{
 	Goldpc_Points -= .@cost;
 	getitem .@itemid,.@amount;
 	mes "You have ^0000ff"+Goldpc_Points+"^000000 points remaining.";
-	cutin "ex_se_star01",255;
+	cutin "ex_se_star01.png",255;
 	close;
 }
 
