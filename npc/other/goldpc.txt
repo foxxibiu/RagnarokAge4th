@@ -10,7 +10,7 @@
 //= 1.4 Added replay version of buff NPC [eppc0330]
 //============================================================
 
-prontera,0,0,0	script	Goldpoint Manager::GOLDPCCAFE	4_M_SE_STAR,{
+prontera,0,0,3	script	Goldpoint Manager::GOLDPCCAFE	4_M_SE_STAR,{
 	// ID:AMOUNT:PRICE
 	setarray .items$[1],
 		"23919:1:2", // K_Secret_Key 1
