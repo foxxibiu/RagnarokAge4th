@@ -523,7 +523,7 @@ ein_in01,38,29,0	script	Paul Spanner	63,{
 
 // Weapon/Armor Refiners
 //============================================================
-prt_in,63,60,0	script	Hollgrehenn	4_M_03,{
+grademk,47,185,0	script	Hollgrehenn	4_M_03,{
 	if( getbattleflag( "feature.refineui" ) ){
 		mes "[Hollgrehenn]";
 		mes "I'm a blacksmith who can refine weapons and equipment.";
@@ -1081,7 +1081,7 @@ function	script	phramain	{
 
 // Ori/Elu Refiners
 //============================================================
-prt_in,63,69,3	script	Dietrich	84,{
+grademk,17,185,3	script	Dietrich	84,{
 	callfunc "orimain","Dietrich";
 	end;
 }
