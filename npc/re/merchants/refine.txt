@@ -642,7 +642,7 @@ OnInit:
 -	marketshop	market_refine_ein_in01	-1,1010:-1:999999,1011:-1:999999
 -	marketshop	market_refine_lhz_in02	-1,1010:-1:999999,1011:-1:999999
 
-prt_in,17,185,3	script	Dietrich#ns_prt	4_M_02,{
+grademk,17,185,3	script	Dietrich#ns_prt	4_M_02,{
 	mes "[" + strnpcinfo(1) + "]";
 	mes "We sell and exchange various ores used in smelting.";
 	next;
