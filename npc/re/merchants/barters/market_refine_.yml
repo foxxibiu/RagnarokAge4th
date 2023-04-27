@@ -45,17 +45,19 @@ Header:
   Type: BARTER_DB
   Version: 1
 
-Footer:
-  Imports:
-  - Path: npc/re/merchants/barters/market_refine_.yml
-  - Path: npc/re/merchants/barters/enchantgrade.yml
-  - Path: npc/re/merchants/barters/Extended_Ammunition.yml
-  - Path: npc/re/merchants/barters/Gemstone_Bagger.yml
-  - Path: npc/re/merchants/barters/quests_16_1.yml
-  - Path: npc/re/merchants/barters/quests_16_2.yml
-  - Path: npc/re/merchants/barters/quests_17_1.yml
-  - Path: npc/re/merchants/barters/quests_17_2.yml
-  - Path: npc/re/merchants/barters/refine.yml
-  - Path: npc/re/merchants/barters/enchantgrade.yml
-  - Path: npc/re/merchants/barters/cashmall.yml
-  - Path: npc/re/merchants/barters/rgsr_in.yml
+Body:
+###########################################################################
+##= Gemstone Bagger ( Exchange )
+###########################################################################
+  - Name: market_refine_
+    Items:
+      - Index: 0
+        Item: Phracon
+        RequiredItems:
+          - Index: 0
+            Zeny: 200
+      - Index: 1
+        Item: Emveretarcon
+        RequiredItems:
+          - Index: 0
+            Zeny: 1000

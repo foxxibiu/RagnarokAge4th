@@ -620,7 +620,7 @@ OnInit:
 		npcshopupdate "market_refine_lhz_in02",1011,1000,999999;
 	}
 	else {
-//		unloadnpc "market_refine_prt_in";
+		unloadnpc "market_refine_prt_in";
 		unloadnpc "market_refine_payon";
 		unloadnpc "market_refine_morocc_in";
 		unloadnpc "market_refine_alberta_in";
@@ -651,7 +651,7 @@ grademk,22,186,3	script	Dietrich#ns_prt	4_M_02,{
 		mes "[" + strnpcinfo(1) + "]";
 		mes "Phracon and Emveretarcon are available for use in smelting low-level weapons.";
 		close2;
-		callshop "market_refine_" + strnpcinfo(4);
+		callshop "market_refine_prt_in" + strnpcinfo(4);
 		end;
 	case 2:
 		mes "[" + strnpcinfo(1) + "]";
