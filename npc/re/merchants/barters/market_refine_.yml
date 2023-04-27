@@ -53,11 +53,10 @@ Body:
     Items:
       - Index: 0
         Item: Phracon
-        RequiredItems:
-          - Index: 0
-            Zeny: 200
+        Stock: 0
+        Zeny: 200
+        
       - Index: 1
         Item: Emveretarcon
-        RequiredItems:
-          - Index: 0
-            Zeny: 1000
+        Stock: 0
+        Zeny: 1000
