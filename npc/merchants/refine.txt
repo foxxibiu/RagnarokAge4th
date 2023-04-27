@@ -1081,7 +1081,7 @@ function	script	phramain	{
 
 // Ori/Elu Refiners
 //============================================================
-prt_in,63,69,4	script	Dietrich	84,{
+grademk,19,182,4	script	Dietrich	84,{
 	callfunc "orimain","Dietrich";
 	end;
 }
