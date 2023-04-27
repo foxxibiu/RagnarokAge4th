@@ -523,7 +523,7 @@ ein_in01,38,29,0	script	Paul Spanner	63,{
 
 // Weapon/Armor Refiners
 //============================================================
-grademk,47,185,5	script	Hollgrehenn	4_M_03,{
+grademk,49,185,3	script	Hollgrehenn	4_M_03,{
 	if( getbattleflag( "feature.refineui" ) ){
 		cutin "Hollgrehenn02.png",2;
 		mes "[Hollgrehenn]";
